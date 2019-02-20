@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <TextView
+        android:id="@+id/text_view_left_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15pt"
+        android:textSize="22pt"
+        android:textColor="@color/color_white"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_toolbar_left_icon"
+        android:layout_width="24pt"
+        android:layout_height="24pt"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20pt"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/tv_toolbar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="标题"
+        android:textColor="@color/color_white"
+        android:textSize="24pt" />
+
+    <ImageView
+        android:id="@+id/iv_toolbar_right_icon"
+        android:layout_width="24pt"
+        android:layout_height="24pt"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20pt"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/text_view_angle"
+        android:layout_width="20pt"
+        android:layout_height="20pt"
+        android:layout_alignRight="@+id/iv_toolbar_right_icon"
+        android:layout_alignTop="@+id/iv_toolbar_right_icon"
+        android:layout_marginRight="-10pt"
+        android:layout_marginTop="-10pt"
+        android:background="@drawable/shape_bg_circle_red_90"
+        android:gravity="center"
+        android:maxLength="2"
+        android:text="5"
+        android:textColor="@color/color_white"
+        android:textSize="12pt"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/text_view_right_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15pt"
+        android:text="22pt"
+        android:textColor="@color/color_white"
+        android:visibility="gone" />
+
+</RelativeLayout>

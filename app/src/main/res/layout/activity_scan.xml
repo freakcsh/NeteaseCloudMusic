@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <cn.bingoogolapple.qrcode.zxing.ZXingView
+        android:id="@+id/zxingview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:qrcv_topOffset="140pt"
+        app:qrcv_cornerSize="3dp"
+        app:qrcv_cornerLength="20dp"
+        app:qrcv_cornerColor="@color/colorPrimary"
+        app:qrcv_rectWidth="200pt"
+        app:qrcv_maskColor="#33FFFFFF"
+        app:qrcv_scanLineSize="0.5dp"
+        app:qrcv_scanLineColor="@color/colorPrimaryDark"
+        app:qrcv_scanLineMargin="3dp"
+        app:qrcv_isShowDefaultScanLineDrawable="true"
+        app:qrcv_borderSize="0.5dp"
+        app:qrcv_borderColor="@android:color/white"
+        app:qrcv_animTime="1400"
+        app:qrcv_isCenterVertical="false"
+        app:qrcv_toolbarHeight="56dp"
+        app:qrcv_isBarcode="false"
+        app:qrcv_qrCodeTipText="将二维码/条码放入框内，即可自动扫描"
+        app:qrcv_tipTextSize="12sp"
+        app:qrcv_tipTextColor="@android:color/white"
+        app:qrcv_isTipTextBelowRect="true"
+        app:qrcv_isShowTipTextAsSingleLine="false"
+        app:qrcv_isShowTipBackground="true"
+        app:qrcv_isScanLineReverse="true"
+        app:qrcv_isShowDefaultGridScanLineDrawable="false"
+        app:qrcv_isOnlyDecodeScanBoxArea="false" />
+        <TextView
+            android:id="@+id/tv_flash"
+            android:visibility="gone"
+            android:drawableTop="@mipmap/ic_flash"
+            android:layout_alignBottom="@+id/zxingview"
+            android:layout_marginBottom="196pt"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>

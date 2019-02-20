@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fl_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/dialog_sign_btn_sure"
+        android:layout_width="270pt"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_dialog_white_radius_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_common_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="22pt"
+                android:text="标题"
+                android:textColor="#000000"
+                android:textSize="17pt" />
+
+            <TextView
+                android:id="@+id/text_view_common_context"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="25pt"
+                android:paddingRight="25pt"
+                android:paddingTop="5pt"
+                android:text="此卡片还没有开通无卡落地功能，请前往申请开通。"
+                android:textColor="#404040"
+                android:textSize="13pt" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1pt"
+                android:layout_marginTop="24pt"
+                android:background="#dddddd" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44pt">
+
+                <TextView
+                    android:id="@+id/text_view_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="#007aff"
+                    android:textSize="17pt" />
+
+                <View
+                    android:layout_width="1pt"
+                    android:layout_height="match_parent"
+                    android:background="#dddddd" />
+
+                <TextView
+                    android:id="@+id/text_view_commit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="前往"
+                    android:textColor="#007aff"
+                    android:textSize="17pt" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>
