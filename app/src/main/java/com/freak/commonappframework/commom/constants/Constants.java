@@ -7,7 +7,7 @@ package com.freak.commonappframework.commom.constants;
  */
 
 public class Constants {
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "http://169.254.246.219:9999";
     public static final String UO_LOGIN = "用户未登录";
     public static final String TOKEN_ABLE = "token_able";
     public static final String RENOVATE = "renovate";

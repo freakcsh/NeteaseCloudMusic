@@ -1,6 +1,8 @@
 package com.freak.commonappframework.model.base;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import com.freak.commonappframework.model.merchant.base.MerchantFragment;
 import com.freak.commonappframework.model.myself.MyselfFragment;
 import com.freak.commonappframework.model.share.base.ShareFragment;
 import com.freak.commonappframework.model.shop.base.ShopFragment;
+import com.freak.commonappframework.utils.LogUtils;
 
 
 /**
@@ -293,5 +296,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        LogUtils.e("接收数据");
     }
 }

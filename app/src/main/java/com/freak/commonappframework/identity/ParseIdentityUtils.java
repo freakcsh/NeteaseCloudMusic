@@ -11,6 +11,17 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class ParseIdentityUtils {
+    private static ParseIdentityUtils parseIdentityUtils;
+
+    public static ParseIdentityUtils getInstance() {
+        if (parseIdentityUtils == null) {
+            synchronized (ParseIdentityUtils.class) {
+                parseIdentityUtils = new ParseIdentityUtils();
+            }
+        }
+        return parseIdentityUtils;
+    }
+
     /**
      * 解析身份证，获取文字信息
      */

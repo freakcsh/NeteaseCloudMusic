@@ -43,7 +43,7 @@ import top.zibin.luban.OnRenameListener;
  */
 
 public class LuBanCompressUtils {
-    private CompositeDisposable mDisposable;
+    private static CompositeDisposable mDisposable;
     private static LuBanCompressUtils sLuBanCompressUtils;
     private Context mContext;
     private static final String TAG = "LuBanCompressUtils";
@@ -54,7 +54,7 @@ public class LuBanCompressUtils {
         return this;
     }
 
-    public LuBanCompressUtils getInstance() {
+    public static LuBanCompressUtils getInstance() {
         if (sLuBanCompressUtils == null) {
             synchronized (LuBanCompressUtils.class) {
                 sLuBanCompressUtils = new LuBanCompressUtils();
@@ -83,7 +83,7 @@ public class LuBanCompressUtils {
      * @param photos
      * @param <T>
      */
-    private <T> void withAsynchronization(final List<T> photos) {
+    public  <T> void withAsynchronization(final List<T> photos) {
         mDisposable.add(Flowable.just(photos)
                 .observeOn(Schedulers.io())
                 .map(new Function<List<T>, List<File>>() {
@@ -123,7 +123,7 @@ public class LuBanCompressUtils {
      * @param photos
      * @param <T>
      */
-    private <T> void withSynchronized(final List<T> photos) {
+    public <T> void withSynchronized(final List<T> photos) {
         Luban.with(mContext)
                 .load(photos)
                 .ignoreBy(100)
@@ -226,7 +226,7 @@ public class LuBanCompressUtils {
      * @param assetsFileName
      * @return
      */
-    private List<File> assetsToFiles(List<String> assetsFileName) {
+    public List<File> assetsToFiles(List<String> assetsFileName) {
         final List<File> files = new ArrayList<>();
 
         for (int i = 0; i < assetsFileName.size(); i++) {
@@ -260,7 +260,7 @@ public class LuBanCompressUtils {
      * @param assetsFileName assetsFileName
      * @return
      */
-    private List<Uri> assetsToUri(List<String> assetsFileName) {
+    public List<Uri> assetsToUri(List<String> assetsFileName) {
         final List<Uri> uris = new ArrayList<>();
         final List<File> files = assetsToFiles(assetsFileName);
         Uri uri;
@@ -286,7 +286,7 @@ public class LuBanCompressUtils {
      * @param file     文件
      * @return
      */
-    public static Uri toURI(Context mContext, File file) {
+    public  Uri toURI(Context mContext, File file) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             return Uri.fromFile(file);
         } else {

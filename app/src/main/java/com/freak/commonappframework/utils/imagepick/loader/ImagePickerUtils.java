@@ -18,19 +18,19 @@ import java.util.List;
  */
 
 public class ImagePickerUtils {
-    private final int RESULT_CODE_IMAGE = 1001;
+    private static ImagePickerUtils mImagePickerUtils;
 
-    /**
-     * 打开imagePicker
-     *
-     * @param activity Activity
-     * @param num      可选择多少张图片
-     */
-    public void openImagePicker(Activity activity, int num) {
-        ImagePicker.getInstance().setSelectLimit(num);
-        Intent intent = new Intent(activity, ImageGridActivity.class);
-        activity.startActivityForResult(intent, RESULT_CODE_IMAGE);
+    public static ImagePickerUtils getInstance() {
+        if (mImagePickerUtils == null) {
+            synchronized (ImagePickerUtils.class) {
+                mImagePickerUtils = new ImagePickerUtils();
+            }
+        }
+        return mImagePickerUtils;
     }
+
+    public static final int RESULT_CODE_IMAGE = 1001;
+
 
     /**
      * 选择图片的回调结果，在onActivityResult方法中调用

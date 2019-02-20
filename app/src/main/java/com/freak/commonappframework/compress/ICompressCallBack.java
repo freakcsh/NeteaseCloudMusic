@@ -16,5 +16,5 @@ public interface ICompressCallBack {
      * @param file 文件
      * @return
      */
-    List<File> CompressSuccess(File file);
+    void CompressSuccess(File file);
 }

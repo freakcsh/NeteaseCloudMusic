@@ -19,7 +19,6 @@ import io.reactivex.Observable;
 public class HomepagePresenter extends RxPresenter<HomepageContract.View> implements HomepageContract.Presenter {
     ApiService apiServer = HttpMethods.getInstance().create(ApiService.class);
 
-
     @Override
     public void doLogin(String userName, String pwd) {
         Observable<LoginBean> observable = apiServer.login(userName, pwd).map(new HttpResultFunc<LoginBean>());

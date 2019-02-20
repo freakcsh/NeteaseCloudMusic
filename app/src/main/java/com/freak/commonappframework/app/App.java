@@ -77,7 +77,7 @@ public class App extends MultiDexApplication {
 //                .methodCount(5)         // （可选）要显示的方法行数。默认值2
 //                .methodOffset(7)        // （可选）隐藏内部方法调用到偏移量。默认值5
 //                .logStrategy() // （可选）更改要打印的日志策略。默认LogCat
-                .tag("NewRetail")   // （可选）每个日志的全局标记。默认PRETTY_LOGGER .build
+                .tag("CommonAppFrameWork")   // （可选）每个日志的全局标记。默认PRETTY_LOGGER .build
                 .build();
         //log日志打印框架Logger
         Logger.addLogAdapter(new AndroidLogAdapter(mFormatStrategy));
