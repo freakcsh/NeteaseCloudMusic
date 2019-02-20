@@ -5,11 +5,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
+
 /**
  * 自定义EditText
  *
- * @author Administrator
- * @date 2018/12/26
+ * @author freak
+ * @date 2019/2/19
  */
 
 @SuppressLint("AppCompatCustomView")

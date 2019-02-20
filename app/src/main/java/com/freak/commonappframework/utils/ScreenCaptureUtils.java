@@ -10,7 +10,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * Created by Administrator on 2019/2/20.
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class ScreenCaptureUtils {

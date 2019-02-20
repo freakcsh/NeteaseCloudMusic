@@ -10,10 +10,12 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * 监听网络状态变化的BroadcastReceiver
  *
- *
+ * @author freak
+ * @date 2019/2/19
  */
 public class NetStateChangeReceiver extends BroadcastReceiver {
 
@@ -77,11 +79,11 @@ public class NetStateChangeReceiver extends BroadcastReceiver {
      */
     private void notifyObservers(NetworkType networkType) {
         if (networkType == NetworkType.NETWORK_NO) {
-            for(NetStateChangeObserver observer : mObservers) {
+            for (NetStateChangeObserver observer : mObservers) {
                 observer.onNetDisconnected();
             }
         } else {
-            for(NetStateChangeObserver observer : mObservers) {
+            for (NetStateChangeObserver observer : mObservers) {
                 observer.onNetConnected(networkType);
             }
         }

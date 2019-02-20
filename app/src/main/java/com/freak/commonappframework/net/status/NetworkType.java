@@ -1,8 +1,11 @@
 package com.freak.commonappframework.net.status;
 
+
 /**
  * 网络类型
  *
+ * @author freak
+ * @date 2019/2/19
  */
 public enum NetworkType {
     /**
@@ -31,6 +34,7 @@ public enum NetworkType {
     NETWORK_NO("No network");
 
     private String desc;
+
     NetworkType(String desc) {
         this.desc = desc;
     }

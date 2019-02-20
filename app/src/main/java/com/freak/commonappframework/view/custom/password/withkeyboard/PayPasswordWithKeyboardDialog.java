@@ -20,7 +20,8 @@ import com.freak.commonappframework.R;
  * setWindowSize
  * 等等方式进行自主配置
  *
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class PayPasswordWithKeyboardDialog {
@@ -99,7 +100,7 @@ public class PayPasswordWithKeyboardDialog {
      */
     public PayPasswordWithKeyboardDialog setAlertDialog() {
         mDialog = new AlertDialog.Builder(mContext, mThemeResId).create();
-      //按返回键退出
+        //按返回键退出
         mDialog.setCancelable(true);
         mDialog.show();
         return this;

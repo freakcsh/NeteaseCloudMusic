@@ -10,22 +10,22 @@ import com.freak.commonappframework.dialog.ToastDialogFragment;
 
 
 /**
- *
- * @author Administrator
- * @date 2018/12/17
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class DialogUtil {
     /**
      * 通用弹窗、可自定义标题、内容、取消按钮和确定按钮
+     *
      * @param activity
-     * @param title 标题
-     * @param context 内容
-     * @param cancel 取消按钮
-     * @param commit 确定按钮
+     * @param title          标题
+     * @param context        内容
+     * @param cancel         取消按钮
+     * @param commit         确定按钮
      * @param onTipsListener 回调接口
      */
-    public static void showCommonDialog(AppCompatActivity activity, String title, String context, String cancel , String commit, CommonDialogFragment.OnTipsListener onTipsListener) {
+    public static void showCommonDialog(AppCompatActivity activity, String title, String context, String cancel, String commit, CommonDialogFragment.OnTipsListener onTipsListener) {
         CommonDialogFragment dialogFragment = new CommonDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
@@ -40,6 +40,7 @@ public class DialogUtil {
 
     /**
      * 温馨提示弹窗
+     *
      * @param activity
      */
     public static void showToastDialog(AppCompatActivity activity, String title, String context, String cancel) {
@@ -55,6 +56,7 @@ public class DialogUtil {
 
     /**
      * 显示密码输入弹窗
+     *
      * @param activity
      * @param onTipsListener
      */

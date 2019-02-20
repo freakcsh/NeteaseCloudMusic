@@ -6,8 +6,12 @@ import android.net.NetworkInfo;
 import android.support.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 
+
 /**
  * 网络状态相关工具类
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class NetworkUtils {
 

@@ -9,9 +9,12 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+
 /**
  * 线程池代理
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class ThreadPoolProxy {
 

@@ -11,7 +11,9 @@ import com.freak.commonappframework.R;
 
 /**
  * 显示Toast的对话框
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class ToastDialogFragment extends DialogFragment implements View.OnClickListener {
 

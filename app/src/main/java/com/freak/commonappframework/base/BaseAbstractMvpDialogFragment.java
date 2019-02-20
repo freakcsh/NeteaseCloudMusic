@@ -21,11 +21,11 @@ import com.freak.httphelper.BasePresenter;
 /**
  * MVP模式的Base Dialog fragment
  *
- * @author quchao
- * @date 2017/11/28
+ * @author freak
+ * @date 2019/2/19
  */
 
-public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> extends DialogFragment implements BaseView ,NetStateChangeObserver {
+public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> extends DialogFragment implements BaseView, NetStateChangeObserver {
 
 
     @Override
@@ -51,6 +51,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
     private RelativeLayout netErrorView;
     protected View loadingView;
     private boolean hidden = false;
+
     protected abstract T createPresenter();
 
     protected abstract int getLayoutId();
@@ -75,7 +76,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(getLayoutId(), null);
-        if (needRegisterNetworkChangeObserver()){
+        if (needRegisterNetworkChangeObserver()) {
             //此处可加入网络连接错误的布局绑定
 //            netErrorView = mView.findViewById(R.id.rl_net_error);
         }
@@ -99,7 +100,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
         initEventAndData(view);
         initLazyData();
         showLoading();
-        if (needRegisterNetworkChangeObserver()){
+        if (needRegisterNetworkChangeObserver()) {
             //此处可加入网络连接错误的布局绑定
 //            netErrorView = mView.findViewById(R.id.rl_net_error);
         }
@@ -167,7 +168,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
      */
     @Override
     public void onNetConnected(NetworkType networkType) {
-        ToastUtil.showLong(mActivity, "当前连接的是"+networkType.toString()+"网络");
+        ToastUtil.showLong(mActivity, "当前连接的是" + networkType.toString() + "网络");
         hideDisConnectedView();
     }
 

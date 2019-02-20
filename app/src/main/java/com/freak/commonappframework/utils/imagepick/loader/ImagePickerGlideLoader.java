@@ -8,9 +8,8 @@ import com.lzy.imagepicker.loader.ImageLoader;
 
 
 /**
- *
- * @author Administrator
- * @date 2018/4/10
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class ImagePickerGlideLoader implements ImageLoader {

@@ -7,8 +7,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+
 /**
- * 这是最新的
+ * 这是最新的.SP存储
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class SharedPreferencesUtils {
 

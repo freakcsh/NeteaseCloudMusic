@@ -7,7 +7,8 @@ import com.freak.commonappframework.base.BaseAbstractMvpFragment;
 
 
 /**
- * Created by Administrator on 2019/2/19.
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class MyselfFragment extends BaseAbstractMvpFragment<MyselfPresenter> implements MyselfContract.View {
@@ -27,9 +28,15 @@ public class MyselfFragment extends BaseAbstractMvpFragment<MyselfPresenter> imp
     }
 
     @Override
-    protected void initEventAndData(View view) {
+    protected void initEventAndData() {
 
     }
+
+    @Override
+    protected void initView(View view) {
+
+    }
+
 
     @Override
     protected void initLazyData() {

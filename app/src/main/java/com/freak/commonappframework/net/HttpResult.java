@@ -4,7 +4,8 @@ package com.freak.commonappframework.net;
 import com.freak.httphelper.AbstractHttpResult;
 
 /**
- * Created by Administrator on 2019/2/299.
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class HttpResult<T> extends AbstractHttpResult<T> {

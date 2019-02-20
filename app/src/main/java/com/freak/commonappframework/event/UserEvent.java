@@ -1,5 +1,9 @@
 package com.freak.commonappframework.event;
 
+/**
+ * @author freak
+ * @date 2019/2/19
+ */
 public class UserEvent {
 
     long id;

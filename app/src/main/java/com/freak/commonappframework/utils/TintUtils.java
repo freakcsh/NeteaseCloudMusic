@@ -5,8 +5,10 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 
+
 /**
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class TintUtils {
 

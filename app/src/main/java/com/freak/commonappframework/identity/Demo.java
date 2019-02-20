@@ -27,7 +27,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class Demo {
     private static final String AppKey = "24683350";

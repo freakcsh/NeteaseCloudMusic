@@ -13,9 +13,8 @@ import com.freak.commonappframework.R;
 
 
 /**
- *
  * @author freak
- * @date 2019/32/29
+ * @date 2019/2/19
  */
 public class SimpleToolbar extends LinearLayout {
 

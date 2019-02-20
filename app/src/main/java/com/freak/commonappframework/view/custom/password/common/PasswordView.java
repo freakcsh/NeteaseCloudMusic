@@ -16,12 +16,14 @@ import com.freak.commonappframework.R;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
+
 /**
  * 方格6位支付密码，不带输入键盘
  *
- * @author Administrator
- * @date 2018/12/26
+ * @author freak
+ * @date 2019/2/19
  */
+
 
 public class PasswordView extends LinearLayout {
     private LastInputEditText mEditTextOne;
@@ -188,6 +190,7 @@ public class PasswordView extends LinearLayout {
     public interface OnInputEndListener {
         /**
          * 输入完成
+         *
          * @param password
          */
         void onInputEnd(String password);

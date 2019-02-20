@@ -1,7 +1,9 @@
 package com.freak.commonappframework.commom.constants;
 
 /**
- * Created by Administrator on 2019/2/19.
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class Constants {

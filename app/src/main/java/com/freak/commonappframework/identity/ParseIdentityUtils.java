@@ -6,7 +6,6 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 
 /**
- *
  * @author freak
  * @date 2019/2/20
  */
@@ -15,11 +14,11 @@ public class ParseIdentityUtils {
     /**
      * 解析身份证，获取文字信息
      */
-    public void parsingIdCard(Bitmap bitmap, DealInterface<String> stringDealInterface){
+    public void parsingIdCard(Bitmap bitmap, DealInterface<String> stringDealInterface) {
         Bitmap positionBitmap = bitmap;
         String mess = String.format("{\"inputs\":[{\"image\":{\"dataType\": 50,\"dataValue\":\"%s\"},\"configure\": {\"dataType\": 50,\"dataValue\": \"{\\\"side\\\":\\\"face\\\"}\"}}]}",
                 bitmapToString(positionBitmap));
-        Demo.identificationHttpTest(mess,stringDealInterface);
+        Demo.identificationHttpTest(mess, stringDealInterface);
     }
 
 
@@ -27,7 +26,7 @@ public class ParseIdentityUtils {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
-        byte[] encode = Base64.encode(bytes,Base64.DEFAULT);
+        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
         return new String(encode);
     }
 }

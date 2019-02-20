@@ -1,8 +1,11 @@
 package com.freak.commonappframework.utils;
 
+
 /**
  * 线程池工厂类
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class ThreadPoolProxyFactory {
 

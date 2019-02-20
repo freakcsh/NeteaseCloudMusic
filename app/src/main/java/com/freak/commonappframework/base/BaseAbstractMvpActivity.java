@@ -26,7 +26,7 @@ import com.freak.httphelper.RxBus;
 
 /**
  * @author freak
- * @date 2019/2/29
+ * @date 2019/2/19
  * MVP activity基类
  */
 

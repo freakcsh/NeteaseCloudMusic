@@ -20,8 +20,8 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 
 /**
- * @author Administrator
- * @date 2018/4/8
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class LoadingViewDialog extends DialogFragment {

@@ -2,6 +2,9 @@ package com.freak.commonappframework.net.status;
 
 /**
  * 网络状态变化观察者
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public interface NetStateChangeObserver {
     /**

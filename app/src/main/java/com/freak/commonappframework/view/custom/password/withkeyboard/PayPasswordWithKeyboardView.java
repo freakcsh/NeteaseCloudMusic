@@ -22,9 +22,12 @@ import com.freak.commonappframework.R;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * 自定义支付密码组件、自带密码输入数字键盘
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class PayPasswordWithKeyboardView extends RelativeLayout {
     /**

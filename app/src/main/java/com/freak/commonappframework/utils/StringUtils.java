@@ -12,8 +12,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Administrator
- * @date 2018/4/8
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class StringUtils {

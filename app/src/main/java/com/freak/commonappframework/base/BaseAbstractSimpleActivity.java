@@ -20,10 +20,12 @@ import com.freak.commonappframework.utils.SharedPreferencesUtils;
 import com.freak.commonappframework.utils.ToastUtil;
 import com.freak.httphelper.RxBus;
 
+
 /**
+ * 无MVP的activity基类
+ *
  * @author freak
  * @date 2019/2/19
- * 无MVP的activity基类
  */
 
 public abstract class BaseAbstractSimpleActivity extends AppCompatActivity implements NetStateChangeObserver {

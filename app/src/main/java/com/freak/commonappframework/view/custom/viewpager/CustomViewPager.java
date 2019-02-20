@@ -6,10 +6,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 /**
- * Created by pc1994 on 2018/3/26
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
-
 public class CustomViewPager extends ViewPager {
 
     private boolean mIsCanScroll = false;
@@ -39,7 +38,7 @@ public class CustomViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        super.setCurrentItem(item,false);
+        super.setCurrentItem(item, false);
     }
 
     @Override

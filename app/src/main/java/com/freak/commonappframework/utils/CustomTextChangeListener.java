@@ -4,9 +4,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 /**
- *
- * @author Administrator
- * @date 2018/4/11
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class CustomTextChangeListener implements TextWatcher {

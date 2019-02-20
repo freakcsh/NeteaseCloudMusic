@@ -23,8 +23,10 @@ import com.freak.httphelper.RxBus;
 
 
 /**
- * Created by Administrator on 2018/2/4.
  * MVP Fragment基类
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 
 public abstract class BaseAbstractMvpFragment<T extends BasePresenter> extends Fragment implements BaseView, NetStateChangeObserver {
@@ -40,7 +42,9 @@ public abstract class BaseAbstractMvpFragment<T extends BasePresenter> extends F
 
     protected abstract int getLayoutId();
 
-    protected abstract void initEventAndData(View view);
+    protected abstract void initEventAndData();
+
+    protected abstract void initView(View view);
 
     protected abstract void initLazyData();
 
@@ -80,9 +84,9 @@ public abstract class BaseAbstractMvpFragment<T extends BasePresenter> extends F
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
-        initEventAndData(view);
+        initView(view);
+        initEventAndData();
         initLazyData();
-        showLoading();
         if (needRegisterNetworkChangeObserver()) {
 //            netErrorView = mView.findViewById(R.id.rl_net_error);
         }

@@ -1,12 +1,13 @@
 package com.freak.commonappframework.identity;
 
+
 /**
- *
- * @author clint
- * @date 2017/9/23
+ * @author freak
+ * @date 2019/2/19
  */
 
 public interface DealInterface<T> {
     void success(T object);
+
     void failure(String error);
 }

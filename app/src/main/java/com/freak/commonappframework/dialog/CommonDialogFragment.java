@@ -11,7 +11,9 @@ import com.freak.commonappframework.R;
 
 /**
  * 显示系統提示的对话框，可以自行设置题目，内容，取消，成功
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class CommonDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -57,6 +59,7 @@ public class CommonDialogFragment extends DialogFragment implements View.OnClick
 
         /**
          * 确定
+         *
          * @param dialog
          */
         void onSuccess(Dialog dialog);

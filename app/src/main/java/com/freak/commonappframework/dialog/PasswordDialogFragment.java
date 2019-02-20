@@ -12,7 +12,9 @@ import com.freak.commonappframework.view.custom.password.common.PasswordView;
 
 /**
  * 显示密码输入框
- * @author Administrator
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 public class PasswordDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -27,13 +29,13 @@ public class PasswordDialogFragment extends DialogFragment implements View.OnCli
         mDialog.setCancelable(true);
 
         mLinearLayoutCancel = mDialog.findViewById(R.id.linear_layout_cancel);
-        mPasswordView =  mDialog.findViewById(R.id.edit_text_password);
+        mPasswordView = mDialog.findViewById(R.id.edit_text_password);
         mLinearLayoutCancel.setOnClickListener(this);
         mPasswordView.setOnInputEndListener(new PasswordView.OnInputEndListener() {
             @Override
             public void onInputEnd(String password) {
-                if (onTipsListener!=null){
-                    onTipsListener.onSuccess(mDialog,password);
+                if (onTipsListener != null) {
+                    onTipsListener.onSuccess(mDialog, password);
                 }
             }
         });
@@ -49,6 +51,7 @@ public class PasswordDialogFragment extends DialogFragment implements View.OnCli
     public interface OnTipsListener {
         /**
          * 输入密码完成
+         *
          * @param dialog
          * @param password
          */

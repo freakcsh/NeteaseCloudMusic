@@ -13,27 +13,30 @@ import com.alibaba.cloudapi.sdk.model.HttpClientBuilderParams;
 
 
 /**
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class HttpsApiClient extends HttpApiClient {
     public final static String HOST = "dm-51.data.aliyun.com";
     static HttpsApiClient instance = new HttpsApiClient();
-    public static HttpsApiClient getInstance(){return instance;}
+
+    public static HttpsApiClient getInstance() {
+        return instance;
+    }
 
     @Override
-    public void init(HttpClientBuilderParams httpClientBuilderParams){
+    public void init(HttpClientBuilderParams httpClientBuilderParams) {
         httpClientBuilderParams.setScheme(Scheme.HTTPS);
         httpClientBuilderParams.setHost(HOST);
         super.init(httpClientBuilderParams);
     }
 
 
-
-    public void identification(byte[] body , ApiCallback callback) {
+    public void identification(byte[] body, ApiCallback callback) {
         String path = "/rest/160601/ocr/ocr_idcard.json";
-        ApiRequest request = new ApiRequest(HttpMethod.POST_BODY , path, body);
-        
+        ApiRequest request = new ApiRequest(HttpMethod.POST_BODY, path, body);
 
-        sendAsyncRequest(request , callback);
+
+        sendAsyncRequest(request, callback);
     }
 }

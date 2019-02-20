@@ -64,7 +64,8 @@ import static com.freak.commonappframework.utils.imagepick.ImageSelector.GET_PIC
 
 
 /**
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class WebViewActivity extends BaseAbstractSimpleActivity implements IActivityStatusBar {
     private String url = "";
@@ -130,7 +131,7 @@ public class WebViewActivity extends BaseAbstractSimpleActivity implements IActi
 
     @Override
     protected void initView() {
-        url=getIntent().getStringExtra("url");
+        url = getIntent().getStringExtra("url");
         mLinearLayoutWebView = findViewById(R.id.linear_layout_webview);
         new RxPermissions(this)
                 .requestEach(Manifest.permission.CAMERA,

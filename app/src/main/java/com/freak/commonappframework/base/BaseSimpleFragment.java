@@ -19,10 +19,12 @@ import com.freak.httphelper.RxBus;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
+
 /**
- * @author Administrator
- * @date 2019/2/19
  * 无MVP的Fragment基类
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 
 public abstract class BaseSimpleFragment extends SupportFragment implements NetStateChangeObserver {

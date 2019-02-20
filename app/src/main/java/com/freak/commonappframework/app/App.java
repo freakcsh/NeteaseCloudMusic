@@ -38,8 +38,10 @@ import java.util.Set;
 
 
 /**
- * Created by Administrator on 2018/2/29.
  * 配置全局变量
+ *
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class App extends MultiDexApplication {
@@ -68,7 +70,7 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance=this;
+        instance = this;
 
         FormatStrategy mFormatStrategy = PrettyFormatStrategy.newBuilder()
                 .showThreadInfo(false)  // （可选）是否显示线程信息。默认值true
@@ -127,6 +129,7 @@ public class App extends MultiDexApplication {
             }
         });
     }
+
     private void initImagePicker() {
         ImagePicker imagePicker = ImagePicker.getInstance();
         //设置图片加载器
@@ -150,6 +153,7 @@ public class App extends MultiDexApplication {
         //保存文件的高度。单位像素
         imagePicker.setOutPutY(1000);
     }
+
     /**
      * 设置ToolBar
      *

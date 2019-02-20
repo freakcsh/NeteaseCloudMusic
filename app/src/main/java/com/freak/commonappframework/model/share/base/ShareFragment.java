@@ -7,10 +7,11 @@ import com.freak.commonappframework.base.BaseAbstractMvpFragment;
 
 
 /**
- * Created by Administrator on 2019/2/19.
+ * @author freak
+ * @date 2019/2/19
  */
 
-public class ShareFragment extends BaseAbstractMvpFragment<SharePresenter> implements ShareContract.View{
+public class ShareFragment extends BaseAbstractMvpFragment<SharePresenter> implements ShareContract.View {
     @Override
     public void showToast(String toast) {
 
@@ -27,9 +28,16 @@ public class ShareFragment extends BaseAbstractMvpFragment<SharePresenter> imple
     }
 
     @Override
-    protected void initEventAndData(View view) {
+    protected void initEventAndData() {
 
     }
+
+    @Override
+    protected void initView(View view) {
+
+    }
+
+
 
     @Override
     protected void initLazyData() {

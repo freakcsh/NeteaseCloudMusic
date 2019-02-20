@@ -33,10 +33,12 @@ import java.util.ArrayList;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.QRCodeDecoder;
 
+
 /**
  * 二维码扫描
  *
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class ScanActivity extends BaseAbstractSimpleActivity implements IActivityStatusBar, QRCodeView.Delegate, View.OnClickListener {
 

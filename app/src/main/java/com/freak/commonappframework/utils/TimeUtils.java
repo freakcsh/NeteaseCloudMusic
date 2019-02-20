@@ -6,8 +6,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+
 /**
- * @author Administrator
+ * @author freak
+ * @date 2019/2/19
  */
 public class TimeUtils {
 
@@ -25,6 +27,7 @@ public class TimeUtils {
 
     /**
      * 月份前后计算
+     *
      * @param month
      * @return
      */
@@ -36,6 +39,7 @@ public class TimeUtils {
 
     /**
      * 获取当年1月1号时间
+     *
      * @return
      */
     public static long getThisYear() {

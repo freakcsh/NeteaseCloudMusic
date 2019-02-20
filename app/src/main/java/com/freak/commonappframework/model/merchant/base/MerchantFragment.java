@@ -7,10 +7,11 @@ import com.freak.commonappframework.base.BaseAbstractMvpFragment;
 
 
 /**
- * Created by Administrator on 2019/2/19.
+ * @author freak
+ * @date 2019/2/19
  */
 
-public class MerchantFragment extends BaseAbstractMvpFragment<MerchantPresenter> implements MerchantContract.View{
+public class MerchantFragment extends BaseAbstractMvpFragment<MerchantPresenter> implements MerchantContract.View {
     @Override
     public void showToast(String toast) {
 
@@ -27,7 +28,12 @@ public class MerchantFragment extends BaseAbstractMvpFragment<MerchantPresenter>
     }
 
     @Override
-    protected void initEventAndData(View view) {
+    protected void initEventAndData() {
+
+    }
+
+    @Override
+    protected void initView(View view) {
 
     }
 

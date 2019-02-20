@@ -7,7 +7,8 @@ import com.freak.commonappframework.base.BaseAbstractMvpFragment;
 
 
 /**
- * Created by Administrator on 2019/2/19.
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class ShopFragment extends BaseAbstractMvpFragment<ShopPresenter> implements ShopContract.View {
@@ -28,9 +29,15 @@ public class ShopFragment extends BaseAbstractMvpFragment<ShopPresenter> impleme
     }
 
     @Override
-    protected void initEventAndData(View view) {
+    protected void initEventAndData() {
 
     }
+
+    @Override
+    protected void initView(View view) {
+
+    }
+
 
     @Override
     protected void initLazyData() {

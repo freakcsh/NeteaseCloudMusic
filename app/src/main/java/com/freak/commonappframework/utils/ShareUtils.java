@@ -14,9 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Administrator
- * @date 2018/5/15
+ * @author freak
+ * @date 2019/2/19
  */
 
 public class ShareUtils {
