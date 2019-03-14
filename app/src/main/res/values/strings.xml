@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">通用APP架构</string>
+    <string name="app_name">网易云音乐</string>
     <string name="homepage_tag">首页</string>
     <string name="merchant_tag">商家</string>
     <string name="shop_tag">商城</string>
     <string name="share_tag">分享</string>
     <string name="myself_tag">我的</string>
     <string name="loading">加载中</string>
+    <string name="key_ok">完成</string>
 </resources>
