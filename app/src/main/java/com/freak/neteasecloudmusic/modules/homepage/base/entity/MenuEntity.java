@@ -12,9 +12,6 @@ public class MenuEntity {
     private boolean isShowBigView;
     private boolean isShowArrows;
 
-    public MenuEntity(String title) {
-        this.title = title;
-    }
 
     public int getId() {
         return id;

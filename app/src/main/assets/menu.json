@@ -1,0 +1,80 @@
+[
+  [
+    {
+      "id": 10,
+      "title": "我的订单",
+      "icon": "ic_icon_my_order",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 11,
+      "title": "实名认证",
+      "icon": "ic_icon_verify_name",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 12,
+      "title": "绑定银行卡",
+      "icon": "ic_icon_bind_bank_card",
+      "isShowSmallView": true,
+      "isShowBigView": true,
+      "isShowArrows": true
+    }
+  ],
+  [
+    {
+      "id": 20,
+      "title": "修改/解绑手机",
+      "icon": "ic_icon_bind_phone",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 21,
+      "title": "修改密码",
+      "icon": "ic_icon_alter_password",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 22,
+      "title": "地址管理",
+      "icon": "ic_icon_manager_address",
+      "isShowSmallView": true,
+      "isShowBigView": true,
+      "isShowArrows": true
+    }
+  ],
+  [
+    {
+      "id": 30,
+      "title": "客服专区",
+      "icon": "ic_icon_service",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 31,
+      "title": "意见反馈",
+      "icon": "ic_icon_face_back",
+      "isShowSmallView": true,
+      "isShowBigView": false,
+      "isShowArrows": true
+    },
+    {
+      "id": 32,
+      "title": "版本更新",
+      "icon": "ic_icon_version_update",
+      "isShowSmallView": true,
+      "isShowBigView": true,
+      "isShowArrows": true
+    }
+  ]
+]

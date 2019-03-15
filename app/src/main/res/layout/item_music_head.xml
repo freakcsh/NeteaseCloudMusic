@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30pt"
+        android:gravity="center_vertical"
+        android:background="@color/color_e5e5e5e">
+
+        <ImageView
+            android:id="@+id/item_music_item_head_arrows"
+            android:layout_width="20pt"
+            android:layout_height="20pt"
+            android:layout_marginLeft="10pt"
+            android:background="@drawable/selector_music_header" />
+
+        <TextView
+            android:id="@+id/item_music_item_head_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="创建的歌单"
+            android:textSize="14pt"
+            android:gravity="center_vertical"
+            android:paddingLeft="10pt"
+            android:textColor="@color/color_666666"/>
+        <ImageView
+            android:id="@+id/item_music_item_head_setting"
+            android:layout_width="25pt"
+            android:layout_height="25pt"
+            android:layout_marginRight="15pt"
+            android:background="@drawable/svg_icon_music_setting"/>
+    </LinearLayout>
+</LinearLayout>

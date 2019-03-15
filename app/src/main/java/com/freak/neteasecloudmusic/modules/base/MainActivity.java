@@ -1,18 +1,17 @@
 package com.freak.neteasecloudmusic.modules.base;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,16 +19,18 @@ import android.widget.ImageView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.modules.base.adapter.MenuItemAdapter;
-import com.freak.neteasecloudmusic.modules.homepage.base.HomePageFragment;
+import com.freak.neteasecloudmusic.modules.disco.base.DiscoFragment;
 import com.freak.neteasecloudmusic.modules.homepage.base.entity.MenuEntity;
-import com.freak.neteasecloudmusic.modules.myself.MyselfFragment;
-import com.freak.neteasecloudmusic.splash.SplashScreen;
-import com.freak.neteasecloudmusic.utils.HandlerUtil;
-import com.freak.neteasecloudmusic.utils.LogUtils;
+import com.freak.neteasecloudmusic.modules.music.MusicFragment;
+import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
+import com.freak.neteasecloudmusic.utils.StringUtils;
+import com.freak.neteasecloudmusic.utils.ToastUtil;
 import com.freak.neteasecloudmusic.view.custom.viewpager.CustomViewPager;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -38,80 +39,68 @@ import java.util.List;
  * @date 2019/02/19
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private ActionBar mActionBar;
-    private SplashScreen mSplashScreen;
-    private ImageView barnet, barmusic, barfriends, search;
-    private ArrayList<ImageView> tabs = new ArrayList<>();
+    private ImageView mImgDisco, mImgMusic, mImgVideo, mImgSearch;
+    private List<ImageView> tabs;
     private DrawerLayout drawerLayout;
-    private RecyclerView recycle_view_menu;
+    private RecyclerView mRecycleViewMenu;
     private long time = 0;
-    private List<MenuEntity> mItems = new ArrayList<MenuEntity>(
-            Arrays.asList(
-                    new MenuEntity("夜间模式"),
-                    new MenuEntity("主题换肤"),
-                    new MenuEntity("定时关闭音乐"),
-                    new MenuEntity("下载歌曲品质"),
-                    new MenuEntity("退出")
-
-            ));
+    private List<MenuEntity> mMenuEntityList;
     private MenuItemAdapter mMenuItemAdapter;
+    private ImageView mImgMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mSplashScreen = new SplashScreen(this);
-        mSplashScreen.show(R.mipmap.bg_splash, SplashScreen.SLIDE_LEFT);
         setContentView(R.layout.activity_main);
+//        mSplashScreen = new SplashScreen(this);
+//        mSplashScreen.show(R.mipmap.bg_splash, SplashScreen.SLIDE_LEFT);
         super.onCreate(savedInstanceState);
-
         initView();
     }
 
 
     private void initView() {
-        getWindow().setBackgroundDrawableResource(R.color.color_fafafa);
 
-        barnet = (ImageView) findViewById(R.id.bar_net);
-        barmusic = (ImageView) findViewById(R.id.bar_music);
-        barfriends = (ImageView) findViewById(R.id.bar_friends);
-        search = (ImageView) findViewById(R.id.bar_search);
-        barmusic = (ImageView) findViewById(R.id.bar_music);
+        mImgDisco = (ImageView) findViewById(R.id.img_disco);
+        mImgMusic = (ImageView) findViewById(R.id.img_music);
+        mImgVideo = (ImageView) findViewById(R.id.img_video);
+        mImgSearch = (ImageView) findViewById(R.id.img_search);
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        recycle_view_menu = (RecyclerView) findViewById(R.id.recycle_view_menu);
-
-        setToolBar();
+        mRecycleViewMenu = (RecyclerView) findViewById(R.id.recycle_view_menu);
+        mImgMenu = (ImageView) findViewById(R.id.img_menu);
+        mImgMenu.setOnClickListener(this);
+        mImgSearch.setOnClickListener(this);
         setViewPager();
         setUpDrawer();
-        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSplashScreen.removeSplashScreen();
-            }
-        }, 3000);
+//        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mSplashScreen.removeSplashScreen();
+//            }
+//        }, 3000);
 
 
     }
 
-    private void setToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
-        mActionBar.setTitle("");
-    }
 
     private void setViewPager() {
-        tabs.add(barnet);
-        tabs.add(barmusic);
+        tabs = new ArrayList<>();
+        mMenuEntityList = new ArrayList<>();
+        tabs.add(mImgDisco);
+        tabs.add(mImgMusic);
+        tabs.add(mImgVideo);
+        mMenuEntityList = getItemList(this);
         final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
-        final HomePageFragment mainFragment = new HomePageFragment();
-        final MyselfFragment tabNetPagerFragment = new MyselfFragment();
+        final MusicFragment musicFragment = new MusicFragment();
+        final DiscoFragment discoFragment = new DiscoFragment();
+        final VideoFragment videoFragment = new VideoFragment();
         CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
-        customViewPagerAdapter.addFragment(tabNetPagerFragment);
-        customViewPagerAdapter.addFragment(mainFragment);
+        customViewPagerAdapter.addFragment(musicFragment);
+        customViewPagerAdapter.addFragment(discoFragment);
+        customViewPagerAdapter.addFragment(videoFragment);
         customViewPager.setAdapter(customViewPagerAdapter);
         customViewPager.setCurrentItem(1);
-        barmusic.setSelected(true);
+        mImgMusic.setSelected(true);
         customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -129,41 +118,107 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        barnet.setOnClickListener(new View.OnClickListener() {
+        mImgDisco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customViewPager.setCurrentItem(0);
             }
         });
-        barmusic.setOnClickListener(new View.OnClickListener() {
+        mImgMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customViewPager.setCurrentItem(1);
             }
         });
-
-        search.setOnClickListener(new View.OnClickListener() {
+        mImgVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final Intent intent = new Intent(MainActivity.this, NetSearchWordsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                MainActivity.this.startActivity(intent);
+                customViewPager.setCurrentItem(2);
             }
         });
     }
 
     private void setUpDrawer() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        recycle_view_menu.setLayoutManager(new LinearLayoutManager(this));
-        mMenuItemAdapter = new MenuItemAdapter(R.layout.nav_header_main,mItems);
-        mMenuItemAdapter.addHeaderView(inflater.inflate(R.layout.nav_header_main, recycle_view_menu, false));
-        recycle_view_menu.setAdapter(mMenuItemAdapter);
+        mRecycleViewMenu.setLayoutManager(new LinearLayoutManager(this));
+        mMenuItemAdapter = new MenuItemAdapter(R.layout.item_menu, mMenuEntityList);
+        mMenuItemAdapter.addHeaderView(inflater.inflate(R.layout.item_menu_head, mRecycleViewMenu, false));
+        mMenuItemAdapter.bindToRecyclerView(mRecycleViewMenu);
+        mRecycleViewMenu.setAdapter(mMenuItemAdapter);
         mMenuItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+                menuItemOnClick(position);
             }
         });
+    }
+
+    public List<MenuEntity> getItemList(Context context) {
+        List<MenuEntity> mineItems = new ArrayList<>();
+        String json = StringUtils.getJsonForLocation(context, "menu.json");
+        if (!TextUtils.isEmpty(json)) {
+            try {
+                JSONArray array = new JSONArray(json);
+                for (int i = 0; i < array.length(); i++) {
+                    JSONArray arrayItem = array.getJSONArray(i);
+                    for (int k = 0; k < arrayItem.length(); k++) {
+                        JSONObject object = arrayItem.getJSONObject(k);
+                        MenuEntity mineItem = new MenuEntity();
+                        mineItem.setId(object.optInt("id"));
+                        mineItem.setTitle(object.optString("title"));
+                        mineItem.setIcon(context.getResources().getIdentifier(object.optString("icon"), "mipmap", context.getPackageName()));
+                        mineItem.setShowArrows(object.optBoolean("isShowArrows"));
+                        mineItem.setShowBigView(object.optBoolean("isShowBigView"));
+                        mineItem.setShowSmallView(object.optBoolean("isShowSmallView"));
+                        mineItems.add(mineItem);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return mineItems;
+    }
+
+    public void menuItemOnClick(int position) {
+        switch (mMenuEntityList.get(position).getId()) {
+            case 10:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 11:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 12:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 13:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 20:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 21:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 22:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+            case 30:
+                ToastUtil.shortShow(mMenuEntityList.get(position).getTitle());
+                drawerLayout.closeDrawers();
+                break;
+
+            default:
+                break;
+        }
     }
 
     private void switchTabs(int position) {
@@ -179,16 +234,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            //侧滑菜单
+            case R.id.img_menu:
+                drawerLayout.openDrawer(Gravity.LEFT);
+                break;
+            //搜索
+            case R.id.img_search:
+                break;
             default:
                 break;
         }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e("接收数据");
     }
 
     static class CustomViewPagerAdapter extends FragmentPagerAdapter {

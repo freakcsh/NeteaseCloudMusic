@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50pt">
+
+        <LinearLayout
+            android:layout_width="50pt"
+            android:layout_height="match_parent"
+            android:background="@color/color_404040"
+            android:layout_marginLeft="5pt"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/svg_icon_music_love" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:text="我喜欢的音乐"
+                android:textSize="14pt"
+                android:paddingTop="5pt"
+                android:gravity="center_vertical"
+                android:paddingLeft="15pt"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="0首"
+                android:textSize="12pt"
+                android:gravity="center_vertical"
+                android:paddingLeft="15pt"
+                android:layout_marginBottom="5pt"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1pt"
+                android:layout_marginLeft="15pt"
+                android:background="@color/color_e5e5e5e"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

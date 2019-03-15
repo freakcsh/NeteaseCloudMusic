@@ -4,54 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <!--<android.support.v7.widget.Toolbar-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:fitsSystemWindows="true"-->
+    <!--app:contentInsetStart="0.0dp"-->
+    <!--app:layout_scrollFlags="enterAlways|scroll">-->
+
+    <LinearLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="44pt"
         android:background="@color/colorPrimary"
-        android:fitsSystemWindows="true"
-        app:contentInsetStart="0.0dp"
-        app:layout_scrollFlags="enterAlways|scroll">
+        android:gravity="center_vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
+        <ImageView
+            android:id="@+id/img_menu"
+            android:layout_width="25pt"
+            android:layout_height="30pt"
+            android:layout_marginLeft="15pt"
+            android:background="@drawable/svg_icon_menu"
+            android:clickable="true" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/bar_net"
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:layout_toLeftOf="@+id/bar_music"
-                android:background="@drawable/selector_actionbar_disco"
-                android:clickable="true" />
 
             <ImageView
-                android:id="@+id/bar_music"
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:background="@drawable/selector_actionbar_music"
-                android:clickable="true" />
+                android:id="@+id/img_music"
+                android:layout_width="25pt"
+                android:layout_height="25pt"
+
+                android:background="@drawable/selector_actionbar_music" />
 
             <ImageView
-                android:id="@+id/bar_friends"
-                android:layout_width="55dp"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/bar_music"
-                android:background="@drawable/selector_actionbar_friends"
-                android:clickable="true" />
+                android:id="@+id/img_disco"
+                android:layout_width="25pt"
+                android:layout_height="25pt"
+                android:layout_marginLeft="20pt"
+                android:layout_marginRight="20pt"
+                android:background="@drawable/selector_actionbar_disco" />
 
             <ImageView
-                android:id="@+id/bar_search"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/icon_actionbar_search"
-                android:scaleType="center" />
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+                android:id="@+id/img_video"
+                android:layout_width="25pt"
+                android:layout_height="25pt"
+                android:background="@drawable/selector_actionbar_video" />
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="20pt"
+            android:layout_height="20pt"
+            android:layout_marginLeft="10pt"
+            android:layout_marginRight="15pt"
+            android:background="@drawable/svg_icon_search" />
+    </LinearLayout>
+    <!--</android.support.v7.widget.Toolbar>-->
 
     <com.freak.neteasecloudmusic.view.custom.viewpager.CustomViewPager
         android:id="@+id/main_viewpager"
@@ -62,6 +77,6 @@
     <FrameLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="50pt"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>

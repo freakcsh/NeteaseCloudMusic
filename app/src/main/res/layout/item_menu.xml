@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <View
+        android:id="@+id/view_item_small_header"
+        android:layout_width="match_parent"
+        android:layout_height="1pt"
+        android:background="@color/color_e5e5e5e"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44pt"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/img_item_icon"
+            android:layout_width="20pt"
+            android:layout_height="20pt"
+            android:layout_marginLeft="15pt" />
+
+        <TextView
+            android:id="@+id/text_view_item_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10pt"
+            android:text="音乐闹钟"
+            android:textColor="@color/color_404040"
+            android:textSize="14pt" />
+
+        <TextView
+            android:id="@+id/text_view_item_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:maxEms="12"
+            android:minLines="1"
+            android:paddingRight="15pt"
+            android:singleLine="true"
+            android:textColor="@color/color_404040"
+            android:textSize="14pt" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view_item_big"
+        android:layout_width="match_parent"
+        android:layout_height="15pt"
+        android:background="@color/color_e5e5e5e"
+        android:visibility="gone" />
+
+</LinearLayout>

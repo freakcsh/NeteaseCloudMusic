@@ -40,7 +40,7 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.freak.neteasecloudmusic.modules.base.MainActivity">
+        <activity android:name=".splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -58,8 +58,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity"/>
-        <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity"/>
+        <activity android:name=".modules.base.MainActivity" />
+        <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity" />
+        <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
     </application>
 
 </manifest>
