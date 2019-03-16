@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.freak.neteasecloudmusic.BuildConfig;
-import com.freak.neteasecloudmusic.utils.LogUtils;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -178,11 +178,11 @@ public class LuBanCompressUtils {
         if (isOrigin) {
             int[] originSize = computeSize(file);
             String originArg = String.format(Locale.CHINA, "原图参数：%d*%d, %dk", originSize[0], originSize[1], file.length() >> 10);
-            LogUtils.e(originArg);
+            LogUtil.e(originArg);
         } else {
             int[] thumbSize = computeSize(file);
             String thumbArg = String.format(Locale.CHINA, "压缩后参数：%d*%d, %dk", thumbSize[0], thumbSize[1], file.length() >> 10);
-            LogUtils.e(thumbArg);
+            LogUtil.e(thumbArg);
         }
     }
 

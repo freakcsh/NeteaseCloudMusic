@@ -21,6 +21,7 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/text_view_menu_login"
             android:layout_width="100pt"
             android:layout_height="30pt"
             android:background="@drawable/shape_bg_circle_e5e5e5_20"

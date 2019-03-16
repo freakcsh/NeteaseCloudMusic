@@ -6,7 +6,7 @@ import com.freak.neteasecloudmusic.commom.constants.Constants;
 
 
 /**
- * 放回结果过滤
+ * 返回结果过滤
  *
  * @author Administrator
  * @date 2019/3/7
@@ -14,7 +14,7 @@ import com.freak.neteasecloudmusic.commom.constants.Constants;
 
 public class ResponseFiltrate {
     public static void filtrateSuccessOrFailure(HttpResult httpResult, @NonNull Filtrate filtrate) {
-        if (Constants.SUCCESS_CODE.equals(httpResult.getCode())) {
+        if (Constants.SUCCESS_STRING_CODE.equals(httpResult.getCode())) {
             filtrate.onSuccess(httpResult);
         } else {
             filtrate.onFailure(httpResult.getMsg());

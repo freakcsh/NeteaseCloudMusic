@@ -9,13 +9,13 @@
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="44pt"
+        app:tabGravity="fill"
         app:tabIndicatorColor="@color/colorPrimary"
         app:tabIndicatorHeight="1pt"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
         app:tabMaxWidth="0dp"
-        app:tabTextColor="@color/color_404040"
-        app:tabSelectedTextColor="@color/colorPrimary" />
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="@color/color_404040" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

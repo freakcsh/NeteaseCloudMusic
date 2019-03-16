@@ -1,15 +1,8 @@
 package com.freak.neteasecloudmusic.modules.homepage.base;
 
-import com.freak.neteasecloudmusic.app.api.ApiService;
-import com.freak.neteasecloudmusic.modules.homepage.base.entity.LoginBean;
-import com.freak.neteasecloudmusic.net.resonse.HttpResultFunc;
-import com.freak.httphelper.ApiCallback;
 import com.freak.httphelper.HttpMethods;
 import com.freak.httphelper.RxPresenter;
-import com.freak.httphelper.SubscriberCallBack;
-import com.orhanobut.logger.Logger;
-
-import io.reactivex.Observable;
+import com.freak.neteasecloudmusic.app.api.ApiService;
 
 
 /**
@@ -21,18 +14,18 @@ public class HomepagePresenter extends RxPresenter<HomepageContract.View> implem
 
     @Override
     public void doLogin(String userName, String pwd) {
-        Observable<LoginBean> observable = apiServer.login(userName, pwd).map(new HttpResultFunc<LoginBean>());
-        addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<LoginBean>() {
-            @Override
-            public void onSuccess(LoginBean model) {
-                Logger.d(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                Logger.d(msg);
-            }
-        }));
+//        Observable<LoginBean> observable = apiServer.login(userName, pwd).map(new HttpResultFunc<LoginBean>());
+//        addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<LoginBean>() {
+//            @Override
+//            public void onSuccess(LoginBean model) {
+//                Logger.d(model);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                Logger.d(msg);
+//            }
+//        }));
 
 
     }

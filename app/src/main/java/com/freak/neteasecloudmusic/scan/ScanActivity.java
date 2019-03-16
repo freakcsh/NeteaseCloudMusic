@@ -21,7 +21,7 @@ import android.widget.Toast;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractSimpleActivity;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
-import com.freak.neteasecloudmusic.utils.LogUtils;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
 import com.freak.neteasecloudmusic.utils.TintUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -133,7 +133,7 @@ public class ScanActivity extends BaseAbstractSimpleActivity implements IActivit
      */
     @Override
     public void onScanQRCodeSuccess(String result) {
-        LogUtils.e(result);
+        LogUtil.e(result);
 //        Pattern pattern = Pattern
 //                .compile("^([hH][tT]{2}[pP]://|[hH][tT]{2}[pP][sS]://)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~/])+$");
 //        LogUtils.e("二维码数据-->" + result);

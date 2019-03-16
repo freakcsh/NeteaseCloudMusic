@@ -12,7 +12,7 @@ import com.alibaba.cloudapi.sdk.model.ApiCallback;
 import com.alibaba.cloudapi.sdk.model.ApiRequest;
 import com.alibaba.cloudapi.sdk.model.ApiResponse;
 import com.alibaba.cloudapi.sdk.model.HttpClientBuilderParams;
-import com.freak.neteasecloudmusic.utils.LogUtils;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -98,7 +98,7 @@ public class Demo {
         HttpApiClient.getInstance().identification(body.getBytes(SdkConstant.CLOUDAPI_ENCODING), new ApiCallback() {
             @Override
             public void onFailure(ApiRequest request, Exception e) {
-                LogUtils.e("身份直接失败 ");
+                LogUtil.e("身份直接失败 ");
                 Demo.dealInterface.failure(e.toString());
                 e.printStackTrace();
             }
@@ -106,11 +106,11 @@ public class Demo {
             @Override
             public void onResponse(ApiRequest request, ApiResponse response) {
                 try {
-                    LogUtils.e("身份回到 ");
+                    LogUtil.e("身份回到 ");
                     System.out.println(getResultString(response));
-                    LogUtils.e("身份20-》" + getResultString(response));
+                    LogUtil.e("身份20-》" + getResultString(response));
                 } catch (Exception ex) {
-                    LogUtils.e("身份回到异常");
+                    LogUtil.e("身份回到异常");
                     Demo.dealInterface.failure(ex.toString());
                     ex.printStackTrace();
                 }

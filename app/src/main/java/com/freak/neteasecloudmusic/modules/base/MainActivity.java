@@ -1,13 +1,11 @@
 package com.freak.neteasecloudmusic.modules.base;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -15,14 +13,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.freak.neteasecloudmusic.R;
+import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
+import com.freak.neteasecloudmusic.commom.constants.Constants;
+import com.freak.neteasecloudmusic.glide.GlideApp;
 import com.freak.neteasecloudmusic.modules.base.adapter.MenuItemAdapter;
+import com.freak.neteasecloudmusic.modules.base.entity.LoginStatusEntity;
 import com.freak.neteasecloudmusic.modules.disco.base.DiscoFragment;
 import com.freak.neteasecloudmusic.modules.homepage.base.entity.MenuEntity;
+import com.freak.neteasecloudmusic.modules.login.LoginActivity;
 import com.freak.neteasecloudmusic.modules.music.MusicFragment;
 import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
+import com.freak.neteasecloudmusic.utils.SPUtils;
 import com.freak.neteasecloudmusic.utils.StringUtils;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
 import com.freak.neteasecloudmusic.view.custom.viewpager.CustomViewPager;
@@ -38,7 +43,7 @@ import java.util.List;
  * @author freak
  * @date 2019/02/19
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> implements MainContract.View, View.OnClickListener {
     private ImageView mImgDisco, mImgMusic, mImgVideo, mImgSearch;
     private List<ImageView> tabs;
     private DrawerLayout drawerLayout;
@@ -47,19 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<MenuEntity> mMenuEntityList;
     private MenuItemAdapter mMenuItemAdapter;
     private ImageView mImgMenu;
+    private View mHeadVew;
+    private TextView text_view_menu_login;
+    private ImageView img_bg_login;
+    private TextView text_view_username;
+    private String mBackgroundUrl;
+    private ImageView img_bg;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_main);
-//        mSplashScreen = new SplashScreen(this);
-//        mSplashScreen.show(R.mipmap.bg_splash, SplashScreen.SLIDE_LEFT);
-        super.onCreate(savedInstanceState);
-        initView();
+    protected int getLayout() {
+        return R.layout.activity_main;
     }
 
+    @Override
+    protected void initEventAndData() {
 
-    private void initView() {
+    }
 
+    @Override
+    protected void initView() {
         mImgDisco = (ImageView) findViewById(R.id.img_disco);
         mImgMusic = (ImageView) findViewById(R.id.img_music);
         mImgVideo = (ImageView) findViewById(R.id.img_video);
@@ -70,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mImgMenu = (ImageView) findViewById(R.id.img_menu);
         mImgMenu.setOnClickListener(this);
         mImgSearch.setOnClickListener(this);
+        mBackgroundUrl = (String) SPUtils.get(this, Constants.LOGIN_URL, "");
         setViewPager();
         setUpDrawer();
 //        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
@@ -79,7 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        }, 3000);
 
+    }
 
+    @Override
+    protected MainPresenter createPresenter() {
+        return new MainPresenter();
     }
 
 
@@ -139,10 +155,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setUpDrawer() {
-        LayoutInflater inflater = LayoutInflater.from(this);
         mRecycleViewMenu.setLayoutManager(new LinearLayoutManager(this));
         mMenuItemAdapter = new MenuItemAdapter(R.layout.item_menu, mMenuEntityList);
-        mMenuItemAdapter.addHeaderView(inflater.inflate(R.layout.item_menu_head, mRecycleViewMenu, false));
+        mPresenter.loadLoginStatusEntity();
         mMenuItemAdapter.bindToRecyclerView(mRecycleViewMenu);
         mRecycleViewMenu.setAdapter(mMenuItemAdapter);
         mMenuItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -151,6 +166,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 menuItemOnClick(position);
             }
         });
+    }
+
+    private void initHeadView(int type, LoginStatusEntity loginStatusEntity) {
+        switch (type) {
+            case 1:
+                mHeadVew = LayoutInflater.from(this).inflate(R.layout.view_menu_view_head_login, null);
+                img_bg_login = mHeadVew.findViewById(R.id.img_bg_login);
+                img_bg = mHeadVew.findViewById(R.id.img_bg);
+                text_view_username = mHeadVew.findViewById(R.id.text_view_username);
+                GlideApp.with(this).load(mBackgroundUrl).thumbnail(0.1f).into(img_bg_login);
+                GlideApp.with(this).load(loginStatusEntity.getProfile().getAvatarUrl()).thumbnail(0.1f).into(img_bg);
+                text_view_username.setText(loginStatusEntity.getProfile().getNickname());
+                mMenuItemAdapter.addHeaderView(mHeadVew);
+                break;
+            case 2:
+                mHeadVew = LayoutInflater.from(this).inflate(R.layout.item_menu_head, null);
+                text_view_menu_login = mHeadVew.findViewById(R.id.text_view_menu_login);
+                text_view_menu_login.setOnClickListener(this);
+                mMenuItemAdapter.addHeaderView(mHeadVew);
+                break;
+            default:
+                break;
+        }
+
     }
 
     public List<MenuEntity> getItemList(Context context) {
@@ -241,9 +280,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //搜索
             case R.id.img_search:
                 break;
+            //登陆
+            case R.id.text_view_menu_login:
+                LoginActivity.startAction(this);
+                finish();
+                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public void showToast(String toast) {
+
+    }
+
+    @Override
+    public void getLoginStatusSuccess(LoginStatusEntity loginStatusEntity) {
+        if (TextUtils.isEmpty(loginStatusEntity.getProfile().getNickname())) {
+            initHeadView(1, loginStatusEntity);
+        } else {
+            initHeadView(2, loginStatusEntity);
+        }
+    }
+
+    @Override
+    public void getLoginStatusError() {
+        initHeadView(2, null);
     }
 
     static class CustomViewPagerAdapter extends FragmentPagerAdapter {

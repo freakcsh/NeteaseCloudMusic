@@ -74,7 +74,7 @@ public class DiscoFragment extends BaseAbstractMvpFragment<DiscoPresenter> imple
         tabAdapter.addFragment(new RecommendFragment(),"推荐");
         tabAdapter.addFragment(new FriendFragment(),"朋友");
         tabAdapter.addFragment(new BroadcastingFragment(),"电台");
-        mViewPager.setAdapter(tabAdapter);
+        upViewPager.setAdapter(tabAdapter);
     }
 
     private class TabAdapter extends FragmentStatePagerAdapter {

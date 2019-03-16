@@ -61,6 +61,7 @@
         <activity android:name=".modules.base.MainActivity" />
         <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity" />
         <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
+        <activity android:name=".modules.login.LoginActivity"/>
     </application>
 
 </manifest>

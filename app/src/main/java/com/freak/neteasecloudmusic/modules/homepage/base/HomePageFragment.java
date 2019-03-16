@@ -15,8 +15,8 @@ import com.freak.neteasecloudmusic.compress.LuBanCompressUtils;
 import com.freak.neteasecloudmusic.identity.DealInterface;
 import com.freak.neteasecloudmusic.identity.ParseIdentityUtils;
 import com.freak.neteasecloudmusic.modules.homepage.base.entity.LoginBean;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
 import com.freak.neteasecloudmusic.scan.ScanActivity;
-import com.freak.neteasecloudmusic.utils.LogUtils;
 import com.freak.neteasecloudmusic.utils.imagepick.loader.ImagePickerUtils;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.bean.ImageItem;
@@ -115,12 +115,12 @@ public class HomePageFragment extends BaseAbstractMvpFragment<HomepagePresenter>
                 ParseIdentityUtils.getInstance().parsingIdCard(((BitmapDrawable) image.getDrawable()).getBitmap(), new DealInterface<String>() {
                     @Override
                     public void success(String object) {
-                        LogUtils.e("身份-->" + object);
+                        LogUtil.e("身份-->" + object);
                     }
 
                     @Override
                     public void failure(String error) {
-                        LogUtils.e("身份错误-->" + error);
+                        LogUtil.e("身份错误-->" + error);
                     }
                 });
                 break;
@@ -143,7 +143,7 @@ public class HomePageFragment extends BaseAbstractMvpFragment<HomepagePresenter>
                 LuBanCompressUtils.getInstance().setContext(getActivity()).setICompressCallBack(new ICompressCallBack() {
                     @Override
                     public void CompressSuccess(File file) {
-                        LogUtils.e("压缩完成");
+                        LogUtil.e("压缩完成");
                       Uri uri= LuBanCompressUtils.getInstance().toURI(getActivity(),file);
                       image.setImageURI(uri);
                     }
@@ -157,10 +157,10 @@ public class HomePageFragment extends BaseAbstractMvpFragment<HomepagePresenter>
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        LogUtils.e("接收数据");
+        LogUtil.e("接收数据");
         List<ImageItem> imageList = ImagePickerUtils.getInstance().selectImageResult(requestCode, resultCode, data);
        if (imageList.size()>0){
-           LogUtils.d(imageList.get(0).path);
+           LogUtil.d(imageList.get(0).path);
            image.setImageURI(Uri.parse(imageList.get(0).path));
        }
     }

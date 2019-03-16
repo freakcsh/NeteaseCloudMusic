@@ -1,7 +1,7 @@
 package com.freak.neteasecloudmusic.app.api;
 
-import com.freak.neteasecloudmusic.modules.homepage.base.entity.LoginBean;
-import com.freak.neteasecloudmusic.net.resonse.HttpResult;
+import com.freak.neteasecloudmusic.modules.base.entity.LoginStatusEntity;
+import com.freak.neteasecloudmusic.modules.login.entty.LoginEntity;
 
 import io.reactivex.Observable;
 import retrofit2.http.POST;
@@ -18,8 +18,11 @@ public interface ApiService {
      *
      * @return
      */
-    @POST("/login")
-    Observable<HttpResult<LoginBean>> login(@Query("userName") String userName,
-                                            @Query("pwd") String pwd
+    @POST("login/cellphone")
+    Observable<LoginEntity> login(@Query("phone") String phone,
+                                  @Query("password") String password
     );
+
+    @POST("login/status")
+    Observable<LoginStatusEntity> loadLoginStatus();
 }
