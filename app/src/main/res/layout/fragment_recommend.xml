@@ -4,8 +4,132 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.jude.rollviewpager.RollPagerView
+        android:id="@+id/roll_pagerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="recommend" />
+        android:layout_height="150pt"
+        android:layout_margin="10pt" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:background="@drawable/svg_icon_recommend_fm" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="私人FM"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:background="@drawable/svg_icon_recommend_tj" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="每日推荐"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_recommend_song_list"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:background="@drawable/svg_icon_recommend_gd" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="歌单"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:background="@drawable/svg_icon_recommend_phb" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="排行榜"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1pt"
+        android:layout_marginTop="10pt"
+        android:background="@color/color_e5e5e5e"/>
 </LinearLayout>

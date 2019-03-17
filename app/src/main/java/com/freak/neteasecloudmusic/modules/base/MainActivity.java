@@ -102,8 +102,8 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     private void setViewPager() {
         tabs = new ArrayList<>();
         mMenuEntityList = new ArrayList<>();
-        tabs.add(mImgDisco);
         tabs.add(mImgMusic);
+        tabs.add(mImgDisco);
         tabs.add(mImgVideo);
         mMenuEntityList = getItemList(this);
         final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
@@ -111,12 +111,10 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         final DiscoFragment discoFragment = new DiscoFragment();
         final VideoFragment videoFragment = new VideoFragment();
         CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
-        customViewPagerAdapter.addFragment(musicFragment);
         customViewPagerAdapter.addFragment(discoFragment);
+        customViewPagerAdapter.addFragment(musicFragment);
         customViewPagerAdapter.addFragment(videoFragment);
         customViewPager.setAdapter(customViewPagerAdapter);
-        customViewPager.setCurrentItem(1);
-        mImgMusic.setSelected(true);
         customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -133,14 +131,15 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
             }
         });
-
-        mImgDisco.setOnClickListener(new View.OnClickListener() {
+        customViewPager.setCurrentItem(1);
+        switchTabs(1);
+        mImgMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customViewPager.setCurrentItem(0);
             }
         });
-        mImgMusic.setOnClickListener(new View.OnClickListener() {
+        mImgDisco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 customViewPager.setCurrentItem(1);
@@ -297,7 +296,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
     @Override
     public void getLoginStatusSuccess(LoginStatusEntity loginStatusEntity) {
-        if (TextUtils.isEmpty(loginStatusEntity.getProfile().getNickname())) {
+        if (!TextUtils.isEmpty(loginStatusEntity.getProfile().getNickname())) {
             initHeadView(1, loginStatusEntity);
         } else {
             initHeadView(2, loginStatusEntity);

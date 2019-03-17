@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
+import com.freak.neteasecloudmusic.net.cookie.CookieJarImpl;
 import com.freak.neteasecloudmusic.net.interceptor.CommonParametersInterceptor;
 import com.freak.neteasecloudmusic.net.log.HttpLogger;
 import com.freak.neteasecloudmusic.receiver.NetworkConnectChangedReceiver;
@@ -89,8 +90,9 @@ public class App extends MultiDexApplication {
         Logger.addLogAdapter(new AndroidLogAdapter(mFormatStrategy));
         HttpMethods.setBaseUrl(Constants.BASE_URL);
         HttpMethods.setLevel(HttpMethods.BODY);
-        HttpMethods.setInterceptor(new CommonParametersInterceptor());
+//        HttpMethods.setInterceptor(new CommonParametersInterceptor());
         HttpMethods.setLogger(new HttpLogger());
+        HttpMethods.setCookieJar(new CookieJarImpl());
         initImagePicker();
         initReceiver();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.freak.neteasecloudmusic">
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
@@ -39,7 +40,8 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,6 +64,7 @@
         <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity" />
         <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
         <activity android:name=".modules.login.LoginActivity"/>
+        <activity android:name=".modules.disco.recommend.songlist.SongListActivity"/>
     </application>
 
 </manifest>

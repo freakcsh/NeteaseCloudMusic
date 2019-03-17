@@ -20,17 +20,19 @@
         android:layout_height="24pt"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="20pt"
+        android:layout_marginLeft="10pt"
         android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tv_toolbar_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/iv_toolbar_left_icon"
         android:text="标题"
+        android:paddingLeft="20pt"
+        android:gravity="center"
         android:textColor="@color/color_white"
-        android:textSize="24pt" />
+        android:textSize="16pt" />
 
     <ImageView
         android:id="@+id/iv_toolbar_right_icon"

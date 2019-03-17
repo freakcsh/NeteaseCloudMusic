@@ -12,7 +12,7 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpFragment;
 import com.freak.neteasecloudmusic.modules.disco.broadcasting.BroadcastingFragment;
 import com.freak.neteasecloudmusic.modules.disco.friend.FriendFragment;
-import com.freak.neteasecloudmusic.modules.disco.recommend.RecommendFragment;
+import com.freak.neteasecloudmusic.modules.disco.recommend.base.RecommendFragment;
 
 import java.util.ArrayList;
 import java.util.List;

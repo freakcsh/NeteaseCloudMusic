@@ -59,7 +59,7 @@ public class CustomViewPager extends ViewPager {
     }
 
     public interface OnSingleTouchListener {
-        public void onSingleTouch(View v);
+         void onSingleTouch(View v);
     }
 
     public void setOnSingleTouchListener(
