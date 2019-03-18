@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40pt"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5pt"
+            android:gravity="center"
+            android:text="最新音乐"
+            android:textColor="@color/color_404040"
+            android:textSize="14pt" />
+
+        <View
+            android:layout_width="25pt"
+            android:layout_height="25pt"
+            android:background="@drawable/svg_arrows_right" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="120pt"
+        android:layout_height="120pt"
+        android:layout_margin="5pt"
+        android:background="@color/color_e5e5e5e">
+
+        <ImageView
+            android:layout_width="120pt"
+            android:layout_height="120pt" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="120pt"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:text="100首古风"
+        android:textSize="12pt" />
+    <TextView
+        android:layout_width="120pt"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10pt"
+        android:layout_marginLeft="5pt"
+        android:layout_marginRight="5pt"
+        android:text="作者"
+        android:textSize="12pt" />
+</LinearLayout>

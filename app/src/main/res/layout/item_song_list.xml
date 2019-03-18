@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+
     <RelativeLayout
-        android:layout_width="125pt"
-        android:layout_height="125pt"
-        android:layout_margin="5pt"
-        android:background="@color/color_e5e5e5e">
+        android:layout_width="180pt"
+        android:layout_height="180pt"
+        android:layout_margin="5pt">
 
         <ImageView
-            android:layout_width="125pt"
-            android:layout_height="125pt" />
+            android:id="@+id/img_bg_song_list"
+            android:layout_width="180pt"
+            android:layout_height="180pt" />
 
         <ImageView
             android:layout_width="12pt"
             android:layout_height="12pt"
             android:layout_toLeftOf="@+id/text_view_bfl"
-            android:background="@drawable/svg_icon_headset" />
+            android:background="@drawable/svg_icon_headset"
+            android:layout_marginTop="5pt"/>
 
         <TextView
             android:id="@+id/text_view_bfl"
@@ -28,31 +30,37 @@
             android:paddingRight="5pt"
             android:text="400"
             android:textColor="@color/white"
-            android:textSize="10pt" />
+            android:textSize="10pt"
+            android:layout_marginTop="5pt"/>
+
         <ImageView
             android:id="@+id/image_author"
             android:layout_width="12pt"
             android:layout_height="12pt"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/svg_icon_rt" />
+            android:background="@drawable/svg_icon_rt"
+            android:layout_marginBottom="5pt"/>
+
         <TextView
             android:id="@+id/text_view_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/image_author"
             android:paddingRight="5pt"
             android:text="米老鼠"
-            android:layout_alignParentBottom="true"
-           android:layout_toRightOf="@+id/image_author"
             android:textColor="@color/white"
-            android:textSize="10pt" />
+            android:textSize="10pt"
+            android:layout_marginBottom="5pt"/>
     </RelativeLayout>
 
     <TextView
-        android:layout_width="125pt"
+        android:id="@+id/text_view_song_list_tip"
+        android:layout_width="180pt"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10pt"
         android:layout_marginLeft="5pt"
         android:layout_marginRight="5pt"
-        android:layout_marginBottom="10pt"
         android:text="100首古风"
-        android:textSize="12pt" />
+        android:textSize="10pt" />
 </LinearLayout>

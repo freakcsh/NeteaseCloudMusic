@@ -11,8 +11,8 @@ public class Constants {
     //    public static final String BASE_URL = "http://192.168.1.89:8014/";
 //    public static final String BASE_URL = "http://192.168.1.169:9999/";
 //    public static final String BASE_URL = "http://192.168.1.178:8081/";
-//    public static final String BASE_URL = "http://192.168.1.166:3000/";
-    public static final String BASE_URL = "http://169.254.246.219:3000/";
+    public static final String BASE_URL = "http://192.168.1.119:3000/";
+//    public static final String BASE_URL = "http://169.254.246.219:3000/";
     public static final String UO_LOGIN = "用户未登录";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String RENOVATE = "renovate";
