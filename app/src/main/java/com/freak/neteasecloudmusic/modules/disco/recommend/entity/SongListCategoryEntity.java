@@ -2,6 +2,7 @@ package com.freak.neteasecloudmusic.modules.disco.recommend.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @date 2019/3/18
  */
 
-public class SongListCategoryEntity {
+public class SongListCategoryEntity implements Serializable {
 
     /**
      * all : {"name":"全部歌单","resourceCount":1000,"imgId":0,"imgUrl":null,"type":0,"category":4,"resourceType":0,"hot":false,"activity":false}
@@ -63,7 +64,7 @@ public class SongListCategoryEntity {
         this.sub = sub;
     }
 
-    public static class AllBean {
+    public static class AllBean implements Serializable{
         /**
          * name : 全部歌单
          * resourceCount : 1000
@@ -159,7 +160,7 @@ public class SongListCategoryEntity {
         }
     }
 
-    public static class CategoriesBean {
+    public static class CategoriesBean implements Serializable{
         /**
          * 0 : 语种
          * 1 : 风格
@@ -220,7 +221,7 @@ public class SongListCategoryEntity {
         }
     }
 
-    public static class SubBean {
+    public static class SubBean implements Serializable{
         /**
          * name : 流行
          * resourceCount : 1000

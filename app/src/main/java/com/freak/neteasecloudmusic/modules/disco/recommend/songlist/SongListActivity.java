@@ -1,24 +1,37 @@
 package com.freak.neteasecloudmusic.modules.disco.recommend.songlist;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.freak.httphelper.RxBus;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
+import com.freak.neteasecloudmusic.event.CategoryEvent;
+import com.freak.neteasecloudmusic.glide.GlideApp;
+import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.adapter.SongListAdapter;
+import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.all.AllSongListActivity;
+import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.hot.HotSongListActivity;
+import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author Administrator
@@ -30,6 +43,13 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
     private SongListAdapter mSongListAdapter;
     private List<SongListEntity.PlaylistsBean> mList;
     private View mHeadView;
+    private SongListCategoryEntity mSongListCategoryEntity;
+    private Disposable mDisposable;
+    private ImageView mImgCategoryBg;
+    private LinearLayout mLinearLayoutHotSongList;
+    private TextView mTextViewHeadCategory;
+    private TextView mTextViewHeadCategoryTip;
+    private SimpleToolbar mSimpleToolbarSongList;
 
     public static void startAction(Context context) {
         Intent intent = new Intent(context, SongListActivity.class);
@@ -44,12 +64,16 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
     @Override
     protected void initEventAndData() {
         mPresenter.loadSongListCategory();
-        mPresenter.loadSongListCategoryList("hot", "全部歌单", mPresenter.mLimit, mPresenter.mOffset);
+
+        mPresenter.loadSongListCategoryList("new", "全部歌单", mPresenter.mLimit, mPresenter.mOffset);
+        mPresenter.loadHotSongListCategoryList("全部歌单", 1, 0);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initView() {
         mList = new ArrayList<>();
+        initToolbar();
         mRecycleViewSongList = findViewById(R.id.recycle_view_song_list);
         mRecycleViewSongList.setOnClickListener(this);
         mRecycleViewSongList.setLayoutManager(new GridLayoutManager(this, 2));
@@ -63,9 +87,30 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
         mSongListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                mPresenter.loadSongListCategoryList("hot", mTextViewCategory.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
+                mPresenter.loadSongListCategoryList("new", mTextViewCategory.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
             }
         }, mRecycleViewSongList);
+        mDisposable = RxBus.getDefault().tObservable(CategoryEvent.class).subscribe(new Consumer<CategoryEvent>() {
+            @Override
+            public void accept(CategoryEvent categoryEvent) throws Exception {
+                if (categoryEvent.getId() == 100) {
+                    mTextViewCategory.setText(categoryEvent.getName());
+                    mPresenter.mOffset = 0;
+                    mList.clear();
+                    mPresenter.loadSongListCategoryList("new", categoryEvent.getName(), mPresenter.mLimit, mPresenter.mOffset);
+                }
+            }
+        });
+    }
+
+    private void initToolbar() {
+        mSimpleToolbarSongList = findViewById(R.id.simple_toolbar_song_list);
+        mSimpleToolbarSongList.setLeftIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -80,19 +125,38 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
 
     @Override
     public int getStatusBarColor() {
-        return getResources().getColor(R.color.color_FF919C96);
+        return getResources().getColor(R.color.color_FF3D3B35);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_view_gf:
+                mTextViewCategory.setText(mTextViewGf.getText().toString().trim());
+                mPresenter.mOffset = 0;
+                mList.clear();
+                mPresenter.loadSongListCategoryList("new", mTextViewGf.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
                 break;
             case R.id.text_view_dz:
+                mTextViewCategory.setText(mTextViewDz.getText().toString().trim());
+                mPresenter.mOffset = 0;
+                mList.clear();
+                mPresenter.loadSongListCategoryList("new", mTextViewDz.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
                 break;
             case R.id.text_view_hy:
+                mTextViewCategory.setText(mTextViewHy.getText().toString().trim());
+                mPresenter.mOffset = 0;
+                mList.clear();
+                mPresenter.loadSongListCategoryList("new", mTextViewHy.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
                 break;
             case R.id.text_view_category:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("category", mSongListCategoryEntity);
+                gotoActivity(AllSongListActivity.class, false, bundle);
+                break;
+            //精品歌单
+            case R.id.linear_layout_hot_song_list:
+                gotoActivity(HotSongListActivity.class, false);
                 break;
             default:
                 break;
@@ -106,12 +170,17 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
      */
     @Override
     public void loadSongListCategoryListSuccess(SongListEntity songListEntity) {
-        if (mPresenter.mOffset >= songListEntity.getTotal()) {
-            mSongListAdapter.loadMoreEnd();
+        if (songListEntity != null) {
+            if (mPresenter.mOffset >= songListEntity.getTotal()) {
+                mSongListAdapter.loadMoreEnd();
+            } else {
+                mSongListAdapter.loadMoreComplete();
+            }
+            mList.addAll(songListEntity.getPlaylists());
         } else {
-            mSongListAdapter.loadMoreComplete();
+            mList.clear();
         }
-        mList.addAll(songListEntity.getPlaylists());
+
         mSongListAdapter.notifyDataSetChanged();
     }
 
@@ -131,6 +200,12 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
         mTextViewHy = mHeadView.findViewById(R.id.text_view_hy);
         mTextViewDz = mHeadView.findViewById(R.id.text_view_dz);
         mTextViewGf = mHeadView.findViewById(R.id.text_view_gf);
+
+        mTextViewHeadCategoryTip = mHeadView.findViewById(R.id.text_view_head_category_tip);
+        mTextViewHeadCategory = mHeadView.findViewById(R.id.text_view_head_category);
+        mLinearLayoutHotSongList = mHeadView.findViewById(R.id.linear_layout_hot_song_list);
+        mImgCategoryBg = mHeadView.findViewById(R.id.img_category_bg);
+        mLinearLayoutHotSongList.setOnClickListener(this);
         mTextViewGf.setOnClickListener(this);
         mTextViewDz.setOnClickListener(this);
         mTextViewHy.setOnClickListener(this);
@@ -144,6 +219,7 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
      */
     @Override
     public void loadSongListCategorySuccess(SongListCategoryEntity songListCategoryEntity) {
+        mSongListCategoryEntity = songListCategoryEntity;
         mTextViewCategory.setText(songListCategoryEntity.getAll().getName());
         switch (songListCategoryEntity.getSub().size()) {
             case 1:
@@ -167,13 +243,25 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
 
     }
 
-    /**
-     * 热门歌单分类
-     *
-     * @param hotSongListCategoryEntity
-     */
-    @Override
-    public void HotSongListCategorySuccess(HotSongListCategoryEntity hotSongListCategoryEntity) {
 
+    @Override
+    public void loadHotSongListCategoryListError(String msg) {
+
+    }
+
+    @Override
+    public void loadHotSongListCategoryListSuccess(HotSongListEntity hotSongListEntity) {
+        GlideApp.with(this).load(hotSongListEntity.getPlaylists().get(0).getCoverImgUrl()).thumbnail(0.1f).into(mImgCategoryBg);
+        mTextViewHeadCategory.setText(hotSongListEntity.getPlaylists().get(0).getName());
+        mTextViewHeadCategoryTip.setText(hotSongListEntity.getPlaylists().get(0).getCopywriter());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDisposable.isDisposed()) {
+            mDisposable.dispose();
+            mDisposable = null;
+        }
     }
 }

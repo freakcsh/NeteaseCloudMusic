@@ -65,6 +65,8 @@
         <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
         <activity android:name=".modules.login.LoginActivity"/>
         <activity android:name=".modules.disco.recommend.songlist.SongListActivity"/>
+        <activity android:name=".modules.disco.recommend.songlist.all.AllSongListActivity"/>
+        <activity android:name=".modules.disco.recommend.songlist.hot.HotSongListActivity"/>
     </application>
 
 </manifest>
