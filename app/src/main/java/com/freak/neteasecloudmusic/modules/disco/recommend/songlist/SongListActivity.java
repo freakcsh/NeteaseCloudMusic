@@ -34,6 +34,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
 /**
+ * 歌单
+ *
  * @author Administrator
  */
 public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter> implements SongListContract.View, IActivityStatusBar, View.OnClickListener {

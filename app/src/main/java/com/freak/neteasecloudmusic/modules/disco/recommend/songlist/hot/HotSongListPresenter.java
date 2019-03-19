@@ -12,10 +12,16 @@ import com.freak.neteasecloudmusic.net.log.LogUtil;
 
 import io.reactivex.Observable;
 
+/**
+ * 热门歌单
+ *
+ * @author Administrator
+ */
 public class HotSongListPresenter extends RxPresenter<HotSongListContract.View> implements HotSongListContract.Presenter {
     ApiService mApiService = HttpMethods.getInstance().create(ApiService.class);
     public int mOffset = 0;
-    public static final int mLimit = 20;
+    public  final int mLimit = 20;
+
     /**
      * 热门歌单分类
      */
@@ -37,7 +43,7 @@ public class HotSongListPresenter extends RxPresenter<HotSongListContract.View> 
 
     @Override
     public void loadHotSongListCategoryList(String cat, final int limit, final int offset) {
-        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList( cat, limit, offset);
+        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList(cat, limit, offset);
         addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<HotSongListEntity>() {
             @Override
             public void onSuccess(HotSongListEntity model) {

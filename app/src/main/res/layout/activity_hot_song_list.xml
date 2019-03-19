@@ -13,4 +13,8 @@
         app:tool_left_icon="@drawable/svg_arrows_left"
         android:background="@color/colorPrimary"
         app:tool_right_text="筛选"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view_hot_song_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

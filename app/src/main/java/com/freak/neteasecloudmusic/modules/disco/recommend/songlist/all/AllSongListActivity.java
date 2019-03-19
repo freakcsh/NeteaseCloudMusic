@@ -1,7 +1,6 @@
 package com.freak.neteasecloudmusic.modules.disco.recommend.songlist.all;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -17,11 +16,16 @@ import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.event.CategoryEvent;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCategoryEntity;
 
+/**
+ * 所有歌单分类
+ *
+ * @author Administrator
+ */
 public class AllSongListActivity extends BaseAbstractSimpleActivity implements IActivityStatusBar {
     private RecyclerView mRecycleViewAllSongList;
     private SongListCategoryEntity mSongListCategoryEntity;
     private AllSongListAdapter mAllSongListAdapter;
-    private TextView text_view_item_head_all_song_list;
+    private TextView mTextViewItemHeadAllSongList;
     private View mHeadView;
 
 
@@ -54,7 +58,7 @@ public class AllSongListActivity extends BaseAbstractSimpleActivity implements I
         mAllSongListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                RxBus.getDefault().post(new CategoryEvent(100,mSongListCategoryEntity.getSub().get(position).getName()));
+                RxBus.getDefault().post(new CategoryEvent(100, mSongListCategoryEntity.getSub().get(position).getName()));
                 finish();
             }
         });
@@ -62,8 +66,8 @@ public class AllSongListActivity extends BaseAbstractSimpleActivity implements I
 
     private void initHeadView() {
         mHeadView = LayoutInflater.from(this).inflate(R.layout.item_all_song_list_head, null);
-        text_view_item_head_all_song_list = mHeadView.findViewById(R.id.text_view_item_head_all_song_list);
-        text_view_item_head_all_song_list.setText(mSongListCategoryEntity.getAll().getName());
+        mTextViewItemHeadAllSongList = mHeadView.findViewById(R.id.text_view_item_head_all_song_list);
+        mTextViewItemHeadAllSongList.setText(mSongListCategoryEntity.getAll().getName());
     }
 
     @Override

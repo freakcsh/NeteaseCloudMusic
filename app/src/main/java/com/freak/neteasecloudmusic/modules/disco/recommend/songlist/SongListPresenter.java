@@ -6,7 +6,6 @@ import com.freak.httphelper.RxPresenter;
 import com.freak.httphelper.SubscriberCallBack;
 import com.freak.neteasecloudmusic.app.api.ApiService;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListEntity;
@@ -21,7 +20,7 @@ import io.reactivex.Observable;
 public class SongListPresenter extends RxPresenter<SongListContract.View> implements SongListContract.Presenter {
     ApiService mApiService = HttpMethods.getInstance().create(ApiService.class);
     public int mOffset = 0;
-    public static final int mLimit = 20;
+    public final int mLimit = 20;
 
     /**
      * 获取歌曲分类列表
@@ -80,7 +79,7 @@ public class SongListPresenter extends RxPresenter<SongListContract.View> implem
 
     @Override
     public void loadHotSongListCategoryList(String cat, final int limit, final int offset) {
-        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList( cat, limit, offset);
+        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList(cat, limit, offset);
         addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<HotSongListEntity>() {
             @Override
             public void onSuccess(HotSongListEntity model) {
