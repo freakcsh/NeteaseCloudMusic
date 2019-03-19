@@ -78,5 +78,6 @@
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="50pt"
+        android:background="@color/white"
         android:layout_alignParentBottom="true" />
 </RelativeLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30pt"
+        android:paddingBottom="10pt">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="25pt"
+            android:paddingLeft="15pt"
+            android:gravity="center_vertical"
+            android:text="选择你喜欢的分类"
+            android:textColor="@color/color_404040"
+            android:textSize="14pt"
+            />
+
+        <ImageView
+            android:id="@+id/img_filtrate_dialog_close"
+            android:layout_width="20pt"
+            android:layout_height="20pt"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15pt"
+            android:background="@drawable/svg_icon_close" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view_filtrate_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="600pt"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"/>
+</LinearLayout>

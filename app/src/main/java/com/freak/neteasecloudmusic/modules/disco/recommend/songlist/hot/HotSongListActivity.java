@@ -1,5 +1,6 @@
 package com.freak.neteasecloudmusic.modules.disco.recommend.songlist.hot;
 
+import android.app.Dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -8,10 +9,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
+import com.freak.neteasecloudmusic.dialog.FiltrateDialogFragment;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.hot.adapter.HotSongListAdapter;
-import com.freak.neteasecloudmusic.utils.ToastUtil;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
+import com.freak.neteasecloudmusic.utils.DialogUtil;
 import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
 import java.util.ArrayList;
@@ -27,7 +30,8 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
     private RecyclerView mRecycleViewHotSongList;
     private HotSongListAdapter mHotSongListAdapter;
     private List<HotSongListEntity.PlaylistsBean> mList;
-    private String category = "全部";
+    private String mCategory = "全部";
+    private HotSongListCategoryEntity mHotSongListCategoryEntity;
 
     @Override
     protected int getLayout() {
@@ -36,7 +40,8 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
 
     @Override
     protected void initEventAndData() {
-        mPresenter.loadHotSongListCategoryList("全部", mPresenter.mLimit, mPresenter.mOffset);
+        mPresenter.loadHotSongListCategory();
+        mPresenter.loadHotSongListCategoryList("全部", mPresenter.mLimit, mPresenter.mBefore);
     }
 
     @Override
@@ -57,15 +62,14 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
         mHotSongListAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                mPresenter.mOffset = 0;
-                mPresenter.loadHotSongListCategoryList("全部", mPresenter.mLimit, mPresenter.mOffset);
+                mPresenter.loadHotSongListCategoryList("全部", mPresenter.mLimit, mPresenter.mBefore);
             }
         }, mRecycleViewHotSongList);
     }
 
     private void initToolbar() {
         mSimpleToolbarHotSongList = findViewById(R.id.simple_toolbar_hot_song_list);
-        mSimpleToolbarHotSongList.setTitleName("精品歌单."+category);
+        mSimpleToolbarHotSongList.setTitleName("精品歌单." + mCategory);
         mSimpleToolbarHotSongList.setLeftIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +78,23 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
         }).setRightTextClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ToastUtil.shortShow("筛选");
+                DialogUtil.showFiltrateDialog(HotSongListActivity.this, mCategory, mHotSongListCategoryEntity, new FiltrateDialogFragment.OnTipsListener() {
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Dialog dialog, String category) {
+                        LogUtil.e("回调");
+                        dialog.dismiss();
+                        mPresenter.mBefore = 0;
+                        mList.clear();
+                        mCategory = category;
+                        mPresenter.loadHotSongListCategoryList(category, mPresenter.mLimit, mPresenter.mBefore);
+                        mSimpleToolbarHotSongList.setTitleName("精品歌单." + mCategory);
+                    }
+                });
             }
         });
     }
@@ -101,7 +121,7 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
      */
     @Override
     public void HotSongListCategorySuccess(HotSongListCategoryEntity hotSongListCategoryEntity) {
-
+        mHotSongListCategoryEntity = hotSongListCategoryEntity;
     }
 
     @Override
@@ -113,9 +133,19 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
     public void loadHotSongListCategoryListSuccess(HotSongListEntity hotSongListEntity) {
         if (hotSongListEntity != null) {
             if (hotSongListEntity.getPlaylists().size() != 0) {
+                if (mPresenter.count >= hotSongListEntity.getTotal()) {
+                    mHotSongListAdapter.loadMoreEnd();
+                } else {
+                    mHotSongListAdapter.loadMoreComplete();
+                }
                 mList.addAll(hotSongListEntity.getPlaylists());
-                mHotSongListAdapter.notifyDataSetChanged();
+
+            } else {
+                mList.clear();
             }
+        } else {
+            mList.clear();
         }
+        mHotSongListAdapter.notifyDataSetChanged();
     }
 }

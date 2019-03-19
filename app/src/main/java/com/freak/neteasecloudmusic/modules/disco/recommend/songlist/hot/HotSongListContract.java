@@ -27,6 +27,6 @@ public class HotSongListContract {
          * @param limit  取出歌单数量 , 默认为 20
          * @param offset
          */
-        void loadHotSongListCategoryList(String cat, final int limit, final int offset);
+        void loadHotSongListCategoryList(String cat, final int limit, final long before);
     }
 }

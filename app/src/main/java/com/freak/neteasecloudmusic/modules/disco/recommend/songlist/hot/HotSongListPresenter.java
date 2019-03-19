@@ -19,8 +19,9 @@ import io.reactivex.Observable;
  */
 public class HotSongListPresenter extends RxPresenter<HotSongListContract.View> implements HotSongListContract.Presenter {
     ApiService mApiService = HttpMethods.getInstance().create(ApiService.class);
-    public int mOffset = 0;
-    public  final int mLimit = 20;
+    public long mBefore = 0;
+    public final int mLimit = 20;
+    public int count = 0;
 
     /**
      * 热门歌单分类
@@ -31,26 +32,31 @@ public class HotSongListPresenter extends RxPresenter<HotSongListContract.View> 
         addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<HotSongListCategoryEntity>() {
             @Override
             public void onSuccess(HotSongListCategoryEntity model) {
-
+                if (model.getCode() == Constants.SUCCESS_CODE) {
+                    mView.HotSongListCategorySuccess(model);
+                } else {
+                    mView.loadHotSongListCategoryListError(model.getMsg());
+                }
             }
 
             @Override
             public void onFailure(String msg) {
-
+                LogUtil.e(msg);
             }
         }));
     }
 
     @Override
-    public void loadHotSongListCategoryList(String cat, final int limit, final int offset) {
-        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList(cat, limit, offset);
+    public void loadHotSongListCategoryList(String cat, final int limit, final long before) {
+        Observable<HotSongListEntity> observable = mApiService.loadQualitySongList(cat, limit, before);
         addSubscription(observable, new SubscriberCallBack<>(new ApiCallback<HotSongListEntity>() {
             @Override
             public void onSuccess(HotSongListEntity model) {
                 if (model.getCode() == Constants.SUCCESS_CODE) {
                     if (model.isMore()) {
-                        mOffset += mLimit;
+                        count += mLimit;
                     }
+                    mBefore = model.getPlaylists().get(model.getPlaylists().size() - 1).getUpdateTime();
                     mView.loadHotSongListCategoryListSuccess(model);
                 } else {
                     mView.loadHotSongListCategoryListError(model.getMsg());

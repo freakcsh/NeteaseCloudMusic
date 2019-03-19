@@ -79,13 +79,13 @@ public interface ApiService {
      *
      * @param cat    比如 " 华语 "、" 古风 " 、" 欧美 "、" 流行 ", 默认为 "全部",可从歌单分类接口获取
      * @param limit  取出歌单数量 , 默认为 20
-     * @param offset 分页起始位置 从0开始
+     * @param before 分页参数,取上一页最后一个歌单的 updateTime 获取下一页数据
      * @return
      */
     @POST("top/playlist/highquality")
     Observable<HotSongListEntity> loadQualitySongList(@Query("cat") String cat,
                                                       @Query("limit") int limit,
-                                                      @Query("offset") int offset);
+                                                      @Query("before") long before);
 
     /**
      * 歌单 ( 网友精选碟 )

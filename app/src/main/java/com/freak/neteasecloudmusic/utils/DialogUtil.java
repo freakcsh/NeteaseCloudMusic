@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.freak.neteasecloudmusic.dialog.CommonDialogFragment;
+import com.freak.neteasecloudmusic.dialog.FiltrateDialogFragment;
 import com.freak.neteasecloudmusic.dialog.PasswordDialogFragment;
 import com.freak.neteasecloudmusic.dialog.ToastDialogFragment;
+import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
 
 
 /**
@@ -62,6 +64,17 @@ public class DialogUtil {
      */
     public static void showPasswordDialog(AppCompatActivity activity, PasswordDialogFragment.OnTipsListener onTipsListener) {
         PasswordDialogFragment dialogFragment = new PasswordDialogFragment();
+        dialogFragment.setCancelable(false);
+        dialogFragment.setOnConfirmListener(onTipsListener);
+        dialogFragment.show(activity.getSupportFragmentManager(), "");
+    }
+
+    public static void showFiltrateDialog(AppCompatActivity activity,String category, HotSongListCategoryEntity hotSongListCategoryEntity, FiltrateDialogFragment.OnTipsListener onTipsListener) {
+        FiltrateDialogFragment dialogFragment = new FiltrateDialogFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("hotSongListCategoryEntity", hotSongListCategoryEntity);
+        args.putString("category",category);
+        dialogFragment.setArguments(args);
         dialogFragment.setCancelable(false);
         dialogFragment.setOnConfirmListener(onTipsListener);
         dialogFragment.show(activity.getSupportFragmentManager(), "");

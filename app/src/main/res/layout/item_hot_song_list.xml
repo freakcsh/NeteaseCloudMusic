@@ -1,6 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100pt"
+        android:layout_marginTop="2pt">
+
+        <RelativeLayout
+            android:layout_width="100pt"
+            android:layout_height="100pt"
+            android:layout_marginLeft="5pt">
+
+            <ImageView
+                android:id="@+id/img_item_hot_bg"
+                android:layout_width="100pt"
+                android:layout_height="100pt"
+              />
+
+            <ImageView
+                android:layout_width="12pt"
+                android:layout_height="12pt"
+                android:layout_marginTop="5pt"
+                android:layout_toLeftOf="@+id/hot_song_list_bfl"
+                android:background="@drawable/svg_icon_headset" />
+
+            <TextView
+                android:id="@+id/hot_song_list_bfl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5pt"
+                android:paddingRight="5pt"
+                android:textColor="@color/white"
+                android:textSize="10pt" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_hot_ms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10pt"
+                android:paddingTop="15pt"
+                android:paddingRight="15pt"
+                android:textColor="@color/color_404040"
+                android:textSize="12pt" />
+
+            <TextView
+                android:id="@+id/text_view_hot_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10pt"
+                android:paddingTop="10pt"
+                android:paddingRight="15pt"
+                android:textColor="@color/color_FF88928D"
+                android:textSize="11pt" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8pt">
+
+                <TextView
+                    android:id="@+id/text_view_hot_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10pt"
+                    android:background="@drawable/shape_bg_red_2"
+                    android:paddingLeft="2pt"
+                    android:paddingRight="2pt"
+                    android:textSize="8pt"
+                    android:textColor="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/text_view_hot_type_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3pt"
+                    android:textColor="@color/color_FF88928D"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1pt"
+        android:layout_marginLeft="100pt"
+        android:background="@color/color_e5e5e5e" />
+</LinearLayout>

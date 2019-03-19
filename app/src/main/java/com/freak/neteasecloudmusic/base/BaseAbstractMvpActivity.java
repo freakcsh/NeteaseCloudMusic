@@ -3,9 +3,12 @@ package com.freak.neteasecloudmusic.base;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +17,7 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.app.App;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 import com.freak.neteasecloudmusic.event.UserEvent;
+import com.freak.neteasecloudmusic.modules.controls.QuickControlsFragment;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeObserver;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
 import com.freak.neteasecloudmusic.net.status.NetworkType;
@@ -30,10 +34,11 @@ import com.freak.httphelper.RxBus;
  * MVP activity基类
  */
 
-public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends AppCompatActivity implements RxBaseView,NetStateChangeObserver {
+public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends AppCompatActivity implements RxBaseView, NetStateChangeObserver {
     protected T mPresenter;
     protected Activity mActivity;
     private View netErrorView;
+    private QuickControlsFragment mFragment;
 
     /**
      * 绑定布局
@@ -79,8 +84,27 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         }
         initView();
         initEventAndData();
+        //TODO  每一个页面包含id为bottom_container的布局
+        //注册播放广播
+//        IntentFilter intentFilter = new IntentFilter();
+        //展示底部播放fragment
+        showQuickFragment();
     }
 
+    /**
+     * 展示底部播放fragment
+     * 全部继承BaseAbstractMvpActivity的activity都展示
+     */
+    public void showQuickFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (mFragment == null) {
+            mFragment = QuickControlsFragment.getInstance();
+            transaction.add(R.id.bottom_container, mFragment).commitNowAllowingStateLoss();
+        } else {
+            transaction.show(mFragment).commitNowAllowingStateLoss();
+        }
+    }
 
     @Override
     protected void onDestroy() {
@@ -185,9 +209,9 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
             finish();
         }
     }
+
     /**
      * 自定义返回监听
-     *
      */
     public void setBackPress() {
         try {
@@ -203,8 +227,10 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
 
         }
     }
+
     /**
      * 系统返回键监听
+     *
      * @param item
      * @return
      */
@@ -218,6 +244,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                 return super.onOptionsItemSelected(item);
         }
     }
+
     /**
      * 未登录状态提示
      *

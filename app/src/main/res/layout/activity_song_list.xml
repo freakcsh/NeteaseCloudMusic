@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_FF3D3B35"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar
-            android:id="@+id/simple_toolbar_song_list"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tool_left_icon="@drawable/svg_arrows_left"
-            app:tool_title="歌单" />
+            android:background="@color/color_FF3D3B35"
+            android:orientation="vertical">
+
+            <com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar
+                android:id="@+id/simple_toolbar_song_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tool_left_icon="@drawable/svg_arrows_left"
+                app:tool_title="歌单" />
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_song_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view_song_list"
+    <FrameLayout
+        android:id="@+id/bottom_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="50pt"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
