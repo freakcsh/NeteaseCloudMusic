@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar
+            android:id="@+id/simple_toolbar_song_list_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_FF3F3334"
+            app:tool_left_icon="@drawable/svg_arrows_left"
+            app:tool_title="歌单" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_song_list_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="50pt"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" />
+</RelativeLayout>

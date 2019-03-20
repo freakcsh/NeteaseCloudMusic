@@ -59,14 +59,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
         <activity android:name=".modules.base.MainActivity" />
         <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity" />
         <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
-        <activity android:name=".modules.login.LoginActivity"/>
-        <activity android:name=".modules.disco.recommend.songlist.SongListActivity"/>
-        <activity android:name=".modules.disco.recommend.songlist.all.AllSongListActivity"/>
-        <activity android:name=".modules.disco.recommend.songlist.hot.HotSongListActivity"/>
+        <activity android:name=".modules.login.LoginActivity" />
+        <activity android:name=".modules.disco.recommend.songlist.SongListActivity" />
+        <activity android:name=".modules.disco.recommend.songlist.all.AllSongListActivity" />
+        <activity android:name=".modules.disco.recommend.songlist.hot.HotSongListActivity" />
+        <activity android:name=".modules.disco.recommend.songlist.detail.DetailActivity" />
     </application>
 
 </manifest>
