@@ -5,7 +5,9 @@ import com.freak.neteasecloudmusic.modules.disco.recommend.entity.BannerEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListDetailEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListEntity;
+import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.modules.login.entty.LoginEntity;
 
 import io.reactivex.Observable;
@@ -98,7 +100,7 @@ public interface ApiService {
     @POST("top/playlist/highquality")
     Observable loadQualitySongListWy(@Query("cat") String cat,
                                      @Query("limit") int limit,
-                                     @Query("before") int before);
+                                     @Query("before") String before);
 
     /**
      * 获取歌单详情
@@ -108,6 +110,26 @@ public interface ApiService {
      * @return
      */
     @POST("playlist/detail")
-    Observable loadSongListCategoryDetail(@Query("id") String id,
-                                          @Query("s") String s);
+    Observable<SongListDetailEntity> loadSongListCategoryDetail(@Query("id") String id,
+                                                                @Query("s") String s);
+
+    /**
+     * 获取音乐播放地址
+     *
+     * @param id
+     * @return
+     */
+    @POST("song/url")
+    Observable<SongUrlEntity> loadSongUrl(@Query("id") String id);
+
+    /***
+     * 检查音乐是否可以使用
+     * 调用此接口,传入歌曲 id, 可获取音乐是否可用,返回 { success: true, message: 'ok' } 或者 { success: false, message: '亲爱的,暂无版权' }
+     * @param id 歌曲 id
+     * @param br 码率,默认设置了 999000 即最大码率,如果要 320k 则可设置为 320000,其他类推
+     * @return
+     */
+    @POST("check/music")
+    Observable checkSongUrl(@Query("id") String id,
+                            @Query("br") String br);
 }

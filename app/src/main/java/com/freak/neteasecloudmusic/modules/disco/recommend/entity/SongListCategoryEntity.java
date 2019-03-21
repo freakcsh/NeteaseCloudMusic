@@ -78,12 +78,12 @@ public class SongListCategoryEntity implements Serializable {
          */
 
         private String name;
-        private int resourceCount;
-        private int imgId;
+        private String resourceCount;
+        private String imgId;
         private Object imgUrl;
-        private int type;
-        private int category;
-        private int resourceType;
+        private String type;
+        private String category;
+        private String resourceType;
         private boolean hot;
         private boolean activity;
 
@@ -95,19 +95,19 @@ public class SongListCategoryEntity implements Serializable {
             this.name = name;
         }
 
-        public int getResourceCount() {
+        public String getResourceCount() {
             return resourceCount;
         }
 
-        public void setResourceCount(int resourceCount) {
+        public void setResourceCount(String resourceCount) {
             this.resourceCount = resourceCount;
         }
 
-        public int getImgId() {
+        public String getImgId() {
             return imgId;
         }
 
-        public void setImgId(int imgId) {
+        public void setImgId(String imgId) {
             this.imgId = imgId;
         }
 
@@ -119,27 +119,27 @@ public class SongListCategoryEntity implements Serializable {
             this.imgUrl = imgUrl;
         }
 
-        public int getType() {
+        public String getType() {
             return type;
         }
 
-        public void setType(int type) {
+        public void setType(String type) {
             this.type = type;
         }
 
-        public int getCategory() {
+        public String getCategory() {
             return category;
         }
 
-        public void setCategory(int category) {
+        public void setCategory(String category) {
             this.category = category;
         }
 
-        public int getResourceType() {
+        public String getResourceType() {
             return resourceType;
         }
 
-        public void setResourceType(int resourceType) {
+        public void setResourceType(String resourceType) {
             this.resourceType = resourceType;
         }
 
@@ -235,12 +235,12 @@ public class SongListCategoryEntity implements Serializable {
          */
 
         private String name;
-        private int resourceCount;
-        private int imgId;
+        private String resourceCount;
+        private String imgId;
         private Object imgUrl;
-        private int type;
-        private int category;
-        private int resourceType;
+        private String type;
+        private String category;
+        private String resourceType;
         private boolean hot;
         private boolean activity;
 
@@ -252,19 +252,19 @@ public class SongListCategoryEntity implements Serializable {
             this.name = name;
         }
 
-        public int getResourceCount() {
+        public String getResourceCount() {
             return resourceCount;
         }
 
-        public void setResourceCount(int resourceCount) {
+        public void setResourceCount(String resourceCount) {
             this.resourceCount = resourceCount;
         }
 
-        public int getImgId() {
+        public String getImgId() {
             return imgId;
         }
 
-        public void setImgId(int imgId) {
+        public void setImgId(String imgId) {
             this.imgId = imgId;
         }
 
@@ -276,27 +276,27 @@ public class SongListCategoryEntity implements Serializable {
             this.imgUrl = imgUrl;
         }
 
-        public int getType() {
+        public String getType() {
             return type;
         }
 
-        public void setType(int type) {
+        public void setType(String type) {
             this.type = type;
         }
 
-        public int getCategory() {
+        public String getCategory() {
             return category;
         }
 
-        public void setCategory(int category) {
+        public void setCategory(String category) {
             this.category = category;
         }
 
-        public int getResourceType() {
+        public String getResourceType() {
             return resourceType;
         }
 
-        public void setResourceType(int resourceType) {
+        public void setResourceType(String resourceType) {
             this.resourceType = resourceType;
         }
 

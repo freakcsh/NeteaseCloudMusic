@@ -12,6 +12,7 @@ import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.dialog.FiltrateDialogFragment;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
+import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail.DetailActivity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.hot.adapter.HotSongListAdapter;
 import com.freak.neteasecloudmusic.net.log.LogUtil;
 import com.freak.neteasecloudmusic.utils.DialogUtil;
@@ -65,6 +66,12 @@ public class HotSongListActivity extends BaseAbstractMvpActivity<HotSongListPres
                 mPresenter.loadHotSongListCategoryList("全部", mPresenter.mLimit, mPresenter.mBefore);
             }
         }, mRecycleViewHotSongList);
+        mHotSongListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DetailActivity.startAction(HotSongListActivity.this,mList.get(position).getId());
+            }
+        });
     }
 
     private void initToolbar() {

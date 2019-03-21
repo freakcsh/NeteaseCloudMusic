@@ -25,7 +25,7 @@ public class HotSongListContract {
          *
          * @param cat    比如 " 华语 "、" 古风 " 、" 欧美 "、" 流行 ", 默认为 "全部",可从歌单分类接口获取(/playlist/catlist)
          * @param limit  取出歌单数量 , 默认为 20
-         * @param offset
+         * @param before
          */
         void loadHotSongListCategoryList(String cat, final int limit, final long before);
     }

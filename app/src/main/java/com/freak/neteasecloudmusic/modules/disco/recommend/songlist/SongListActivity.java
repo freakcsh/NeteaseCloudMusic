@@ -24,6 +24,7 @@ import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCatego
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.adapter.SongListAdapter;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.all.AllSongListActivity;
+import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail.DetailActivity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.hot.HotSongListActivity;
 import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
@@ -92,6 +93,12 @@ public class SongListActivity extends BaseAbstractMvpActivity<SongListPresenter>
                 mPresenter.loadSongListCategoryList("new", mTextViewCategory.getText().toString().trim(), mPresenter.mLimit, mPresenter.mOffset);
             }
         }, mRecycleViewSongList);
+        mSongListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                DetailActivity.startAction(SongListActivity.this,mList.get(position).getId());
+            }
+        });
         mDisposable = RxBus.getDefault().tObservable(CategoryEvent.class).subscribe(new Consumer<CategoryEvent>() {
             @Override
             public void accept(CategoryEvent categoryEvent) throws Exception {
