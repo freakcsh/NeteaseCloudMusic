@@ -1,6 +1,8 @@
 package com.freak.neteasecloudmusic.modules.base;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,6 +22,7 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 import com.freak.neteasecloudmusic.glide.GlideApp;
+import com.freak.neteasecloudmusic.handler.WeakRefHandler;
 import com.freak.neteasecloudmusic.modules.base.adapter.MenuItemAdapter;
 import com.freak.neteasecloudmusic.modules.base.entity.LoginStatusEntity;
 import com.freak.neteasecloudmusic.modules.disco.base.DiscoFragment;
@@ -28,6 +31,8 @@ import com.freak.neteasecloudmusic.modules.login.LoginActivity;
 import com.freak.neteasecloudmusic.modules.music.MusicFragment;
 import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
 import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
+import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
+import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
 import com.freak.neteasecloudmusic.service.AudioPlayerService;
 import com.freak.neteasecloudmusic.utils.SPUtils;
 import com.freak.neteasecloudmusic.utils.StringUtils;
@@ -60,6 +65,14 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     private TextView text_view_username;
     private String mBackgroundUrl;
     private ImageView img_bg;
+    /**
+     * 音频广播
+     */
+    private AudioBroadcastReceiver mAudioBroadcastReceiver;
+    /**
+     * 处理ui任务
+     */
+    public WeakRefHandler mUIHandler;
 
     @Override
     protected int getLayout() {
@@ -69,14 +82,396 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     @Override
     protected void initEventAndData() {
         initService();
+        initReceiver();
         AudioPlayerManager.getInstance(this).init();
     }
+
+    /**
+     * 初始化广播
+     */
+    private void initReceiver() {
+
+//        //fragment广播
+//        mFragmentReceiver = new FragmentReceiver(mContext);
+//        mFragmentReceiver.setReceiverListener(new FragmentReceiver.FragmentReceiverListener() {
+//            @Override
+//            public void onReceive(Context context, final Intent intent, final int code) {
+//                mUIHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        handleFragmentReceiver(intent, code);
+//                    }
+//                });
+//            }
+//
+//            /**
+//             * 处理fragment
+//             * @param intent
+//             * @param code
+//             */
+//            private void handleFragmentReceiver(final Intent intent, int code) {
+//
+//                switch (code) {
+//                    case FragmentReceiver.ACTION_CODE_OPEN_RECOMMENDFRAGMENT:
+//
+//                        //排行
+//                        Bundle recommendBundle = intent.getBundleExtra(SongFragment.ARGUMENTS_KEY);
+//                        SongFragment recommendSongFragment = SongFragment.newInstance();
+//                        recommendSongFragment.setArguments(recommendBundle);
+//                        mSlidingMenuOnListener.addAndShowFragment(recommendSongFragment);
+//
+//
+//                        break;
+//                    case FragmentReceiver.ACTION_CODE_OPEN_SPECIALFRAGMENT:
+//                    case FragmentReceiver.ACTION_CODE_OPEN_LOCALFRAGMENT:
+//                    case FragmentReceiver.ACTION_CODE_OPEN_LIKEFRAGMENT:
+//                    case FragmentReceiver.ACTION_CODE_OPEN_RECENTFRAGMENT:
+//
+//                        Bundle bundle = intent.getBundleExtra(SongFragment.ARGUMENTS_KEY);
+//                        SongFragment songFragment = SongFragment.newInstance();
+//                        songFragment.setArguments(bundle);
+//
+//                        mSlidingMenuOnListener.addAndShowFragment(songFragment);
+//                        break;
+//                    case FragmentReceiver.ACTION_CODE_OPEN_DOWNLOADFRAGMENT:
+//
+//                        DownloadMusicFragment downloadMusicFragment = DownloadMusicFragment.newInstance();
+//                        mSlidingMenuOnListener.addAndShowFragment(downloadMusicFragment);
+//
+//                        break;
+//
+//                    case FragmentReceiver.ACTION_CODE_CLOSE_FRAGMENT:
+//
+//                        mSlidingMenuOnListener.hideFragment();
+//
+//                        break;
+//                }
+//            }
+//        });
+//        mFragmentReceiver.registerReceiver(mContext);
+
+        //音频广播
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver();
+        mAudioBroadcastReceiver.setReceiverListener(new AudioBroadcastReceiver.AudioReceiverListener() {
+            @Override
+            public void onReceive(Context context, final Intent intent, final int code) {
+                mUIHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        handleAudioBroadcastReceiver(intent, code);
+                    }
+                });
+            }
+
+            private void handleAudioBroadcastReceiver(Intent intent, int code) {
+                switch (code) {
+                    case AudioBroadcastReceiver.ACTION_CODE_NULL:
+
+                        //空数据
+//                        mSongNameTextView.setText(R.string.def_songName);
+//                        mSingerNameTextView.setText(R.string.def_artist);
+//                        mPauseImageView.setVisibility(View.INVISIBLE);
+//                        mPlayImageView.setVisibility(View.VISIBLE);
+//
+//                        //
+//                        mMusicSeekBar.setEnabled(false);
+//                        mMusicSeekBar.setProgress(0);
+//                        mMusicSeekBar.setSecondaryProgress(0);
+//                        mMusicSeekBar.setMax(0);
+//
+//                        //
+//                        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.bpz);
+//                        mArtistImageView.setImageDrawable(new BitmapDrawable(bitmap));
+//                        mArtistImageView.setTag("");
+//
+//                        //重置额外歌词状态
+//                        mConfigInfo.setExtraLrcStatus(ConfigInfo.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+//
+//                        if (mAdapter != null)
+//                            mAdapter.reshViewHolder(null);
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_INIT:
+                        Bundle initBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+                        final AudioInfo initAudioInfo = initBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+                        if (initAudioInfo != null) {
+//                            mSongNameTextView.setText(initAudioInfo.getSongName());
+//                            mSingerNameTextView.setText(initAudioInfo.getSingerName());
+//                            mPauseImageView.setVisibility(View.INVISIBLE);
+//                            mPlayImageView.setVisibility(View.VISIBLE);
+//
+//                            //设置进度条
+//                            mMusicSeekBar.setEnabled(true);
+//                            mMusicSeekBar.setMax((int) initAudioInfo.getDuration());
+//                            mMusicSeekBar.setProgress((int) initAudioInfo.getPlayProgress());
+//                            mMusicSeekBar.setSecondaryProgress(0);
+
+                            //加载歌手头像
+//                            ImageUtil.loadSingerImage(mContext, mArtistImageView, initAudioInfo.getSingerName(), mConfigInfo.isWifi(), 400, 400, new AsyncHandlerTask(mUIHandler, mWorkerHandler), new ImageUtil.ImageLoadCallBack() {
+//                                @Override
+//                                public void callback(Bitmap bitmap) {
+//                                    //if (bitmap != null) {
+//                                    AudioBroadcastReceiver.sendNotifiyImgLoadedReceiver(mContext, initAudioInfo);
+//                                    // }
+//                                }
+//                            });
+
+//                            //加载歌词
+//                            String keyWords = initAudioInfo.getTitle();
+//                            LyricsManager.getInstance(mContext).loadLyrics(keyWords, keyWords, initAudioInfo.getDuration() + "", initAudioInfo.getHash(), mConfigInfo.isWifi(), new AsyncHandlerTask(mUIHandler, mWorkerHandler), null);
+//
+//                            if (mAdapter != null) {
+//
+//                                if (mIsShowPopPlayList) {
+//                                    //定位
+//                                    int position = AudioPlayerManager.getInstance(mContext).getCurSongIndex(mConfigInfo.getAudioInfos(), mConfigInfo.getPlayHash());
+//                                    if (position != -1) {
+//                                        ((LinearLayoutManager) mPlayListRListView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
+//                                    }
+//                                }
+//
+//                                mAdapter.reshViewHolder(initAudioInfo.getHash());
+//                            }
+                        } else {
+//                            if (mAdapter != null)
+//                                mAdapter.reshViewHolder(null);
+                        }
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_PLAY:
+//                        if (mPauseImageView.getVisibility() != View.VISIBLE)
+//                            mPauseImageView.setVisibility(View.VISIBLE);
+//
+//                        if (mPlayImageView.getVisibility() != View.INVISIBLE)
+//                            mPlayImageView.setVisibility(View.INVISIBLE);
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_PLAYING:
+
+                        Bundle playingBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+                        AudioInfo playingAudioInfo = playingBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+                        if (playingAudioInfo != null) {
+//                            mMusicSeekBar.setProgress((int) playingAudioInfo.getPlayProgress());
+                        }
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_STOP:
+//                        //暂停完成
+//                        if (mPauseImageView.getVisibility() != View.INVISIBLE)
+//                            mPauseImageView.setVisibility(View.INVISIBLE);
+//
+//                        if (mPlayImageView.getVisibility() != View.VISIBLE)
+//                            mPlayImageView.setVisibility(View.VISIBLE);
+
+                        break;
+
+                    case AudioBroadcastReceiver.ACTION_CODE_SEEKTO:
+                        Bundle seektoBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+                        AudioInfo seektoAudioInfo = seektoBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+                        if (seektoAudioInfo != null) {
+//                            mMusicSeekBar.setProgress(seektoAudioInfo.getPlayProgress());
+                        }
+                        break;
+
+                    case AudioBroadcastReceiver.ACTION_CODE_DOWNLOAD_FINISH:
+                    case AudioBroadcastReceiver.ACTION_CODE_DOWNLOADONEDLINESONG:
+//                        if (!mIsShowPopPlayList || mAdapter == null) {
+//                            return;
+//                        }
+                        //网络歌曲下载完成
+                        Bundle downloadedBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+//                        DownloadTask downloadedTask = downloadedBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+//                        String downloadedHash = downloadedTask.getTaskId();
+//                        if (downloadedTask != null && !TextUtils.isEmpty(downloadedHash)) {
+//                            mAdapter.reshViewHolder(downloadedHash);
+//                        }
+
+                        break;
+
+                    case AudioBroadcastReceiver.ACTION_CODE_UPDATE_PLAYLIST:
+//                        if (!mIsShowPopPlayList || mAdapter == null) {
+//                            return;
+//                        }
+//
+//                        //设置当前歌曲数据
+//                        List<AudioInfo> audioInfoList = mConfigInfo.getAudioInfos();
+//                        mPopListSizeTv.setText(audioInfoList.size() + "");
+//
+//                        mAdapter.notifyDataSetChanged();
+
+                        break;
+
+                    case AudioBroadcastReceiver.ACTION_CODE_DOWNLOADONLINESONG:
+//                        //网络歌曲下载中
+//                        Bundle downloadOnlineSongBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+//                        DownloadTask downloadingTask = downloadOnlineSongBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+//                        String hash = mConfigInfo.getPlayHash();
+//                        AudioInfo audioInfo = AudioPlayerManager.getInstance(mContext).getCurSong(hash);
+//                        if (audioInfo != null && downloadingTask != null && !TextUtils.isEmpty(hash) && hash.equals(downloadingTask.getTaskId())) {
+//                            int downloadedSize = DownloadThreadInfoDB.getDownloadedSize(mContext, downloadingTask.getTaskId(), OnLineAudioManager.mThreadNum);
+//                            double pre = downloadedSize * 1.0 / audioInfo.getFileSize();
+//                            int downloadProgress = (int) (mMusicSeekBar.getMax() * pre);
+//                            mMusicSeekBar.setSecondaryProgress(downloadProgress);
+//                        }
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_NOTIFY_DESLRC_HIDE_ACTION:
+//
+//                        mDesktoplrcSwitchButton.setChecked(false);
+//                        mConfigInfo.setShowDesktopLrc(false).save();
+//                        //
+//                        AudioBroadcastReceiver.sendReceiver(mContext, AudioBroadcastReceiver.ACTION_CODE_NOTIFY_DESLRC);
+//                        //关闭桌面歌词
+//                        HPApplication applicationTtemp = (HPApplication) getApplication();
+//                        applicationTtemp.stopFloatService();
+
+                        break;
+                    case AudioBroadcastReceiver.ACTION_CODE_NOTIFY_DESLRC_SHOW_ACTION:
+
+//                        if (!hasShowFloatWindowPermission()) return;
+//
+//                        mDesktoplrcSwitchButton.setChecked(true);
+//                        mConfigInfo.setShowDesktopLrc(true).save();
+//                        //
+//                        AudioBroadcastReceiver.sendReceiver(mContext, AudioBroadcastReceiver.ACTION_CODE_NOTIFY_DESLRC);
+//                        //启动桌面歌词
+//                        HPApplication application = (HPApplication) getApplication();
+//                        application.startFloatService();
+
+                        break;
+
+                }
+            }
+        });
+        mAudioBroadcastReceiver.registerReceiver(this);
+
+//        //系统
+//        mAppSystemReceiver = new AppSystemReceiver();
+//        mAppSystemReceiver.setReceiverListener(new AppSystemReceiver.AppSystemReceiverListener() {
+//            @Override
+//            public void onReceive(Context context, final Intent intent, final int code) {
+//                mUIHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        handleAppSystemBroadcastReceiver(intent, code);
+//                    }
+//                });
+//            }
+//
+//            private void handleAppSystemBroadcastReceiver(Intent intent, int code) {
+//                switch (code) {
+//                    case AppSystemReceiver.ACTION_CODE_TOAST_ERRORMSG:
+//                        Bundle toastErrorMSGBundle = intent.getBundleExtra(AppSystemReceiver.ACTION_BUNDLEKEY);
+//                        String msg = toastErrorMSGBundle.getString(AppSystemReceiver.ACTION_DATA_KEY);
+//                        ToastUtil.showTextToast(mContext, msg);
+//
+//                        break;
+//                    case AppSystemReceiver.ACTION_CODE_TIMER_SETTING:
+//                        mUIHandler.removeMessages(MESSAGE_WHAT_TIMERUPDATE);
+//                        //设置timer
+//                    case AppSystemReceiver.ACTION_CODE_TIMER_UPDATE:
+//                        Message tempMsg = Message.obtain();
+//                        tempMsg.what = MESSAGE_WHAT_TIMERUPDATE;
+//
+//                        Bundle timerBundle = intent.getBundleExtra(AppSystemReceiver.ACTION_BUNDLEKEY);
+//                        TimerInfo timerInfo = timerBundle.getParcelable(AppSystemReceiver.ACTION_DATA_KEY);
+//                        mConfigInfo.setTimerInfo(timerInfo);
+//                        if (timerInfo != null) {
+//                            tempMsg.obj = timerInfo;
+//                            mUIHandler.sendMessageDelayed(tempMsg, 1000);
+//                        } else {
+//                            mUIHandler.sendMessage(tempMsg);
+//                        }
+//                        //更新
+//                        break;
+//                    case AppSystemReceiver.ACTION_CODE_SCREEN_OFF:
+//                        //关闭屏幕
+//                        if (mConfigInfo.isShowLockScreenLrc()) {
+//
+//                            Intent lockIntent = new Intent(MainActivity.this,
+//                                    LockActivity.class);
+//                            lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                            startActivity(lockIntent);
+//                            //去掉动画
+//                            overridePendingTransition(0, 0);
+//                        }
+//
+//                        break;
+//                }
+//            }
+//        });
+//        mAppSystemReceiver.registerReceiver(mContext);
+//
+//        //线控
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            mPhoneReceiver = new PhoneReceiver(mContext);
+//            mPhoneReceiver.registerReceiver(mContext);
+//        } else {
+//            mPhoneV4Receiver = new PhoneV4Receiver(mContext);
+//            mPhoneV4Receiver.registerReceiver(mContext);
+//        }
+    }
+
     /**
      * 初始服务
      */
     private void initService() {
         AudioPlayerService.startService(this);
     }
+
+    @Override
+    protected void onDestroy() {
+        releaseData();
+        destroyService();
+        destroyReceiver();
+        super.onDestroy();
+    }
+
+    /**
+     * 销毁服务
+     */
+    private void destroyService() {
+        AudioPlayerService.stopService(this);
+    }
+
+    /**
+     * 释放数据
+     */
+    private void releaseData() {
+//        ImageUtil.release();
+//        DownloadAudioManager.getInstance(mContext).release();
+        AudioPlayerManager.getInstance(this).release();
+//        ToastUtil.release();
+    }
+
+    /**
+     * 销毁广播
+     */
+    private void destroyReceiver() {
+//        if (mFragmentReceiver != null) {
+//            mFragmentReceiver.unregisterReceiver(mContext);
+//        }
+
+        if (mAudioBroadcastReceiver != null) {
+            mAudioBroadcastReceiver.unregisterReceiver(this);
+        }
+//
+//        if (mAppSystemReceiver != null) {
+//            mAppSystemReceiver.unregisterReceiver(mContext);
+//        }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            if (mPhoneReceiver != null) {
+//                mPhoneReceiver.unregisterReceiver(mContext);
+//            }
+//        } else {
+//            if (mPhoneV4Receiver != null) {
+//                mPhoneV4Receiver.unregisterReceiver(mContext);
+//            }
+//        }
+    }
+
     @Override
     protected void initView() {
         mImgDisco = (ImageView) findViewById(R.id.img_disco);

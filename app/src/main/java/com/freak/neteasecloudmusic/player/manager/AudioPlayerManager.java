@@ -179,10 +179,10 @@ public class AudioPlayerManager {
         }
 
         //更新数据
-        ConfigInfo configInfo = ConfigInfo.obtain();
-        configInfo.setPlayHash(audioInfo.getHash());
-        AudioInfo curAudioInfo = getCurSong(configInfo.getAudioInfos(), audioInfo.getHash());
-        curAudioInfo.setPlayProgress(audioInfo.getPlayProgress());
+//        ConfigInfo configInfo = ConfigInfo.obtain();
+//        configInfo.setPlayHash(audioInfo.getHash());
+//        AudioInfo curAudioInfo = getCurSong(configInfo.getAudioInfos(), audioInfo.getHash());
+//        curAudioInfo.setPlayProgress(audioInfo.getPlayProgress());
 //        configInfo.save();
 
         //

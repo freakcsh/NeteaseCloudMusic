@@ -2,7 +2,6 @@ package com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,14 +19,14 @@ import com.freak.neteasecloudmusic.glide.GlideApp;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListDetailEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail.adapter.SongListDetailAdapter;
+import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
+import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * 歌单详情
@@ -146,16 +145,20 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
     @Override
     public void loadSongUrlSuccess(SongUrlEntity songUrlEntity) {
         LogUtil.e("播放歌曲信息 --》" + songUrlEntity.toString());
-        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
-
-        try {
-            ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            ijkMediaPlayer.setDataSource(songUrlEntity.getData().get(0).getUrl());
-            ijkMediaPlayer.prepareAsync();
-            ijkMediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AudioInfo audioInfo=new AudioInfo();
+        audioInfo.setDownloadUrl(songUrlEntity.getData().get(0).getUrl());
+        audioInfo.setType(AudioInfo.TYPE_LOCAL);
+        AudioPlayerManager.getInstance(this).playSong(audioInfo);
+//        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
+//
+//        try {
+//            ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            ijkMediaPlayer.setDataSource(songUrlEntity.getData().get(0).getUrl());
+//            ijkMediaPlayer.prepareAsync();
+//            ijkMediaPlayer.start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

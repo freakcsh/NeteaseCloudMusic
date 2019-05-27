@@ -4,10 +4,18 @@ package com.freak.neteasecloudmusic.player.manager;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.freak.httphelper.log.LogUtil;
+import com.freak.neteasecloudmusic.app.App;
+import com.freak.neteasecloudmusic.commom.constants.Constants;
+import com.freak.neteasecloudmusic.commom.constants.ResourceConstants;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 import com.freak.neteasecloudmusic.player.manager.entity.TimerInfo;
 import com.freak.neteasecloudmusic.player.manager.util.ColorUtil;
+import com.freak.neteasecloudmusic.player.manager.util.FileUtil;
+import com.freak.neteasecloudmusic.player.manager.util.RandomUtil;
+import com.freak.neteasecloudmusic.player.manager.util.ResourceUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -213,7 +221,6 @@ public class ConfigInfo implements Parcelable {
 
             isShowSubtitle = in.readByte() != 0;
             subtitleFontSize = in.readInt();/**/
-//            audioInfos = in.createTypedArrayList(AudioInfo.CREATOR);
         }
     }
 
@@ -235,7 +242,6 @@ public class ConfigInfo implements Parcelable {
 
         dest.writeByte((byte) (isShowSubtitle ? 1 : 0));
         dest.writeInt(subtitleFontSize);
-//        dest.writeTypedList(audioInfos);
     }
 
     @Override
@@ -260,32 +266,32 @@ public class ConfigInfo implements Parcelable {
      *
      * @return
      */
-//    public static ConfigInfo load() {
-//        Parcel parcel = null;
-//        synchronized (lock) {
-//            String filePath = ResourceUtil.getContextFilePath(ContextUtil.getContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
-//            try {
-//                byte[] data = FileUtil.readFile(filePath);
-//                if (data == null) {
-//                    parcel = null;
-//                    ZLog.i(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.load readFile => null");
-//                } else {
-//                    parcel = Parcel.obtain();
-//                    parcel.unmarshall(data, 0, data.length);
-//                    parcel.setDataPosition(0);
-//                }
-//            } catch (Exception e) {
-//                ZLog.e(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.load Exception: ", e.getMessage());
-//            }
-//        }
-//        //
-//        if (parcel == null) {
-//            _ConfigInfo = new ConfigInfo();
-//        } else {
-//            _ConfigInfo = CREATOR.createFromParcel(parcel);
-//        }
-//        return _ConfigInfo;
-//    }
+    public static ConfigInfo load() {
+        Parcel parcel = null;
+        synchronized (lock) {
+            String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
+            try {
+                byte[] data = FileUtil.readFile(filePath);
+                if (data == null) {
+                    parcel = null;
+                    LogUtil.e("ConfigInfo.load readFile => null");
+                } else {
+                    parcel = Parcel.obtain();
+                    parcel.unmarshall(data, 0, data.length);
+                    parcel.setDataPosition(0);
+                }
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.load Exception: " + e.getMessage());
+            }
+        }
+
+        if (parcel == null) {
+            _ConfigInfo = new ConfigInfo();
+        } else {
+            _ConfigInfo = CREATOR.createFromParcel(parcel);
+        }
+        return _ConfigInfo;
+    }
 
     /**
      *
@@ -297,7 +303,7 @@ public class ConfigInfo implements Parcelable {
      */
     public static ConfigInfo obtain() {
         if (_ConfigInfo == null) {
-//            load();
+            load();
         }
         return _ConfigInfo;
     }
@@ -308,21 +314,21 @@ public class ConfigInfo implements Parcelable {
      *
      * @return
      */
-//    public ConfigInfo save() {
-//        Parcel parcel = Parcel.obtain();
-//        writeToParcel(parcel, PARCELABLE_WRITE_RETURN_VALUE);
-//        synchronized (lock) {
-//            try {
-//                String filePath = ResourceUtil.getContextFilePath(ContextUtil.getContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
-//                FileUtil.writeFile(filePath, parcel.marshall());
-//            } catch (Exception e) {
-//                ZLog.e(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.save Exception: ", e.getMessage());
-//            }
-//        }
-//        //
-//        _ConfigInfo = this;
-//        return _ConfigInfo;
-//    }
+    public ConfigInfo save() {
+        Parcel parcel = Parcel.obtain();
+        writeToParcel(parcel, PARCELABLE_WRITE_RETURN_VALUE);
+        synchronized (lock) {
+            try {
+                String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
+                FileUtil.writeFile(filePath, parcel.marshall());
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.save Exception: " + e.getMessage());
+            }
+        }
+        //
+        _ConfigInfo = this;
+        return _ConfigInfo;
+    }
 
     public boolean isWifi() {
         return isWifi;
@@ -478,16 +484,16 @@ public class ConfigInfo implements Parcelable {
 
     public List<AudioInfo> getAudioInfos() {
         if (audioInfos == null) {
-//            loadPlayListData();
+            loadPlayListData();
         }
         return audioInfos;
     }
 
     public ConfigInfo setAudioInfos(List<AudioInfo> audioInfos) {
         //添加随机数
-//        RandomUtil.setNums(audioInfos.size());
+        RandomUtil.setNums(audioInfos.size());
         this.audioInfos = audioInfos;
-//        savePlayListData(audioInfos);
+        savePlayListData(audioInfos);
         return this;
     }
 
@@ -499,52 +505,49 @@ public class ConfigInfo implements Parcelable {
      * @author: zhangliangming
      * @date: 2018-10-06 23:21
      */
-//    private void loadPlayListData() {
-//        Parcel parcel = null;
-//        synchronized (lock) {
-//            String filePath = ResourceUtil.getContextFilePath(ContextUtil.getContext(), ResourceConstants.PATH_CONFIG, Constants.PLAYLIST);
-//            try {
-//                byte[] data = FileUtil.readFile(filePath);
-//                if (data == null) {
-//                    parcel = null;
-//                    ZLog.i(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.loadPlayListData readFile => null");
-//                } else {
-//                    parcel = Parcel.obtain();
-//                    parcel.unmarshall(data, 0, data.length);
-//                    parcel.setDataPosition(0);
-//                }
-//            } catch (Exception e) {
-//                ZLog.e(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.loadPlayListData Exception: ", e.getMessage());
-//            }
-//        }
-//
-//        if (parcel == null) {
-//            audioInfos = new ArrayList<AudioInfo>();
-//        } else {
-//            audioInfos = parcel.createTypedArrayList(AudioInfo.CREATOR);
-//        }
-//        //添加随机数
-//        RandomUtil.setNums(audioInfos.size());
-//    }
+    private void loadPlayListData() {
+        Parcel parcel = null;
+        synchronized (lock) {
+            String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.PLAYLIST);
+            try {
+                byte[] data = FileUtil.readFile(filePath);
+                if (data == null) {
+                    parcel = null;
+                    LogUtil.e("ConfigInfo.loadPlayListData readFile => null");
+                } else {
+                    parcel = Parcel.obtain();
+                    parcel.unmarshall(data, 0, data.length);
+                    parcel.setDataPosition(0);
+                }
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.loadPlayListData Exception: " + e.getMessage());
+            }
+        }
+
+        if (parcel == null) {
+            audioInfos = new ArrayList<AudioInfo>();
+        } else {
+            audioInfos = parcel.createTypedArrayList(AudioInfo.CREATOR);
+        }
+        //添加随机数
+        RandomUtil.setNums(audioInfos.size());
+    }
 
     /**
-     * @throws
-     * @Description: 保存播放列表数据
-     * @param:
-     * @return:
-     * @author: zhangliangming
-     * @date: 2018-10-06 23:26
+     * 保存播放列表数据
+     *
+     * @param audioInfos
      */
-//    private void savePlayListData(List<AudioInfo> audioInfos) {
-//        Parcel parcel = Parcel.obtain();
-//        parcel.writeTypedList(audioInfos);
-//        synchronized (lock) {
-//            try {
-//                String filePath = ResourceUtil.getContextFilePath(ContextUtil.getContext(), ResourceConstants.PATH_CONFIG, Constants.PLAYLIST);
-//                FileUtil.writeFile(filePath, parcel.marshall());
-//            } catch (Exception e) {
-//                ZLog.e(new CodeLineUtil().getCodeLineInfo(), "ConfigInfo.savePlayListData Exception: ", e.getMessage());
-//            }
-//        }
-//    }
+    private void savePlayListData(List<AudioInfo> audioInfos) {
+        Parcel parcel = Parcel.obtain();
+        parcel.writeTypedList(audioInfos);
+        synchronized (lock) {
+            try {
+                String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.PLAYLIST);
+                FileUtil.writeFile(filePath, parcel.marshall());
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.savePlayListData Exception: " + e.getMessage());
+            }
+        }
+    }
 }
