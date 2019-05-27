@@ -21,21 +21,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.freak.httphelper.HttpMethods;
+import com.freak.httphelper.log.LogLevel;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 import com.freak.neteasecloudmusic.net.cookie.CookieJarImpl;
-import com.freak.neteasecloudmusic.net.interceptor.CommonParametersInterceptor;
-import com.freak.neteasecloudmusic.net.log.HttpLogger;
 import com.freak.neteasecloudmusic.receiver.NetworkConnectChangedReceiver;
 import com.freak.neteasecloudmusic.utils.imagepick.loader.ImagePickerGlideLoader;
-import com.freak.httphelper.HttpMethods;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.view.CropImageView;
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.Logger;
-import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -78,21 +73,22 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-
-        FormatStrategy mFormatStrategy = PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(false)  // （可选）是否显示线程信息。默认值true
-//                .methodCount(5)         // （可选）要显示的方法行数。默认值2
-//                .methodOffset(7)        // （可选）隐藏内部方法调用到偏移量。默认值5
-//                .logStrategy() // （可选）更改要打印的日志策略。默认LogCat
-                .tag("CommonAppFrameWork")   // （可选）每个日志的全局标记。默认PRETTY_LOGGER .build
-                .build();
-        //log日志打印框架Logger
-        Logger.addLogAdapter(new AndroidLogAdapter(mFormatStrategy));
-        HttpMethods.setBaseUrl(Constants.BASE_URL);
-        HttpMethods.setLevel(HttpMethods.BODY);
-//        HttpMethods.setInterceptor(new CommonParametersInterceptor());
-        HttpMethods.setLogger(new HttpLogger());
-        HttpMethods.setCookieJar(new CookieJarImpl());
+        HttpMethods
+                .getInstanceBuilder()
+                .setBaseUrl(Constants.BASE_URL)//设置域名
+                .setLogLevel(LogLevel.ERROR)//设置日志打印级别，使用默认的日志打印才需要设置这个
+                .setLogName("NeteaseCloudMusic")//设置默认日志打印名字
+                .setIsOpenLog(true)//设置是否开启框架默认的日志打印
+                .setCookieJar(new CookieJarImpl())//设置自定义的cookiejar
+//                .setLogger(new HttpLogger())//设置自定义logger，此设置是打印网络请求的数据（如果设置了自定义的，则框架默认的则不需要设置）
+//                .setLevel(LoggerLevel.BODY)//设置日志打印级别（自定义logger可设置，框架默认的是BODY级别，如果上架需要关闭日志打印，则设置setIsOpenLog(false)即可）
+                .setReadTimeOut(60)
+                .setConnectTimeOut(60)
+                .setWriteTimeOut(60);
+//                .setInterceptor(new CommonParametersInterceptor())//设置拦截器
+//                .setNetworkInterceptor(new CommonParametersInterceptor())//设置拦截器
+//                .setFactory(CustomConverterFactory.create())//设置自定义解析器
+//                .setInterceptors(new CommonParametersInterceptor(), new CommonParametersInterceptorHead());//设置多个拦截器
         initImagePicker();
         initReceiver();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

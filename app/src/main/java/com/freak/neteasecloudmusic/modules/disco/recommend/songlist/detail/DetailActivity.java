@@ -2,6 +2,7 @@ package com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.freak.httphelper.log.LogUtil;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
@@ -20,10 +22,12 @@ import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail.adapter.SongListDetailAdapter;
 import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * 歌单详情
@@ -32,21 +36,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @date 2019/3/20
  */
 
-public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> implements DetailContract.View, View.OnClickListener ,IActivityStatusBar {
+public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> implements DetailContract.View, View.OnClickListener, IActivityStatusBar {
     private SimpleToolbar mSimpleToolbarSongListDetail;
     private RecyclerView mRecycleViewSongListDetail;
     private SongListDetailAdapter mSongListDetailAdapter;
     private List<SongListDetailEntity.PlaylistBean.TracksBean> mList;
     private View mHeadView;
-    private ImageView img_song_list_detail_logo,img_song_list_detail_start_all;
+    private ImageView img_song_list_detail_logo, img_song_list_detail_start_all;
     private TextView text_view_song_list_detail_bfl, text_view_song_list_detail_tip, text_view_song_list_detail_author, text_view_song_list_detail_comment_count,
             text_view_song_list_detail_share_count, text_view_song_list_detail_count, text_view_song_list_detail_collect;
     private CircleImageView img_song_list_detail_author_photo;
     private LinearLayout linear_layout_song_list_detail_comment, linear_layout_song_list_detail_share, linear_layout_song_list_detail_download, linear_layout_song_list_detail_more_selector;
-    private String id ;
+    private String id;
 
     public static void startAction(Context context, String songId) {
-        Intent intent = new Intent(context,DetailActivity.class);
+        Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra("songId", songId);
         context.startActivity(intent);
     }
@@ -129,8 +133,8 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
             text_view_song_list_detail_author.setText(songListDetailEntity.getPlaylist().getCreator().getNickname());
             text_view_song_list_detail_comment_count.setText(songListDetailEntity.getPlaylist().getCommentCount() + "");
             text_view_song_list_detail_share_count.setText(songListDetailEntity.getPlaylist().getShareCount() + "");
-            text_view_song_list_detail_collect.setText("+ 收藏("+songListDetailEntity.getPlaylist().getSubscribedCount() + ")首");
-            text_view_song_list_detail_count.setText("(共"+songListDetailEntity.getPlaylist().getTrackCount() + "首)");
+            text_view_song_list_detail_collect.setText("+ 收藏(" + songListDetailEntity.getPlaylist().getSubscribedCount() + ")首");
+            text_view_song_list_detail_count.setText("(共" + songListDetailEntity.getPlaylist().getTrackCount() + "首)");
             if (songListDetailEntity.getPlaylist().getTracks().size() != 0) {
                 mList.addAll(songListDetailEntity.getPlaylist().getTracks());
                 mSongListDetailAdapter.notifyDataSetChanged();
@@ -141,7 +145,17 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
 
     @Override
     public void loadSongUrlSuccess(SongUrlEntity songUrlEntity) {
+        LogUtil.e("播放歌曲信息 --》" + songUrlEntity.toString());
+        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
 
+        try {
+            ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            ijkMediaPlayer.setDataSource(songUrlEntity.getData().get(0).getUrl());
+            ijkMediaPlayer.prepareAsync();
+            ijkMediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

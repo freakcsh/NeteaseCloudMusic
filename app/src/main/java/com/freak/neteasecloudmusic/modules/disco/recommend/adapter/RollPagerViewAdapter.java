@@ -25,7 +25,6 @@ public class RollPagerViewAdapter extends StaticPagerAdapter {
 
     @Override
     public View getView(ViewGroup container, final int position) {
-
         mImageView = new ImageView(App.getInstance().getApplicationContext());
         Glide.with(App.getInstance().getApplicationContext()).load(dataList.get(position).getPicUrl()).into(mImageView);
         mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

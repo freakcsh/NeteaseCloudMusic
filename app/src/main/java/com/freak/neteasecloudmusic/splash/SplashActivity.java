@@ -1,14 +1,15 @@
 package com.freak.neteasecloudmusic.splash;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.widget.TextView;
 
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
@@ -21,41 +22,39 @@ import java.lang.ref.WeakReference;
  *
  * @author Administrator
  */
-public class SplashActivity extends AppCompatActivity implements IActivityStatusBar {
-    private LinearLayout linear_layout_splash;
-    private ObjectAnimator animator1;
-    private ObjectAnimator animator2;
-    private ObjectAnimator animator3;
-    private ObjectAnimator animator4;
-    private AnimatorSet animSet;
-    private int height;
-
+public class SplashActivity extends AppCompatActivity implements IActivityStatusBar ,View.OnClickListener{
+    private TextView text_view_time;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_splash);
         super.onCreate(savedInstanceState);
-        linear_layout_splash = findViewById(R.id.linear_layout_splash);
-        height = linear_layout_splash.getHeight();
-        initAnimator();
-        animatorStart();
-        new InnerThread(this).start();
+//        new InnerThread(this).start();
+        text_view_time = findViewById(R.id.text_view_time);
+        text_view_time.setOnClickListener(this);
+        timer.start();
     }
+    CountDownTimer timer = new CountDownTimer(8000, 100) {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onTick(long sin) {
+            text_view_time.setText("跳过 " + sin / 1000);
+        }
 
-    private void animatorStart() {
-        animSet = new AnimatorSet();
-        animSet.play(animator4).with(animator3).with(animator2).after(animator1);
-        animSet.setDuration(5000L);
-        animSet.start();
-    }
-
-    /**
-     * 初始化动画
-     */
-    public void initAnimator() {
-        animator1 = ObjectAnimator.ofFloat(linear_layout_splash, "translationY", height / 8, -100, height / 2);
-        animator2 = ObjectAnimator.ofFloat(linear_layout_splash, "translationY", height / 8, -100, height / 2);
-        animator3 = ObjectAnimator.ofFloat(linear_layout_splash, "translationY", height / 8, -100, height / 2);
-        animator4 = ObjectAnimator.ofFloat(linear_layout_splash, "translationY", height / 8, -100, height / 2);
+        @Override
+        public void onFinish() {
+            startLogin();
+        }
+    };
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.text_view_time:
+                timer.cancel();
+                startLogin();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

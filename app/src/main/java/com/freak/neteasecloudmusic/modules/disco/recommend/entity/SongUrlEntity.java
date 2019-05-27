@@ -210,5 +210,37 @@ public class SongUrlEntity {
         public void setEncodeType(String encodeType) {
             this.encodeType = encodeType;
         }
+
+        @Override
+        public String toString() {
+            return "DataBean{" +
+                    "id=" + id +
+                    ", url='" + url + '\'' +
+                    ", br=" + br +
+                    ", size=" + size +
+                    ", md5='" + md5 + '\'' +
+                    ", code=" + code +
+                    ", expi=" + expi +
+                    ", type='" + type + '\'' +
+                    ", gain=" + gain +
+                    ", fee=" + fee +
+                    ", uf=" + uf +
+                    ", payed=" + payed +
+                    ", flag=" + flag +
+                    ", canExtend=" + canExtend +
+                    ", freeTrialInfo=" + freeTrialInfo +
+                    ", level='" + level + '\'' +
+                    ", encodeType='" + encodeType + '\'' +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "SongUrlEntity{" +
+                "msg='" + msg + '\'' +
+                ", code=" + code +
+                ", data=" + data +
+                '}';
     }
 }

@@ -6,7 +6,9 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpFragment;
 
 /**
- * Created by Administrator on 2019/3/15.
+ *
+ * @author Administrator
+ * @date 2019/3/15
  */
 
 public class BroadcastingFragment extends BaseAbstractMvpFragment<BroadcastingPresenter> implements BroadcastingContract.View {

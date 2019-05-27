@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_layout_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@mipmap/bg_splash"
-    />
+    >
+    <TextView
+        android:id="@+id/text_view_time"
+        android:layout_width="75dp"
+        android:layout_height="39dp"
+        android:gravity="center"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape_splash_cancle_bg"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+</RelativeLayout>

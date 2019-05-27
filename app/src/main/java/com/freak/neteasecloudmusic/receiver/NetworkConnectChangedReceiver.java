@@ -11,7 +11,9 @@ import com.freak.neteasecloudmusic.utils.ToastUtil;
 
 /**
  * 网络状态改变监听
- * Created by hboxs020 on 2017/8/8.
+ *
+ * @author freak
+ * @date 2019/5/20
  */
 
 public class NetworkConnectChangedReceiver extends BroadcastReceiver {

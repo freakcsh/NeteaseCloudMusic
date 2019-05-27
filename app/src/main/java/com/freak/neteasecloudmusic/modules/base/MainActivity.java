@@ -27,6 +27,8 @@ import com.freak.neteasecloudmusic.modules.homepage.base.entity.MenuEntity;
 import com.freak.neteasecloudmusic.modules.login.LoginActivity;
 import com.freak.neteasecloudmusic.modules.music.MusicFragment;
 import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
+import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
+import com.freak.neteasecloudmusic.service.AudioPlayerService;
 import com.freak.neteasecloudmusic.utils.SPUtils;
 import com.freak.neteasecloudmusic.utils.StringUtils;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
@@ -66,9 +68,15 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
     @Override
     protected void initEventAndData() {
-
+        initService();
+        AudioPlayerManager.getInstance(this).init();
     }
-
+    /**
+     * 初始服务
+     */
+    private void initService() {
+        AudioPlayerService.startService(this);
+    }
     @Override
     protected void initView() {
         mImgDisco = (ImageView) findViewById(R.id.img_disco);

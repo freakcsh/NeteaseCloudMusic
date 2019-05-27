@@ -4,7 +4,9 @@ import com.freak.httphelper.BasePresenter;
 import com.freak.neteasecloudmusic.base.BaseView;
 
 /**
- * Created by Administrator on 2019/3/15.
+ *
+ * @author Administrator
+ * @date 2019/3/15
  */
 
 public class BroadcastingContract {

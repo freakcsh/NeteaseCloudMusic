@@ -1,7 +1,6 @@
 package com.freak.neteasecloudmusic.modules.homepage.base;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +11,6 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpFragment;
 import com.freak.neteasecloudmusic.compress.ICompressCallBack;
 import com.freak.neteasecloudmusic.compress.LuBanCompressUtils;
-import com.freak.neteasecloudmusic.identity.DealInterface;
-import com.freak.neteasecloudmusic.identity.ParseIdentityUtils;
 import com.freak.neteasecloudmusic.modules.homepage.base.entity.LoginBean;
 import com.freak.neteasecloudmusic.net.log.LogUtil;
 import com.freak.neteasecloudmusic.scan.ScanActivity;
@@ -112,17 +109,6 @@ public class HomePageFragment extends BaseAbstractMvpFragment<HomepagePresenter>
                 break;
             //读取身份证信息
             case R.id.btn5:
-                ParseIdentityUtils.getInstance().parsingIdCard(((BitmapDrawable) image.getDrawable()).getBitmap(), new DealInterface<String>() {
-                    @Override
-                    public void success(String object) {
-                        LogUtil.e("身份-->" + object);
-                    }
-
-                    @Override
-                    public void failure(String error) {
-                        LogUtil.e("身份错误-->" + error);
-                    }
-                });
                 break;
             //glide
             case R.id.btn6:
