@@ -1,5 +1,29 @@
 package com.freak.neteasecloudmusic.player.manager.util;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
+import android.util.LruCache;
+import android.widget.ImageView;
+
+import com.freak.neteasecloudmusic.commom.constants.ResourceConstants;
+import com.freak.neteasecloudmusic.player.manager.async.AsyncHandlerTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * @Description:
  * @author: zhangliangming
@@ -7,73 +31,73 @@ package com.freak.neteasecloudmusic.player.manager.util;
  **/
 public class ImageUtil {
 
-//    // 缓存
-//    private static LruCache<String, Bitmap> mImageCache = getImageCache();
-//
-//    /**
-//     * 初始化图片内存
-//     */
-//    private static LruCache<String, Bitmap> getImageCache() {
-//        // 获取系统分配给每个应用程序的最大内存，每个应用系统分配32M
-//        int maxMemory = (int) Runtime.getRuntime().maxMemory();
-//        int mCacheSize = maxMemory / 8;
-//        // 给LruCache分配1/8 4M
-//        LruCache<String, Bitmap> sImageCache = new LruCache<String, Bitmap>(
-//                mCacheSize) {
-//
-//            // 必须重写此方法，来测量Bitmap的大小
-//            @Override
-//            protected int sizeOf(String key, Bitmap value) {
-//                return value.getRowBytes() * value.getHeight();
-//            }
-//        };
-//
-//        return sImageCache;
-//    }
-//
-//    /**
-//     * 加载通知栏歌手头像
-//     *
-//     * @param context
-//     * @param singerName
-//     * @param asyncHandlerTask
-//     * @return
-//     */
-//    public static Bitmap getNotifiIcon(Context context, String singerName, int width, int height, AsyncHandlerTask asyncHandlerTask) {
-//        //多个歌手，则取第一个歌手头像
-//        String regex = "、";
-//        String searchSingerName = singerName;
-//        if (singerName.contains(regex)) {
-//            String reg = "\\s*、\\s*";
-//            String[] temp = singerName.split(reg);
-//            if (temp.length > 0) {
-//                searchSingerName = temp[0];
-//            }
-//        }
-//
-//        String filePath = ResourceUtil.getFilePath(context, ResourceConstants.PATH_SINGER, searchSingerName + File.separator + searchSingerName + ".jpg");
-//        String key = filePath.hashCode() + "";
-//
-//        Bitmap bitmap = null;
-//        if (mImageCache.get(key) != null) {
-//            bitmap = mImageCache.get(key);
-//        }
-//        //从本地文件中获取
-//        if (bitmap == null && filePath != null) {
-//            bitmap = readBitmapFromFile(filePath, width, height);
-//        }
-//        if (mImageCache.get(key) == null && bitmap != null) {
-//            mImageCache.put(key, bitmap);
-//        }
-//        return bitmap;
-//    }
-//
-//    /**
-//     * 加载歌手头像
-//     *
-//     * @param context
-//     * @param imageView
-//     */
+    // 缓存
+    private static LruCache<String, Bitmap> mImageCache = getImageCache();
+
+    /**
+     * 初始化图片内存
+     */
+    private static LruCache<String, Bitmap> getImageCache() {
+        // 获取系统分配给每个应用程序的最大内存，每个应用系统分配32M
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int mCacheSize = maxMemory / 8;
+        // 给LruCache分配1/8 4M
+        LruCache<String, Bitmap> sImageCache = new LruCache<String, Bitmap>(
+                mCacheSize) {
+
+            // 必须重写此方法，来测量Bitmap的大小
+            @Override
+            protected int sizeOf(String key, Bitmap value) {
+                return value.getRowBytes() * value.getHeight();
+            }
+        };
+
+        return sImageCache;
+    }
+
+    /**
+     * 加载通知栏歌手头像
+     *
+     * @param context
+     * @param singerName
+     * @param asyncHandlerTask
+     * @return
+     */
+    public static Bitmap getNotifiIcon(Context context, String singerName, int width, int height, AsyncHandlerTask asyncHandlerTask) {
+        //多个歌手，则取第一个歌手头像
+        String regex = "、";
+        String searchSingerName = singerName;
+        if (singerName.contains(regex)) {
+            String reg = "\\s*、\\s*";
+            String[] temp = singerName.split(reg);
+            if (temp.length > 0) {
+                searchSingerName = temp[0];
+            }
+        }
+
+        String filePath = ResourceUtil.getFilePath(context, ResourceConstants.PATH_SINGER, searchSingerName + File.separator + searchSingerName + ".jpg");
+        String key = filePath.hashCode() + "";
+
+        Bitmap bitmap = null;
+        if (mImageCache.get(key) != null) {
+            bitmap = mImageCache.get(key);
+        }
+        //从本地文件中获取
+        if (bitmap == null && filePath != null) {
+            bitmap = readBitmapFromFile(filePath, width, height);
+        }
+        if (mImageCache.get(key) == null && bitmap != null) {
+            mImageCache.put(key, bitmap);
+        }
+        return bitmap;
+    }
+
+    /**
+     * 加载歌手头像
+     *
+     * @param context
+     * @param imageView
+     */
 //    public static void loadSingerImage(final Context context, ImageView imageView, final String singerName, final boolean askWifi, int width, int height, AsyncHandlerTask asyncHandlerTask, ImageLoadCallBack imageLoadCallBack) {
 //        //多个歌手，则取第一个歌手头像
 //        String regex = "、";
@@ -105,43 +129,43 @@ public class ImageUtil {
 //        };
 //        loadImage(context, R.mipmap.bpz, filePath, null, askWifi, imageView, width, height, asyncHandlerTask, loadImgUrlCallBack, imageLoadCallBack);
 //    }
-//
-//    /**
-//     * 加载歌手写真
-//     *
-//     * @param context
-//     * @param filePath
-//     * @param imageUrl
-//     * @param imageView
-//     * @param asyncHandlerTask
-//     */
+
+    /**
+     * 加载歌手写真
+     *
+     * @param context
+     * @param filePath
+     * @param imageUrl
+     * @param imageView
+     * @param asyncHandlerTask
+     */
 //    public static void loadSingerPic(final Context context, final String filePath, final String imageUrl, final boolean askWifi, final ImageView imageView, final int width, final int height, AsyncHandlerTask asyncHandlerTask, final ImageLoadCallBack imageLoadCallBack) {
 //        loadImage(context, R.mipmap.picture_manager_default, filePath, imageUrl, askWifi, imageView, width, height, asyncHandlerTask, null, imageLoadCallBack);
 //    }
-//
-//    /**
-//     * 加载图片
-//     *
-//     * @param context
-//     * @param filePath
-//     * @param imageUrl
-//     * @param imageView
-//     * @param asyncHandlerTask
-//     */
+
+    /**
+     * 加载图片
+     *
+     * @param context
+     * @param filePath
+     * @param imageUrl
+     * @param imageView
+     * @param asyncHandlerTask
+     */
 //    public static void loadImage(final Context context, final String filePath, final String imageUrl, final boolean askWifi, final ImageView imageView, final int width, final int height, AsyncHandlerTask asyncHandlerTask, final ImageLoadCallBack imageLoadCallBack) {
 //        loadImage(context, R.mipmap.bpz, filePath, imageUrl, askWifi, imageView, width, height, asyncHandlerTask, null, imageLoadCallBack);
 //    }
-//
-//
-//    /**
-//     * 加载图片
-//     *
-//     * @param context
-//     * @param filePath
-//     * @param imageUrl
-//     * @param imageView
-//     * @param asyncHandlerTask
-//     */
+
+
+    /**
+     * 加载图片
+     *
+     * @param context
+     * @param filePath
+     * @param imageUrl
+     * @param imageView
+     * @param asyncHandlerTask
+     */
 //    private static void loadImage(final Context context, int resourceId, final String filePath, final String imageUrl, final boolean askWifi, final ImageView imageView, final int width, final int height, AsyncHandlerTask asyncHandlerTask, final LoadImgUrlCallBack loadImgUrlCallBack, final ImageLoadCallBack imageLoadCallBack) {
 //        final String key = filePath.hashCode() + "";
 //        //如果当前的图片与上一次一样，则不操作
@@ -187,10 +211,10 @@ public class ImageUtil {
 //            }
 //        });
 //    }
-//
-//    /**
-//     * 加载歌手写真图片
-//     */
+
+    /**
+     * 加载歌手写真图片
+     */
 //    public static void loadSingerImage(final Context context, final TransitionImageView singerImageView, final String singerName, final boolean askWifi, final AsyncHandlerTask asyncHandlerTask) {
 //
 //        final String key = singerName.hashCode() + "";
@@ -276,14 +300,14 @@ public class ImageUtil {
 //        });
 //
 //    }
-//
-//    /**
-//     * 添加和排序数据
-//     *
-//     * @param returnResult
-//     * @param tempReturnResult
-//     * @param singerNames
-//     */
+
+    /**
+     * 添加和排序数据
+     *
+     * @param returnResult
+     * @param tempReturnResult
+     * @param singerNames
+     */
 //    private static void addAndSortData(List<SingerInfo> returnResult, List<List<SingerInfo>> tempReturnResult, List<String> singerNames) {
 //        for (int i = 0; i < singerNames.size(); i++) {
 //            if (i == 0) {
@@ -313,24 +337,24 @@ public class ImageUtil {
 //            }
 //        }
 //    }
-//
-//    /**
-//     * @param singerImageView
-//     * @param returnResult
-//     */
+
+    /**
+     * @param singerImageView
+     * @param returnResult
+     */
 //    private static void startSingerImage(TransitionImageView
 //                                                 singerImageView, List<SingerInfo> returnResult) {
 //        singerImageView.initData(returnResult);
 //    }
-//
-//    /**
-//     * 获取歌手写真图片
-//     *
-//     * @param context
-//     * @param asyncHandlerTask
-//     * @param singerName
-//     * @return
-//     */
+
+    /**
+     * 获取歌手写真图片
+     *
+     * @param context
+     * @param asyncHandlerTask
+     * @param singerName
+     * @return
+     */
 //    public static void loadSingerImage(final Context context, AsyncHandlerTask
 //            asyncHandlerTask, String singerName, final String imageUrl, final boolean askWifi) {
 //        final String filePath = ResourceUtil.getFilePath(context, ResourceConstants.PATH_SINGER, singerName + File.separator + imageUrl.hashCode() + ".jpg");
@@ -343,16 +367,16 @@ public class ImageUtil {
 //            }
 //        });
 //    }
-//
-//
-//    /**
-//     * @throws
-//     * @Description: 从缓存中获取
-//     * @param:
-//     * @return:
-//     * @author: zhangliangming
-//     * @date: 2018-10-05 16:37
-//     */
+
+
+    /**
+     * @throws
+     * @Description: 从缓存中获取
+     * @param:
+     * @return:
+     * @author: zhangliangming
+     * @date: 2018-10-05 16:37
+     */
 //    private static Bitmap loadImageFormCache(Context context, String filePath, String
 //            imageUrl, String key, int width, int height, boolean askWifi, LoadImgUrlCallBack
 //                                                     loadImgUrlCallBack) {
@@ -368,15 +392,15 @@ public class ImageUtil {
 //        }
 //        return bitmap;
 //    }
-//
-//    /**
-//     * @throws
-//     * @Description: 从本地获取图片
-//     * @param:
-//     * @return:
-//     * @author: zhangliangming
-//     * @date: 2018-10-05 15:18
-//     */
+
+    /**
+     * @throws
+     * @Description: 从本地获取图片
+     * @param:
+     * @return:
+     * @author: zhangliangming
+     * @date: 2018-10-05 15:18
+     */
 //    private static Bitmap loadImageFormFile(Context context, String filePath, String imageUrl,
 //                                            int width, int height, boolean askWifi, LoadImgUrlCallBack loadImgUrlCallBack) {
 //        Bitmap bitmap = readBitmapFromFile(filePath, width, height);
@@ -388,15 +412,15 @@ public class ImageUtil {
 //        }
 //        return bitmap;
 //    }
-//
-//    /**
-//     * @throws
-//     * @Description: 从网上获取图片
-//     * @param:
-//     * @return:
-//     * @author: zhangliangming
-//     * @date: 2018-10-05 15:19
-//     */
+
+    /**
+     * @throws
+     * @Description: 从网上获取图片
+     * @param:
+     * @return:
+     * @author: zhangliangming
+     * @date: 2018-10-05 15:19
+     */
 //    private static Bitmap loadImageFormUrl(Context context, String imageUrl, int width,
 //                                           int height, boolean askWifi, LoadImgUrlCallBack loadImgUrlCallBack) {
 //        if (askWifi) {
@@ -424,165 +448,165 @@ public class ImageUtil {
 //        Bitmap bitmap = readBitmapFromByteArray(data, width, height);
 //        return bitmap;
 //    }
-//
-//    /**
-//     * 获取缩放后的本地图片
-//     *
-//     * @param filePath 文件路径
-//     * @param width    宽
-//     * @param height   高
-//     * @return
-//     */
-//    private static Bitmap readBitmapFromFile(String filePath, int width, int height) {
-//        try {
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inJustDecodeBounds = false;
-//
-//            /** 这里是获取手机屏幕的分辨率用来处理 图片 溢出问题的。begin */
-//
-//            int displaypixels = width / 2 * height / 2;
-//
-//            options.inSampleSize = computeSampleSize(options, -1, displaypixels);
-//            options.inJustDecodeBounds = false;
-//            try {
-//                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
-//                return bmp;
-//            } catch (OutOfMemoryError err) {
-//                err.printStackTrace();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * 获取缩放后的本地图片
-//     *
-//     * @param ins    输入流
-//     * @param width  宽
-//     * @param height 高
-//     * @return
-//     */
-//    private static Bitmap readBitmapFromInputStream(InputStream ins, int width, int height) {
-//        try {
-//            int displaypixels = width / 2 * height / 2;
-//            byte[] bytes = getBytes(ins);
-//            BitmapFactory.Options opts = new BitmapFactory.Options();
-//            // 这3句是处理图片溢出的begin( 如果不需要处理溢出直接 opts.inSampleSize=1;)
-//            opts.inJustDecodeBounds = true;
-//            BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
-//            opts.inSampleSize = computeSampleSize(opts, -1, displaypixels);
-//            // end
-//            opts.inJustDecodeBounds = false;
-//            Bitmap bitmap = BitmapFactory
-//                    .decodeByteArray(bytes, 0, bytes.length, opts);
-//            ins.close();
-//
-//            return bitmap;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * 从二进制数据中获取图片
-//     *
-//     * @param data
-//     * @param width
-//     * @param height
-//     * @return
-//     */
-//    private static Bitmap readBitmapFromByteArray(byte[] data, int width, int height) {
-//        try {
-//
-//            int displaypixels = width / 2 * height / 2;
-//            BitmapFactory.Options opts = new BitmapFactory.Options();
-//            // 这3句是处理图片溢出的begin( 如果不需要处理溢出直接 opts.inSampleSize=1;)
-//            opts.inJustDecodeBounds = true;
-//            BitmapFactory.decodeByteArray(data, 0, data.length, opts);
-//            opts.inSampleSize = computeSampleSize(opts, -1, displaypixels);
-//            // end
-//            opts.inJustDecodeBounds = false;
-//            Bitmap bitmap = BitmapFactory
-//                    .decodeByteArray(data, 0, data.length, opts);
-//
-//            return bitmap;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//
-//    private static byte[] getBytes(InputStream input) throws IOException {
-//        ByteArrayOutputStream result = new ByteArrayOutputStream();
-//        copy(input, result);
-//        result.close();
-//        return result.toByteArray();
-//    }
-//
-//    private static void copy(InputStream input, OutputStream output) throws IOException {
-//        copy(input, output, 2048);
-//    }
-//
-//    private static void copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
-//        byte[] buf = new byte[bufferSize];
-//
-//        for (int bytesRead = input.read(buf); bytesRead != -1; bytesRead = input.read(buf)) {
-//            output.write(buf, 0, bytesRead);
-//        }
-//
-//        output.flush();
-//    }
-//
-//    private static int computeSampleSize(BitmapFactory.Options options,
-//                                         int minSideLength, int maxNumOfPixels) {
-//        int initialSize = computeInitialSampleSize(options, minSideLength,
-//                maxNumOfPixels);
-//
-//        int roundedSize;
-//        if (initialSize <= 8) {
-//            roundedSize = 1;
-//            while (roundedSize < initialSize) {
-//                roundedSize <<= 1;
-//            }
-//        } else {
-//            roundedSize = (initialSize + 7) / 8 * 8;
-//        }
-//
-//        return roundedSize;
-//    }
-//
-//    private static int computeInitialSampleSize(BitmapFactory.Options options,
-//                                                int minSideLength, int maxNumOfPixels) {
-//        double w = options.outWidth;
-//        double h = options.outHeight;
-//        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math
-//                .sqrt(w * h / maxNumOfPixels));
-//        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
-//                Math.floor(w / minSideLength), Math.floor(h / minSideLength));
-//        if (upperBound < lowerBound) {
-//            // return the larger one when there is no overlapping zone.
-//            return lowerBound;
-//        }
-//        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
-//            return 1;
-//        } else if (minSideLength == -1) {
-//            return lowerBound;
-//        } else {
-//            return upperBound;
-//        }
-//    }
-//
-//    /**
-//     * 保存文件
-//     *
-//     * @param filePath
-//     * @param b
-//     * @param quality
-//     */
+
+    /**
+     * 获取缩放后的本地图片
+     *
+     * @param filePath 文件路径
+     * @param width    宽
+     * @param height   高
+     * @return
+     */
+    private static Bitmap readBitmapFromFile(String filePath, int width, int height) {
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = false;
+
+            /** 这里是获取手机屏幕的分辨率用来处理 图片 溢出问题的。begin */
+
+            int displaypixels = width / 2 * height / 2;
+
+            options.inSampleSize = computeSampleSize(options, -1, displaypixels);
+            options.inJustDecodeBounds = false;
+            try {
+                Bitmap bmp = BitmapFactory.decodeFile(filePath, options);
+                return bmp;
+            } catch (OutOfMemoryError err) {
+                err.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取缩放后的本地图片
+     *
+     * @param ins    输入流
+     * @param width  宽
+     * @param height 高
+     * @return
+     */
+    private static Bitmap readBitmapFromInputStream(InputStream ins, int width, int height) {
+        try {
+            int displaypixels = width / 2 * height / 2;
+            byte[] bytes = getBytes(ins);
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            // 这3句是处理图片溢出的begin( 如果不需要处理溢出直接 opts.inSampleSize=1;)
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
+            opts.inSampleSize = computeSampleSize(opts, -1, displaypixels);
+            // end
+            opts.inJustDecodeBounds = false;
+            Bitmap bitmap = BitmapFactory
+                    .decodeByteArray(bytes, 0, bytes.length, opts);
+            ins.close();
+
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 从二进制数据中获取图片
+     *
+     * @param data
+     * @param width
+     * @param height
+     * @return
+     */
+    private static Bitmap readBitmapFromByteArray(byte[] data, int width, int height) {
+        try {
+
+            int displaypixels = width / 2 * height / 2;
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            // 这3句是处理图片溢出的begin( 如果不需要处理溢出直接 opts.inSampleSize=1;)
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(data, 0, data.length, opts);
+            opts.inSampleSize = computeSampleSize(opts, -1, displaypixels);
+            // end
+            opts.inJustDecodeBounds = false;
+            Bitmap bitmap = BitmapFactory
+                    .decodeByteArray(data, 0, data.length, opts);
+
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private static byte[] getBytes(InputStream input) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        copy(input, result);
+        result.close();
+        return result.toByteArray();
+    }
+
+    private static void copy(InputStream input, OutputStream output) throws IOException {
+        copy(input, output, 2048);
+    }
+
+    private static void copy(InputStream input, OutputStream output, int bufferSize) throws IOException {
+        byte[] buf = new byte[bufferSize];
+
+        for (int bytesRead = input.read(buf); bytesRead != -1; bytesRead = input.read(buf)) {
+            output.write(buf, 0, bytesRead);
+        }
+
+        output.flush();
+    }
+
+    private static int computeSampleSize(BitmapFactory.Options options,
+                                         int minSideLength, int maxNumOfPixels) {
+        int initialSize = computeInitialSampleSize(options, minSideLength,
+                maxNumOfPixels);
+
+        int roundedSize;
+        if (initialSize <= 8) {
+            roundedSize = 1;
+            while (roundedSize < initialSize) {
+                roundedSize <<= 1;
+            }
+        } else {
+            roundedSize = (initialSize + 7) / 8 * 8;
+        }
+
+        return roundedSize;
+    }
+
+    private static int computeInitialSampleSize(BitmapFactory.Options options,
+                                                int minSideLength, int maxNumOfPixels) {
+        double w = options.outWidth;
+        double h = options.outHeight;
+        int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math
+                .sqrt(w * h / maxNumOfPixels));
+        int upperBound = (minSideLength == -1) ? 128 : (int) Math.min(
+                Math.floor(w / minSideLength), Math.floor(h / minSideLength));
+        if (upperBound < lowerBound) {
+            // return the larger one when there is no overlapping zone.
+            return lowerBound;
+        }
+        if ((maxNumOfPixels == -1) && (minSideLength == -1)) {
+            return 1;
+        } else if (minSideLength == -1) {
+            return lowerBound;
+        } else {
+            return upperBound;
+        }
+    }
+
+    /**
+     * 保存文件
+     *
+     * @param filePath
+     * @param b
+     * @param quality
+     */
 //    private static void writeBitmapToFile(String filePath, Bitmap b, int quality) {
 //        String permission = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 //        if (ContextCompat.checkSelfPermission(ContextUtil.getContext(), permission) == PackageManager.PERMISSION_GRANTED && PermissionChecker.checkSelfPermission(ContextUtil.getContext(), permission) == PackageManager.PERMISSION_GRANTED) {
@@ -598,100 +622,100 @@ public class ImageUtil {
 //            }
 //        }
 //    }
-//
-//    /**
-//     * 获取转换颜色的图标
-//     *
-//     * @param imageView
-//     * @param resourceId     图片资源id
-//     * @param translateColor 需要转换成的颜色
-//     * @return
-//     */
-//    public static void getTranslateColorImg(final Context context, final ImageView imageView, final int resourceId, final int translateColor) {
-//
-//        final String key = resourceId + "";
-//
-//        new AsyncTask<String, Integer, Bitmap>() {
-//
-//            @Override
-//            protected Bitmap doInBackground(String... params) {
-//
-//                if (mImageCache.get(key) != null) {
-//                    return mImageCache.get(key);
-//                }
-//
-//                Bitmap baseBitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
-//
-//                Bitmap defBitmap = Bitmap.createBitmap(baseBitmap.getWidth(),
-//                        baseBitmap.getHeight(), baseBitmap.getConfig());
-//                Canvas pCanvas = new Canvas(defBitmap);
-//                Paint paint = new Paint();
-//                paint.setDither(true);
-//                paint.setAntiAlias(true);
-//
-//                float progressR = Color.red(translateColor) / 255f;
-//                float progressG = Color.green(translateColor) / 255f;
-//                float progressB = Color.blue(translateColor) / 255f;
-//                float progressA = Color.alpha(translateColor) / 255f;
-//
-//                // 根据SeekBar定义RGBA的矩阵
-//                float[] src = new float[]{progressR, 0, 0, 0, 0, 0, progressG, 0,
-//                        0, 0, 0, 0, progressB, 0, 0, 0, 0, 0, progressA, 0};
-//                // 定义ColorMatrix，并指定RGBA矩阵
-//                ColorMatrix colorMatrix = new ColorMatrix();
-//                colorMatrix.set(src);
-//                // 设置Paint的颜色
-//                paint.setColorFilter(new ColorMatrixColorFilter(src));
-//                // 通过指定了RGBA矩阵的Paint把原图画到空白图片上
-//                pCanvas.drawBitmap(baseBitmap, new Matrix(), paint);
-//
-//
-//                return defBitmap;
-//            }
-//
-//            @SuppressLint("NewApi")
-//            @Override
-//            protected void onPostExecute(Bitmap result) {
-//
-//                if (result != null) {
-//                    imageView.setImageDrawable(new BitmapDrawable(result));
-//
-//                    if (mImageCache.get(key) == null) {
-//                        mImageCache.put(key, result);
-//                    }
-//                }
-//            }
-//        }.execute("");
-//    }
-//
-//    /**
-//     * @param key
-//     * @return
-//     */
-//    public static Bitmap getBitmapFromCache(String key) {
-//        return mImageCache.get(key);
-//    }
-//
-//    /**
-//     * @param key
-//     */
-//    public static void remove(String key) {
-//        if (mImageCache != null) {
-//            mImageCache.remove(key);
-//        }
-//    }
-//
-//    public static void release() {
-//        if (mImageCache != null) {
-//            mImageCache = getImageCache();
-//        }
-//    }
-//
-//    private interface LoadImgUrlCallBack {
-//        String getImageUrl();
-//    }
-//
-//    public interface ImageLoadCallBack {
-//        void callback(Bitmap bitmap);
-//    }
+
+    /**
+     * 获取转换颜色的图标
+     *
+     * @param imageView
+     * @param resourceId     图片资源id
+     * @param translateColor 需要转换成的颜色
+     * @return
+     */
+    public static void getTranslateColorImg(final Context context, final ImageView imageView, final int resourceId, final int translateColor) {
+
+        final String key = resourceId + "";
+
+        new AsyncTask<String, Integer, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(String... params) {
+
+                if (mImageCache.get(key) != null) {
+                    return mImageCache.get(key);
+                }
+
+                Bitmap baseBitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+
+                Bitmap defBitmap = Bitmap.createBitmap(baseBitmap.getWidth(),
+                        baseBitmap.getHeight(), baseBitmap.getConfig());
+                Canvas pCanvas = new Canvas(defBitmap);
+                Paint paint = new Paint();
+                paint.setDither(true);
+                paint.setAntiAlias(true);
+
+                float progressR = Color.red(translateColor) / 255f;
+                float progressG = Color.green(translateColor) / 255f;
+                float progressB = Color.blue(translateColor) / 255f;
+                float progressA = Color.alpha(translateColor) / 255f;
+
+                // 根据SeekBar定义RGBA的矩阵
+                float[] src = new float[]{progressR, 0, 0, 0, 0, 0, progressG, 0,
+                        0, 0, 0, 0, progressB, 0, 0, 0, 0, 0, progressA, 0};
+                // 定义ColorMatrix，并指定RGBA矩阵
+                ColorMatrix colorMatrix = new ColorMatrix();
+                colorMatrix.set(src);
+                // 设置Paint的颜色
+                paint.setColorFilter(new ColorMatrixColorFilter(src));
+                // 通过指定了RGBA矩阵的Paint把原图画到空白图片上
+                pCanvas.drawBitmap(baseBitmap, new Matrix(), paint);
+
+
+                return defBitmap;
+            }
+
+            @SuppressLint("NewApi")
+            @Override
+            protected void onPostExecute(Bitmap result) {
+
+                if (result != null) {
+                    imageView.setImageDrawable(new BitmapDrawable(result));
+
+                    if (mImageCache.get(key) == null) {
+                        mImageCache.put(key, result);
+                    }
+                }
+            }
+        }.execute("");
+    }
+
+    /**
+     * @param key
+     * @return
+     */
+    public static Bitmap getBitmapFromCache(String key) {
+        return mImageCache.get(key);
+    }
+
+    /**
+     * @param key
+     */
+    public static void remove(String key) {
+        if (mImageCache != null) {
+            mImageCache.remove(key);
+        }
+    }
+
+    public static void release() {
+        if (mImageCache != null) {
+            mImageCache = getImageCache();
+        }
+    }
+
+    private interface LoadImgUrlCallBack {
+        String getImageUrl();
+    }
+
+    public interface ImageLoadCallBack {
+        void callback(Bitmap bitmap);
+    }
 }

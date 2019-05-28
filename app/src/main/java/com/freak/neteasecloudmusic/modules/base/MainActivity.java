@@ -3,6 +3,11 @@ package com.freak.neteasecloudmusic.modules.base;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -18,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.freak.httphelper.log.LogUtil;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
@@ -50,6 +56,7 @@ import java.util.List;
  * @author freak
  * @date 2019/02/19
  */
+@SuppressWarnings("ALL")
 public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> implements MainContract.View, View.OnClickListener {
     private ImageView mImgDisco, mImgMusic, mImgVideo, mImgSearch;
     private List<ImageView> tabs;
@@ -69,6 +76,12 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
      * 音频广播
      */
     private AudioBroadcastReceiver mAudioBroadcastReceiver;
+    //创建异步HandlerThread
+    private HandlerThread mHandlerThread;
+    /**
+     * 子线程用于执行耗时任务
+     */
+    public WeakRefHandler mWorkerHandler;
     /**
      * 处理ui任务
      */
@@ -81,9 +94,10 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
     @Override
     protected void initEventAndData() {
-        initService();
         initReceiver();
+        initService();
         AudioPlayerManager.getInstance(this).init();
+
     }
 
     /**
@@ -155,6 +169,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         mAudioBroadcastReceiver.setReceiverListener(new AudioBroadcastReceiver.AudioReceiverListener() {
             @Override
             public void onReceive(Context context, final Intent intent, final int code) {
+                LogUtil.e("接收广播"+code);
                 mUIHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -339,7 +354,8 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 //                        application.startFloatService();
 
                         break;
-
+                    default:
+                        break;
                 }
             }
         });
@@ -432,6 +448,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
      * 销毁服务
      */
     private void destroyService() {
+        LogUtil.e("销毁服务");
         AudioPlayerService.stopService(this);
     }
 
@@ -452,7 +469,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 //        if (mFragmentReceiver != null) {
 //            mFragmentReceiver.unregisterReceiver(mContext);
 //        }
-
+        LogUtil.e("销毁广播");
         if (mAudioBroadcastReceiver != null) {
             mAudioBroadcastReceiver.unregisterReceiver(this);
         }
@@ -487,18 +504,48 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         mBackgroundUrl = (String) SPUtils.get(this, Constants.LOGIN_URL, "");
         setViewPager();
         setUpDrawer();
-//        HandlerUtil.getInstance(this).postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mSplashScreen.removeSplashScreen();
-//            }
-//        }, 3000);
+        //创建ui handler
+        mUIHandler = new WeakRefHandler(Looper.getMainLooper(), this, new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                handleUIMessage(msg);
+                return true;
+            }
+        });
 
+        //创建异步HandlerThread
+        mHandlerThread = new HandlerThread("loadActivityData", Process.THREAD_PRIORITY_BACKGROUND);
+        //必须先开启线程
+        mHandlerThread.start();
+        //子线程Handler
+        mWorkerHandler = new WeakRefHandler(mHandlerThread.getLooper(), this, new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                handleWorkerMessage(msg);
+                return true;
+            }
+        });
     }
 
     @Override
     protected MainPresenter createPresenter() {
         return new MainPresenter();
+    }
+    /**
+     * 处理UI
+     *
+     * @param msg
+     */
+    protected void handleUIMessage(Message msg) {
+
+    }
+    /**
+     * 处理子线程worker
+     *
+     * @param msg
+     */
+    protected void handleWorkerMessage(Message msg) {
+
     }
 
 

@@ -3,7 +3,6 @@ package com.freak.neteasecloudmusic.base;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
+import com.freak.httphelper.BasePresenter;
+import com.freak.httphelper.RxBaseView;
+import com.freak.httphelper.RxBus;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.app.App;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
@@ -23,9 +26,6 @@ import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
 import com.freak.neteasecloudmusic.net.status.NetworkType;
 import com.freak.neteasecloudmusic.utils.SharedPreferencesUtils;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
-import com.freak.httphelper.BasePresenter;
-import com.freak.httphelper.RxBaseView;
-import com.freak.httphelper.RxBus;
 
 
 /**
@@ -39,6 +39,9 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
     protected Activity mActivity;
     private View netErrorView;
     private QuickControlsFragment mFragment;
+    private View mFloatView;
+    private FrameLayout mContentContainer;
+    private static AppCompatActivity sAppCompatActivity;
 
     /**
      * 绑定布局
@@ -64,6 +67,10 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
      */
     protected abstract T createPresenter();
 
+    public static AppCompatActivity getBaseActivity(){
+        return sAppCompatActivity;
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +84,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         setContentView(getLayout());
         super.onCreate(savedInstanceState);
         mActivity = this;
+        sAppCompatActivity=this;
         //活动控制器
         App.getInstance().addActivity(this);
         if (mPresenter != null) {
@@ -104,6 +112,24 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         } else {
             transaction.show(mFragment).commitNowAllowingStateLoss();
         }
+//        mFloatView = LayoutInflater.from(getBaseContext()).inflate(R.layout.fragment_quick_controls,null);
+//        ViewGroup mDecorView = (ViewGroup)getWindow().getDecorView();
+//        mContentContainer = (FrameLayout)((ViewGroup)mDecorView.getChildAt(0)).getChildAt(1);
+//        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+////        musicProcessBar = (ProgressBar)mFloatView.findViewById(R.id.float_Music_ProgressBar);
+////        musicImageView = (ImageView)mFloatView.findViewById(R.id.float_MusicImage);
+////        musicNameTextView = (TextView)mFloatView.findViewById(R.id.float_Music_Name);
+////        musicArtistTextView = (TextView)mFloatView.findViewById(R.id.float_Music_Artist);
+////        musicPlayBtn = (ImageView)mFloatView.findViewById(R.id.float_Play_Btn);
+////        musicNextBtn = (ImageView)mFloatView.findViewById(R.id.float_Next_Music);
+////        musicPlayListBtn = (ImageView)mFloatView.findViewById(R.id.float_Play_List);
+////        mFloatView.findViewById(R.id.float_Music_Container).setOnClickListener(this);
+////        musicPlayBtn.setOnClickListener(this);
+////        musicPlayListBtn.setOnClickListener(this);
+////        musicNextBtn.setOnClickListener(this);
+//        //获取当前正在播放的音乐
+//        layoutParams.gravity = Gravity.BOTTOM;//设置对齐位置
+//        mContentContainer.addView(mFloatView,layoutParams);
     }
 
     @Override

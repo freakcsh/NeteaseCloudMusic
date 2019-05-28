@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpFragment;
+import com.freak.neteasecloudmusic.service.AudioPlayerService;
 
 public class QuickControlsFragment extends BaseAbstractMvpFragment<QuickControlsPresenter> implements QuickControlsContract.View, View.OnClickListener {
 
@@ -28,7 +29,14 @@ public class QuickControlsFragment extends BaseAbstractMvpFragment<QuickControls
 
     @Override
     protected void initView(View view) {
+        initService();
+    }
 
+    /**
+     * 初始服务
+     */
+    private void initService() {
+        AudioPlayerService.startService(getActivity());
     }
 
     @Override

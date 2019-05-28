@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.freak.httphelper.log.LogUtil;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
+import com.freak.neteasecloudmusic.player.manager.ConfigInfo;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 import com.freak.neteasecloudmusic.player.manager.entity.DownloadTask;
 
@@ -20,22 +22,22 @@ public class AudioBroadcastReceiver {
     /**
      * audio的receiver的action
      */
-    private static final String RECEIVER_ACTION = "com.zlm.hp.receiver.audio.action";
+    private static final String RECEIVER_ACTION = "com.freak.neteasecloudmusic.receiver.audio.action";
 
     /**
      * code key
      */
-    private static final String ACTION_CODE_KEY = "com.zlm.hp.receiver.audio.action.code.key";
+    private static final String ACTION_CODE_KEY = "com.freak.neteasecloudmusic.receiver.audio.action.code.key";
 
     /**
      * bundle key
      */
-    public static final String ACTION_BUNDLEKEY = "com.zlm.hp.receiver.audio.action.bundle.key";
+    public static final String ACTION_BUNDLEKEY = "com.freak.neteasecloudmusic.receiver.audio.action.bundle.key";
 
     /**
      * data key
      */
-    public static final String ACTION_DATA_KEY = "com.zlm.hp.receiver.audio.action.data.key";
+    public static final String ACTION_DATA_KEY = "com.freak.neteasecloudmusic.receiver.audio.action.data.key";
 
     /**
      * null
@@ -254,7 +256,6 @@ public class AudioBroadcastReceiver {
      * @param context
      */
     public void registerReceiver(Context context) {
-
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -307,9 +308,9 @@ public class AudioBroadcastReceiver {
     public static void sendNullReceiver(Context context) {
 
         //清空当前的播放的索引
-//        ConfigInfo configInfo = ConfigInfo.obtain();
-//        configInfo.setPlayHash("");
-//        configInfo.save();
+        ConfigInfo configInfo = ConfigInfo.obtain();
+        configInfo.setPlayHash("");
+        configInfo.save();
 
         sendReceiver(context, ACTION_CODE_NULL, null, null);
     }
@@ -370,6 +371,7 @@ public class AudioBroadcastReceiver {
      * @param audioInfo
      */
     public static void sendPlayLocalSongReceiver(Context context, AudioInfo audioInfo) {
+        LogUtil.e("广播发送");
         Bundle bundle = new Bundle();
         bundle.putParcelable(ACTION_DATA_KEY, audioInfo);
         sendReceiver(context, ACTION_CODE_SERVICE_PLAYLOCALSONG, ACTION_BUNDLEKEY, bundle);

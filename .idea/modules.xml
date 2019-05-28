@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NeteaseCloudMusic.iml" filepath="$PROJECT_DIR$/NeteaseCloudMusic.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\NeteaseCloudMusic\NeteaseCloudMusic\music.iml" filepath="E:\NeteaseCloudMusic\NeteaseCloudMusic\music.iml" />
+      <module fileurl="file://E:\CloudMusic\NeteaseCloudMusic\music.iml" filepath="E:\CloudMusic\NeteaseCloudMusic\music.iml" />
     </modules>
   </component>
 </project>

@@ -32,6 +32,18 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <uses-feature android:name="android.hardware.usb.host" />
+
+
+    <!-- 显示悬浮窗口权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 动态广播自定义权限 -->
+    <uses-permission android:name="com.zlm.hp.permissions.RECEIVER" />
+    <permission
+        android:name="com.zlm.hp.permissions.RECEIVER"
+        android:protectionLevel="signature" />
     <application
         android:name="com.freak.neteasecloudmusic.app.App"
         android:allowBackup="true"
@@ -67,6 +79,7 @@
         <activity android:name=".modules.disco.recommend.songlist.all.AllSongListActivity" />
         <activity android:name=".modules.disco.recommend.songlist.hot.HotSongListActivity" />
         <activity android:name=".modules.disco.recommend.songlist.detail.DetailActivity" />
+        <service android:name=".service.AudioPlayerService"/>
     </application>
 
 </manifest>

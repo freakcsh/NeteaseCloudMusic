@@ -149,16 +149,6 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
         audioInfo.setDownloadUrl(songUrlEntity.getData().get(0).getUrl());
         audioInfo.setType(AudioInfo.TYPE_LOCAL);
         AudioPlayerManager.getInstance(this).playSong(audioInfo);
-//        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
-//
-//        try {
-//            ijkMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//            ijkMediaPlayer.setDataSource(songUrlEntity.getData().get(0).getUrl());
-//            ijkMediaPlayer.prepareAsync();
-//            ijkMediaPlayer.start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override

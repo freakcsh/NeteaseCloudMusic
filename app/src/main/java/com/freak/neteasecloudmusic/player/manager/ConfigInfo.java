@@ -270,6 +270,7 @@ public class ConfigInfo implements Parcelable {
         Parcel parcel = null;
         synchronized (lock) {
             String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
+         LogUtil.e("文件路径"+filePath);
             try {
                 byte[] data = FileUtil.readFile(filePath);
                 if (data == null) {

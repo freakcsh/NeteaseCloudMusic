@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
+import com.freak.neteasecloudmusic.player.manager.util.RandomUtil;
 import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
 
 import java.util.List;
@@ -314,7 +315,7 @@ public class AudioPlayerManager {
             case 1:
                 // 随机播放
 
-//                playIndex = RandomUtil.createRandomNum();
+                playIndex = RandomUtil.createRandomNum();
 
 
                 break;
@@ -388,7 +389,7 @@ public class AudioPlayerManager {
             case 1:
                 // 随机播放
 
-//                playIndex = RandomUtil.createRandomNum();
+                playIndex = RandomUtil.createRandomNum();
 
 
                 break;
