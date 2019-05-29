@@ -148,6 +148,7 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
         AudioInfo audioInfo=new AudioInfo();
         audioInfo.setDownloadUrl(songUrlEntity.getData().get(0).getUrl());
         audioInfo.setType(AudioInfo.TYPE_LOCAL);
+        audioInfo.setHash(songUrlEntity.getData().get(0).getMd5());
         AudioPlayerManager.getInstance(this).playSong(audioInfo);
     }
 

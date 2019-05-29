@@ -27,7 +27,9 @@ import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 import com.freak.neteasecloudmusic.net.cookie.CookieJarImpl;
+import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
 import com.freak.neteasecloudmusic.receiver.NetworkConnectChangedReceiver;
+import com.freak.neteasecloudmusic.service.AudioPlayerService;
 import com.freak.neteasecloudmusic.utils.imagepick.loader.ImagePickerGlideLoader;
 import com.lzy.imagepicker.ImagePicker;
 import com.lzy.imagepicker.view.CropImageView;
@@ -56,6 +58,7 @@ public class App extends MultiDexApplication {
     }
 
     private NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
+    private static AudioBroadcastReceiver mAudioBroadcastReceiver;
 
     public void setAllActivities(Set<Activity> allActivities) {
         this.allActivities = allActivities;
@@ -67,6 +70,13 @@ public class App extends MultiDexApplication {
 
     public static void setInstance(App instance) {
         App.instance = instance;
+    }
+
+    public static AudioBroadcastReceiver getAudioBroadcastReceiverInstance() {
+        if (mAudioBroadcastReceiver == null) {
+            mAudioBroadcastReceiver = new AudioBroadcastReceiver();
+        }
+        return mAudioBroadcastReceiver;
     }
 
     @Override
@@ -91,6 +101,7 @@ public class App extends MultiDexApplication {
 //                .setInterceptors(new CommonParametersInterceptor(), new CommonParametersInterceptorHead());//设置多个拦截器
         initImagePicker();
         initReceiver();
+        initService();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 
             @Override
@@ -138,6 +149,10 @@ public class App extends MultiDexApplication {
         });
     }
 
+    private void initService() {
+        AudioPlayerService.startService(this);
+    }
+
     /**
      * 注册广播
      */
@@ -151,8 +166,9 @@ public class App extends MultiDexApplication {
         if (mNetworkConnectChangedReceiver == null) {
             mNetworkConnectChangedReceiver = new NetworkConnectChangedReceiver();
         }
-
         registerReceiver(mNetworkConnectChangedReceiver, filter);
+
+        getAudioBroadcastReceiverInstance().registerReceiver(this);
     }
 
     @Override
@@ -161,6 +177,10 @@ public class App extends MultiDexApplication {
         if (mNetworkConnectChangedReceiver != null) {
             unregisterReceiver(mNetworkConnectChangedReceiver);
         }
+        if (mAudioBroadcastReceiver != null) {
+            mAudioBroadcastReceiver.unregisterReceiver(this);
+        }
+        AudioPlayerService.stopService(this);
     }
 
     @Override
@@ -169,6 +189,10 @@ public class App extends MultiDexApplication {
         if (mNetworkConnectChangedReceiver != null) {
             unregisterReceiver(mNetworkConnectChangedReceiver);
         }
+        if (mAudioBroadcastReceiver != null) {
+            mAudioBroadcastReceiver.unregisterReceiver(this);
+        }
+        AudioPlayerService.stopService(this);
     }
 
     private void initImagePicker() {

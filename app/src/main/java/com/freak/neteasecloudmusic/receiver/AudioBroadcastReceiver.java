@@ -256,19 +256,21 @@ public class AudioBroadcastReceiver {
      * @param context
      */
     public void registerReceiver(Context context) {
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
+        if (mBroadcastReceiver==null){
+            mBroadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
 
-                if (mReceiverListener != null) {
-                    int code = intent.getIntExtra(ACTION_CODE_KEY, -1);
-                    if (code != -1) {
-                        mReceiverListener.onReceive(context, intent, code);
+                    if (mReceiverListener != null) {
+                        int code = intent.getIntExtra(ACTION_CODE_KEY, -1);
+                        if (code != -1) {
+                            mReceiverListener.onReceive(context, intent, code);
+                        }
                     }
                 }
-            }
-        };
-        context.registerReceiver(mBroadcastReceiver, mIntentFilter, Constants.RECEIVER_PERMISSION, null);
+            };
+            context.registerReceiver(mBroadcastReceiver, mIntentFilter, Constants.RECEIVER_PERMISSION, null);
+        }
     }
 
     /**

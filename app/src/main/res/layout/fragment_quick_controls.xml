@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44pt"
+        android:layout_height="50pt"
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/image_view_controller_bg"
             android:layout_width="40pt"
             android:layout_height="40pt"
             android:layout_marginLeft="5pt" />
@@ -21,6 +23,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/text_view_controller_song_name"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -31,6 +34,7 @@
                 android:textSize="12pt" />
 
             <TextView
+                android:id="@+id/text_view_controller_author_name"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -42,22 +46,31 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="30pt"
-            android:layout_height="30pt">
+            android:layout_width="50pt"
+            android:layout_height="50pt">
 
-            <ProgressBar
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            <com.freak.neteasecloudmusic.view.seekbar.CircleSeekBar
+                android:id="@+id/circle_seek_bar_controller_rate"
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                app:progressWidth="2pt"
+                app:sProgressWidth="2pt"
+                app:progressColor="@color/colorPrimary"
+                app:sProgressColor="@color/color_404040"
+                android:layout_centerInParent="true"
+                app:showText="false"/>
+
 
             <ImageView
-                android:layout_width="15pt"
-                android:layout_height="15pt"
+                android:id="@+id/image_view_controller_start_or_stop"
+                android:layout_width="20pt"
+                android:layout_height="20pt"
                 android:layout_centerInParent="true"
                 android:background="@drawable/selector_start_stop" />
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/image_view_controller_song_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20pt"

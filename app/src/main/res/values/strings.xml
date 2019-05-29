@@ -7,7 +7,7 @@
     <string name="myself_tag">我的</string>
     <string name="loading">加载中</string>
     <string name="key_ok">完成</string>
-    <string name="def_artist">freak音乐</string>
+    <string name="def_artist">freak</string>
     <string name="def_songName">就是任性</string>
     <string name="def_text">freak音乐 就是任性</string>
     <string name="desktoplrc_tip">该功能，需要手动向APP申请权限。\n1.进入设置>更多应用>乐乐音乐>权限管理>显示悬浮窗\n\n2.开启允许</string>

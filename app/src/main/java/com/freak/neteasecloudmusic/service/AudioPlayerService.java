@@ -292,9 +292,9 @@ public class AudioPlayerService extends Service {
     private void handleWorkerMessage(Message msg) {
         switch (msg.what) {
             case MESSAGE_WHAT_LOADPLAYPROGRESSDATA:
-
+                LogUtil.e("加载当前播放进度");
                 if (getCurAudioInfo() != null && mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-
+                    LogUtil.e("加载当前播放进度2");
                     getCurAudioInfo().setPlayProgress((int) mMediaPlayer.getCurrentPosition());
                     AudioBroadcastReceiver.sendPlayingReceiver(mContext, getCurAudioInfo());
                 }
@@ -636,9 +636,13 @@ public class AudioPlayerService extends Service {
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setDataSource(filePath);
             mMediaPlayer.prepareAsync();
+            mMediaPlayer.getDuration();
+            mMediaPlayer.getCurrentPosition();
             mMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
                 @Override
                 public void onSeekComplete(IMediaPlayer mp) {
+                    LogUtil.e("播放总时长--》" + mMediaPlayer.getDuration() + "播放进度--》" + mMediaPlayer.getCurrentPosition());
+
                     //发送播放中广播
                     AudioBroadcastReceiver.sendPlayReceiver(mContext, audioInfo);
                     mWorkerHandler.removeMessages(MESSAGE_WHAT_LOADPLAYPROGRESSDATA);
@@ -678,7 +682,7 @@ public class AudioPlayerService extends Service {
                         AudioBroadcastReceiver.sendPlayReceiver(mContext, audioInfo);
                         mWorkerHandler.removeMessages(MESSAGE_WHAT_LOADPLAYPROGRESSDATA);
                         mWorkerHandler.sendEmptyMessage(MESSAGE_WHAT_LOADPLAYPROGRESSDATA);
-
+                        LogUtil.e("播放总时长--》" + mMediaPlayer.getDuration() + "播放进度--》" + mMediaPlayer.getCurrentPosition());
                         mMediaPlayer.start();
 
                     }
