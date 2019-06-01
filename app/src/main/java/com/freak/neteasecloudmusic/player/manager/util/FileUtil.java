@@ -3,6 +3,8 @@ package com.freak.neteasecloudmusic.player.manager.util;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.StatFs;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.text.TextUtils;
@@ -15,9 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 
-/**
- * @author zhangliangming
- */
+
 public class FileUtil {
     /**
      * 获取文件后缀
@@ -25,6 +25,7 @@ public class FileUtil {
      * @param file
      * @return
      */
+    @NonNull
     public static String getFileExt(File file) {
         return getFileExt(file.getName());
     }
@@ -49,6 +50,7 @@ public class FileUtil {
      * @param fileName
      * @return
      */
+    @NonNull
     public static String getFileExt(String fileName) {
         int pos = fileName.lastIndexOf(".");
         if (pos == -1)
@@ -64,6 +66,7 @@ public class FileUtil {
      * @return
      * @throws Exception
      */
+    @Nullable
     public static byte[] readFile(String filePath) throws Exception {
         String permission = Manifest.permission.READ_EXTERNAL_STORAGE;
         if (ContextCompat.checkSelfPermission(App.getInstance().getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED && PermissionChecker.checkSelfPermission(App.getInstance().getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED) {

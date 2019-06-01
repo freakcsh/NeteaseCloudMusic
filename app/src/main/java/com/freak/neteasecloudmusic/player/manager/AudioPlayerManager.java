@@ -3,10 +3,14 @@ package com.freak.neteasecloudmusic.player.manager;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.freak.neteasecloudmusic.commom.constants.ResourceConstants;
+import com.freak.neteasecloudmusic.net.log.LogUtil;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 import com.freak.neteasecloudmusic.player.manager.util.RandomUtil;
+import com.freak.neteasecloudmusic.player.manager.util.ResourceUtil;
 import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -182,7 +186,8 @@ public class AudioPlayerManager {
 //        更新数据
         ConfigInfo configInfo = ConfigInfo.obtain();
         configInfo.setPlayHash(audioInfo.getHash());
-        AudioInfo curAudioInfo = getCurSong(audioInfo);
+        AudioInfo curAudioInfo = getCurSong(configInfo.getAudioInfos(), audioInfo.getHash());
+//        AudioInfo curAudioInfo = getCurSong(audioInfo);
         curAudioInfo.setPlayProgress(audioInfo.getPlayProgress());
         configInfo.save();
 
@@ -199,23 +204,25 @@ public class AudioPlayerManager {
                 AudioBroadcastReceiver.sendPlayLocalSongReceiver(mContext, audioInfo);
                 break;
             case AudioInfo.TYPE_NET:
-
-//                String fileName = audioInfo.getTitle();
-//                String filePath = ResourceUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO, fileName + "." + audioInfo.getFileExt());
-//                File audioFile = new File(filePath);
-//                if (audioFile.exists()) {
-//                    mPlayStatus = PLAYING;
-//                    //设置文件路径
-//                    audioInfo.setFilePath(filePath);
-//                    AudioBroadcastReceiver.sendPlayLocalSongReceiver(mContext, audioInfo);
-//                } else {
-//                    filePath = ResourceUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO, audioInfo.getHash() + ".temp");
-//                    audioFile = new File(filePath);
-//                    if (!audioFile.exists()) {
-//                        //临时文件不存在，删除数据库中的数据
+                LogUtil.e("播放网络音乐");
+                String fileName = audioInfo.getTitle();
+                String filePath = ResourceUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO, fileName + "." + audioInfo.getFileExt());
+                File audioFile = new File(filePath);
+                if (audioFile.exists()) {
+                    mPlayStatus = PLAYING;
+                    //设置文件路径
+                    audioInfo.setFilePath(filePath);
+                    AudioBroadcastReceiver.sendPlayLocalSongReceiver(mContext, audioInfo);
+                } else {
+                    LogUtil.e("文件不存在，发送播放网络音乐广播");
+                    filePath = ResourceUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO, audioInfo.getHash() + ".temp");
+                    audioFile = new File(filePath);
+                    if (!audioFile.exists()) {
+                        //临时文件不存在，删除数据库中的数据
 //                        DownloadThreadInfoDB.delete(mContext, audioInfo.getHash(), OnLineAudioManager.mThreadNum);
-//                    }
-//                    mPlayStatus = PLAYINGNET;
+                    }
+                    mPlayStatus = PLAYINGNET;
+                    AudioBroadcastReceiver.sendPlayNetSongReceiver(mContext, audioInfo);
 //                    int downloadedSize = DownloadThreadInfoDB.getDownloadedSize(mContext, audioInfo.getHash(), OnLineAudioManager.mThreadNum);
 //                    if (downloadedSize == audioInfo.getFileSize()) {
 //                        mPlayStatus = PLAYING;
@@ -228,7 +235,7 @@ public class AudioPlayerManager {
 //                        }
 //                        mOnLineAudioManager.addDownloadTask(audioInfo);
 //                    }
-//                }
+                }
                 break;
             default:
                 break;

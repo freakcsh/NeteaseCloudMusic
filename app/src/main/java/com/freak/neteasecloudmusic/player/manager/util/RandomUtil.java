@@ -3,10 +3,8 @@ package com.freak.neteasecloudmusic.player.manager.util;
 import java.util.Random;
 
 /**
- * @Description: 处理随机数
- * @author: zhangliangming
- * @date: 2018-10-07 16:00
- **/
+ * 处理随机数
+ */
 public class RandomUtil {
     /**
      *
@@ -22,7 +20,7 @@ public class RandomUtil {
     private static int mSize = -1;
 
     /**
-     * 设置随机机
+     * 设置随机数
      *
      * @param size
      */

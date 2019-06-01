@@ -24,11 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * @Description:
- * @author: zhangliangming
- * @date: 2018-10-05 12:46
- **/
+
 public class ImageUtil {
 
     // 缓存

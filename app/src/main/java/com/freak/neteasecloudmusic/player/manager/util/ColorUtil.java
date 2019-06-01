@@ -4,8 +4,6 @@ import android.graphics.Color;
 
 /**
  * 颜色处理类
- *
- * @author zhangliangming
  */
 public class ColorUtil {
     /**

@@ -31,6 +31,7 @@ import com.freak.neteasecloudmusic.modules.login.LoginActivity;
 import com.freak.neteasecloudmusic.modules.music.MusicFragment;
 import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
 import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
+import com.freak.neteasecloudmusic.player.manager.ConfigInfo;
 import com.freak.neteasecloudmusic.utils.SPUtils;
 import com.freak.neteasecloudmusic.utils.StringUtils;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     private TextView text_view_username;
     private String mBackgroundUrl;
     private ImageView img_bg;
+    private ConfigInfo mConfigInfo;
 
     @Override
     protected int getLayout() {
@@ -73,7 +75,8 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
     @Override
     protected void initEventAndData() {
-
+        mConfigInfo = ConfigInfo.obtain();
+        AudioPlayerManager.getInstance(mActivity).init();
     }
 
     @Override
@@ -112,6 +115,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
                     @Override
                     public void onSuccess(Permission model) {
                         if (model.granted) {
+                            mConfigInfo = ConfigInfo.obtain();
                             AudioPlayerManager.getInstance(mActivity).init();
                         } else {
 //                            ToastUtil.shortShow("没有开启权限，部分功能将无法使用");

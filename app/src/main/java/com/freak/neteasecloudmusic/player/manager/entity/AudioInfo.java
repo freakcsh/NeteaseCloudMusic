@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 
 /**
- * 歌曲信息
+ * 音频信息（音乐/视频）
  *
  * @author Freak
  * @date 2019/5/27.
@@ -20,30 +20,37 @@ public class AudioInfo implements Parcelable {
     public static final int STATUS_INIT = 2;
 
     /**
-     * 状态
+     * 播放音乐状态
      */
     private int status = STATUS_INIT;
 
     /**
      * 类型
+     * 0 本地播放
+     * 1 网络播放
      */
     public static final int TYPE_LOCAL = 0;
     public static final int TYPE_NET = 1;
-    //最近-本地
+    /**
+     * 播放音乐类型
+     */
+    private int type = TYPE_LOCAL;
+    /**
+     * 最近播放的音乐列表信息
+     * 2 在列表中是本地音乐（读取本地音乐数据）
+     * 3 在列表中是网络数据（读取缓存数据，没有缓存则播放网络音乐，并下载放到缓存文件夹中）
+     */
     public static final int TYPE_RECENT_LOCAL = 2;
-    //最近-网络
     public static final int TYPE_RECENT_NET = 3;
 
     /**
      * 喜欢（网络-本地）
+     * 4 在喜欢的音乐列表中是本地音乐
+     * 5 在喜欢的音乐列表中是网络音乐
      */
     public static final int TYPE_LIKE_LOCAL = 4;
     public static final int TYPE_LIKE_NET = 5;
 
-    /**
-     * 类型
-     */
-    private int type = TYPE_LOCAL;
 
     /**
      * 关键字
@@ -122,7 +129,7 @@ public class AudioInfo implements Parcelable {
     private String downloadUrl;
 
     /**
-     *
+     * 播放进度
      */
 //    @Transient
     private int playProgress;

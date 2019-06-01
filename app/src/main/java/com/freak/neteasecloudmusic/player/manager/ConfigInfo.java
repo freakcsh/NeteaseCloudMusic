@@ -98,7 +98,7 @@ public class ConfigInfo implements Parcelable {
     //歌曲相关数据
 
     /**
-     * 当前播放歌曲的hash
+     * 当前播放歌曲的hash(MD5)
      */
     private String playHash = "";
     /**
@@ -127,6 +127,11 @@ public class ConfigInfo implements Parcelable {
      * 默认只显示默认歌词
      */
     private int extraLrcStatus = EXTRALRCSTATUS_NOSHOWEXTRALRC;
+
+    /**
+     * 配置信息
+     */
+    private static ConfigInfo _ConfigInfo;
 
     /**
      * 桌面歌词未读颜色
@@ -261,75 +266,6 @@ public class ConfigInfo implements Parcelable {
         }
     };
 
-    /**
-     * 加载
-     *
-     * @return
-     */
-    public static ConfigInfo load() {
-        Parcel parcel = null;
-        synchronized (lock) {
-            String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
-         LogUtil.e("文件路径"+filePath);
-            try {
-                byte[] data = FileUtil.readFile(filePath);
-                if (data == null) {
-                    parcel = null;
-                    LogUtil.e("ConfigInfo.load readFile => null");
-                } else {
-                    parcel = Parcel.obtain();
-                    parcel.unmarshall(data, 0, data.length);
-                    parcel.setDataPosition(0);
-                }
-            } catch (Exception e) {
-                LogUtil.e("ConfigInfo.load Exception: " + e.getMessage());
-            }
-        }
-
-        if (parcel == null) {
-            _ConfigInfo = new ConfigInfo();
-        } else {
-            _ConfigInfo = CREATOR.createFromParcel(parcel);
-        }
-        return _ConfigInfo;
-    }
-
-    /**
-     *
-     */
-    private static ConfigInfo _ConfigInfo;
-
-    /**
-     * @return
-     */
-    public static ConfigInfo obtain() {
-        if (_ConfigInfo == null) {
-            load();
-        }
-        return _ConfigInfo;
-    }
-
-
-    /**
-     * 保存
-     *
-     * @return
-     */
-    public ConfigInfo save() {
-        Parcel parcel = Parcel.obtain();
-        writeToParcel(parcel, PARCELABLE_WRITE_RETURN_VALUE);
-        synchronized (lock) {
-            try {
-                String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
-                FileUtil.writeFile(filePath, parcel.marshall());
-            } catch (Exception e) {
-                LogUtil.e("ConfigInfo.save Exception: " + e.getMessage());
-            }
-        }
-        //
-        _ConfigInfo = this;
-        return _ConfigInfo;
-    }
 
     public boolean isWifi() {
         return isWifi;
@@ -483,6 +419,78 @@ public class ConfigInfo implements Parcelable {
         return this;
     }
 
+    /**
+     * 获取配置信息
+     *
+     * @return ConfigInfo
+     */
+    public static ConfigInfo obtain() {
+        if (_ConfigInfo == null) {
+            load();
+        }
+        return _ConfigInfo;
+    }
+
+    /**
+     * 加载
+     *
+     * @return
+     */
+    public static ConfigInfo load() {
+        Parcel parcel = null;
+        synchronized (lock) {
+            String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
+            LogUtil.e("文件路径" + filePath);
+            try {
+                byte[] data = FileUtil.readFile(filePath);
+                if (data == null) {
+                    parcel = null;
+                    LogUtil.e("ConfigInfo.load readFile => null");
+                } else {
+                    parcel = Parcel.obtain();
+                    parcel.unmarshall(data, 0, data.length);
+                    parcel.setDataPosition(0);
+                }
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.load Exception: " + e.getMessage());
+            }
+        }
+
+        if (parcel == null) {
+            _ConfigInfo = new ConfigInfo();
+        } else {
+            _ConfigInfo = CREATOR.createFromParcel(parcel);
+        }
+        return _ConfigInfo;
+    }
+
+
+    /**
+     * 保存配置信息
+     *
+     * @return
+     */
+    public ConfigInfo save() {
+        Parcel parcel = Parcel.obtain();
+        writeToParcel(parcel, PARCELABLE_WRITE_RETURN_VALUE);
+        synchronized (lock) {
+            try {
+                String filePath = ResourceUtil.getContextFilePath(App.getInstance().getApplicationContext(), ResourceConstants.PATH_CONFIG, Constants.CONFIG);
+                FileUtil.writeFile(filePath, parcel.marshall());
+            } catch (Exception e) {
+                LogUtil.e("ConfigInfo.save Exception: " + e.getMessage());
+            }
+        }
+        //
+        _ConfigInfo = this;
+        return _ConfigInfo;
+    }
+
+    /**
+     * 获取音频播放列表信息
+     *
+     * @return
+     */
     public List<AudioInfo> getAudioInfos() {
         if (audioInfos == null) {
             loadPlayListData();
@@ -490,6 +498,12 @@ public class ConfigInfo implements Parcelable {
         return audioInfos;
     }
 
+    /**
+     * 设置音频信息
+     *
+     * @param audioInfos
+     * @return
+     */
     public ConfigInfo setAudioInfos(List<AudioInfo> audioInfos) {
         //添加随机数
         RandomUtil.setNums(audioInfos.size());
@@ -499,12 +513,7 @@ public class ConfigInfo implements Parcelable {
     }
 
     /**
-     * @throws
-     * @Description: 加载播放列表
-     * @param:
-     * @return:
-     * @author: zhangliangming
-     * @date: 2018-10-06 23:21
+     * 加载播放列表
      */
     private void loadPlayListData() {
         Parcel parcel = null;
@@ -531,6 +540,7 @@ public class ConfigInfo implements Parcelable {
             audioInfos = parcel.createTypedArrayList(AudioInfo.CREATOR);
         }
         //添加随机数
+        assert audioInfos != null;
         RandomUtil.setNums(audioInfos.size());
     }
 

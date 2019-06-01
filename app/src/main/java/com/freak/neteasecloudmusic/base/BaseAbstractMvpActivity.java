@@ -250,25 +250,16 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                     //播放初始化
                     case AudioBroadcastReceiver.ACTION_CODE_INIT:
                         Bundle initBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
-                        final AudioInfo initAudioInfo = initBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+                        AudioInfo initAudioInfo = initBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
                         if (initAudioInfo != null) {
-                            mTextViewControllerSongName.setText(R.string.def_songName);
-                            mTextViewControllerAuthorName.setText(R.string.def_artist);
+                            LogUtil.e("播放初始化");
+                            mTextViewControllerSongName.setText(initAudioInfo.getSongName());
+                            mTextViewControllerAuthorName.setText(initAudioInfo.getSingerName());
                             mImageViewControllerStartOrStop.setSelected(false);
                             mCircleSeekBarControllerRate.setEnabled(true);
-                            mCircleSeekBarControllerRate.setMaxProgress((int)initAudioInfo.getDuration());
+                            mCircleSeekBarControllerRate.setMaxProgress((int) initAudioInfo.getDuration());
                             mCircleSeekBarControllerRate.setProgress((int) initAudioInfo.getPlayProgress());
                             GlideApp.with(mActivity).load("").placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
-//                            mSongNameTextView.setText(initAudioInfo.getSongName());
-//                            mSingerNameTextView.setText(initAudioInfo.getSingerName());
-//                            mPauseImageView.setVisibility(View.INVISIBLE);
-//                            mPlayImageView.setVisibility(View.VISIBLE);
-//
-//                            //设置进度条
-//                            mMusicSeekBar.setEnabled(true);
-//                            mMusicSeekBar.setMax((int) initAudioInfo.getDuration());
-//                            mMusicSeekBar.setProgress((int) initAudioInfo.getPlayProgress());
-//                            mMusicSeekBar.setSecondaryProgress(0);
 
                             //加载歌手头像
 //                            ImageUtil.loadSingerImage(mContext, mArtistImageView, initAudioInfo.getSingerName(), mConfigInfo.isWifi(), 400, 400, new AsyncHandlerTask(mUIHandler, mWorkerHandler), new ImageUtil.ImageLoadCallBack() {
@@ -304,14 +295,21 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                         break;
                     //播放
                     case AudioBroadcastReceiver.ACTION_CODE_PLAY:
-//                        if (mPauseImageView.getVisibility() != View.VISIBLE)
-//                            mPauseImageView.setVisibility(View.VISIBLE);
-//
-//                        if (mPlayImageView.getVisibility() != View.INVISIBLE)
-//                            mPlayImageView.setVisibility(View.INVISIBLE);
-                        mImageViewControllerStartOrStop.setSelected(true);
-                        mCircleSeekBarControllerRate.setProgress(20);
-                        LogUtil.e("接收到播放广播");
+                        Bundle bundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
+                        AudioInfo audioInfo = bundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
+                        if (audioInfo != null) {
+                            LogUtil.e("播放");
+                            mTextViewControllerSongName.setText(audioInfo.getSongName());
+                            mTextViewControllerAuthorName.setText(audioInfo.getSingerName());
+                            mImageViewControllerStartOrStop.setSelected(false);
+                            mCircleSeekBarControllerRate.setEnabled(true);
+                            mCircleSeekBarControllerRate.setMaxProgress((int) audioInfo.getDuration());
+                            mCircleSeekBarControllerRate.setProgress((int) audioInfo.getPlayProgress());
+                            GlideApp.with(mActivity).load("").placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                            mImageViewControllerStartOrStop.setSelected(true);
+                            mCircleSeekBarControllerRate.setProgress(20);
+                        }
+
                         break;
                     //播放中
                     case AudioBroadcastReceiver.ACTION_CODE_PLAYING:
@@ -319,18 +317,14 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                         Bundle playingBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
                         AudioInfo playingAudioInfo = playingBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
                         if (playingAudioInfo != null) {
-//                            mMusicSeekBar.setProgress((int) playingAudioInfo.getPlayProgress());
+                            mCircleSeekBarControllerRate.setProgress((int) playingAudioInfo.getPlayProgress());
                         }
 
                         break;
                     //停止播放歌曲
                     case AudioBroadcastReceiver.ACTION_CODE_STOP:
 //                        //暂停完成
-//                        if (mPauseImageView.getVisibility() != View.INVISIBLE)
-//                            mPauseImageView.setVisibility(View.INVISIBLE);
-//
-//                        if (mPlayImageView.getVisibility() != View.VISIBLE)
-//                            mPlayImageView.setVisibility(View.VISIBLE);
+                        mImageViewControllerStartOrStop.setSelected(true);
 
                         break;
                     //seekto歌曲
@@ -338,7 +332,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                         Bundle seektoBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
                         AudioInfo seektoAudioInfo = seektoBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
                         if (seektoAudioInfo != null) {
-//                            mMusicSeekBar.setProgress(seektoAudioInfo.getPlayProgress());
+                            mCircleSeekBarControllerRate.setProgress(seektoAudioInfo.getPlayProgress());
                         }
                         break;
                     //歌曲完成

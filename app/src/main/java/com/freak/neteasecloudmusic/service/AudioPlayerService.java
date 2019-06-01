@@ -147,7 +147,7 @@ public class AudioPlayerService extends Service {
                         mUIHandler.post(new Runnable() {
                             @Override
                             public void run() {
-//                                doNotification(null, code, false);
+                                doNotification(null, code, false);
                             }
                         });
 
@@ -287,20 +287,19 @@ public class AudioPlayerService extends Service {
 
 
     /**
+     * 更新播放进度handle
+     *
      * @param msg
      */
     private void handleWorkerMessage(Message msg) {
         switch (msg.what) {
             case MESSAGE_WHAT_LOADPLAYPROGRESSDATA:
-                LogUtil.e("加载当前播放进度");
                 if (getCurAudioInfo() != null && mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-                    LogUtil.e("加载当前播放进度2");
                     getCurAudioInfo().setPlayProgress((int) mMediaPlayer.getCurrentPosition());
                     AudioBroadcastReceiver.sendPlayingReceiver(mContext, getCurAudioInfo());
                 }
                 //
                 mWorkerHandler.sendEmptyMessageDelayed(MESSAGE_WHAT_LOADPLAYPROGRESSDATA, 1000);
-
                 break;
             default:
                 break;
@@ -372,7 +371,7 @@ public class AudioPlayerService extends Service {
      * 处理通知栏视图
      */
     private void doNotification(AudioInfo audioInfo, int code, boolean isFristToLoadIcon) {
-
+        LogUtil.e("通知栏code" + code);
         ConfigInfo configInfo = ConfigInfo.obtain();
         if (configInfo.isShowDesktopLrc()) {
             if (configInfo.isDesktopLrcCanMove()) {
@@ -400,6 +399,7 @@ public class AudioPlayerService extends Service {
         }
         switch (code) {
             case AudioBroadcastReceiver.ACTION_CODE_NULL:
+                LogUtil.e("无歌曲");
                 //无歌曲
 
                 mNotifyPlayBarRemoteViews.setImageViewResource(R.id.singPic,
@@ -415,6 +415,7 @@ public class AudioPlayerService extends Service {
                 break;
 
             case AudioBroadcastReceiver.ACTION_CODE_INIT:
+                LogUtil.e("初始化");
                 //初始化
                 String titleName = audioInfo.getTitle();
                 mNotifyPlayBarRemoteViews.setTextViewText(R.id.titleName,
@@ -441,6 +442,7 @@ public class AudioPlayerService extends Service {
 
                 break;
             case AudioBroadcastReceiver.ACTION_CODE_PLAY:
+                LogUtil.e("播放");
                 //播放
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.INVISIBLE);
@@ -450,6 +452,7 @@ public class AudioPlayerService extends Service {
                 break;
 
             case AudioBroadcastReceiver.ACTION_CODE_STOP:
+                LogUtil.e("暂停");
                 //暂停
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.VISIBLE);
@@ -619,7 +622,7 @@ public class AudioPlayerService extends Service {
 //        }
 
         try {
-//            String fileName = audioInfo.getTitle();
+            String fileName = audioInfo.getTitle();
             String filePath = audioInfo.getDownloadUrl();
 //            if (audioInfo.getType() != AudioInfo.TYPE_LOCAL) {
 //                filePath = ResourceUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO, fileName + "." + audioInfo.getFileExt());
@@ -679,6 +682,9 @@ public class AudioPlayerService extends Service {
                         mMediaPlayer.seekTo(audioInfo.getPlayProgress());
                     } else {
                         //发送播放中广播
+                        if (audioInfo.getType() == AudioInfo.TYPE_NET) {
+                            audioInfo.setDuration(mMediaPlayer.getDuration());
+                        }
                         AudioBroadcastReceiver.sendPlayReceiver(mContext, audioInfo);
                         mWorkerHandler.removeMessages(MESSAGE_WHAT_LOADPLAYPROGRESSDATA);
                         mWorkerHandler.sendEmptyMessage(MESSAGE_WHAT_LOADPLAYPROGRESSDATA);
@@ -712,8 +718,6 @@ public class AudioPlayerService extends Service {
     private void handleError() {
         releasePlayer();
         ToastUtil.show("播放歌曲出错，1秒后播放下一首");
-
-
         new Thread() {
             @Override
             public void run() {

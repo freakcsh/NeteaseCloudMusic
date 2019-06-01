@@ -21,6 +21,7 @@ import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.modules.disco.recommend.songlist.detail.adapter.SongListDetailAdapter;
 import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
+import com.freak.neteasecloudmusic.player.manager.util.AudioInfoTransitionUtil;
 import com.freak.neteasecloudmusic.view.custom.toolbar.SimpleToolbar;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
     private CircleImageView img_song_list_detail_author_photo;
     private LinearLayout linear_layout_song_list_detail_comment, linear_layout_song_list_detail_share, linear_layout_song_list_detail_download, linear_layout_song_list_detail_more_selector;
     private String id;
+    private SongListDetailEntity.PlaylistBean.TracksBean songInfo = null;
 
     public static void startAction(Context context, String songId) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -94,7 +96,8 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
         mSongListDetailAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mPresenter.loadSongUrl(mList.get(position).getId());
+                songInfo = mList.get(position);
+                mPresenter.loadSongUrl(songInfo.getId());
             }
         });
     }
@@ -145,11 +148,12 @@ public class DetailActivity extends BaseAbstractMvpActivity<DetailPresenter> imp
     @Override
     public void loadSongUrlSuccess(SongUrlEntity songUrlEntity) {
         LogUtil.e("播放歌曲信息 --》" + songUrlEntity.toString());
-        AudioInfo audioInfo=new AudioInfo();
-        audioInfo.setDownloadUrl(songUrlEntity.getData().get(0).getUrl());
-        audioInfo.setType(AudioInfo.TYPE_LOCAL);
-        audioInfo.setHash(songUrlEntity.getData().get(0).getMd5());
-        AudioPlayerManager.getInstance(this).playSong(audioInfo);
+        AudioInfo audioInfo = AudioInfoTransitionUtil.audioInfoTransition(songUrlEntity.getData().get(0), songInfo);
+//        AudioInfo audioInfo = new AudioInfo();
+//        audioInfo.setDownloadUrl(songUrlEntity.getData().get(0).getUrl());
+//        audioInfo.setType(AudioInfo.TYPE_LOCAL);
+//        audioInfo.setHash(songUrlEntity.getData().get(0).getMd5());
+        AudioPlayerManager.getInstance(this).playSongAndAdd(audioInfo);
     }
 
     @Override
