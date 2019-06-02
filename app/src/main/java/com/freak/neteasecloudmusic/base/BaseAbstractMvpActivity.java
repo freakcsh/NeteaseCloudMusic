@@ -255,11 +255,11 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                             LogUtil.e("播放初始化");
                             mTextViewControllerSongName.setText(initAudioInfo.getSongName());
                             mTextViewControllerAuthorName.setText(initAudioInfo.getSingerName());
-                            mImageViewControllerStartOrStop.setSelected(false);
+                            mImageViewControllerStartOrStop.setSelected(true);
                             mCircleSeekBarControllerRate.setEnabled(true);
                             mCircleSeekBarControllerRate.setMaxProgress((int) initAudioInfo.getDuration());
                             mCircleSeekBarControllerRate.setProgress((int) initAudioInfo.getPlayProgress());
-                            GlideApp.with(mActivity).load("").placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                            GlideApp.with(mActivity).load(initAudioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
 
                             //加载歌手头像
 //                            ImageUtil.loadSingerImage(mContext, mArtistImageView, initAudioInfo.getSingerName(), mConfigInfo.isWifi(), 400, 400, new AsyncHandlerTask(mUIHandler, mWorkerHandler), new ImageUtil.ImageLoadCallBack() {
@@ -301,19 +301,17 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                             LogUtil.e("播放");
                             mTextViewControllerSongName.setText(audioInfo.getSongName());
                             mTextViewControllerAuthorName.setText(audioInfo.getSingerName());
-                            mImageViewControllerStartOrStop.setSelected(false);
                             mCircleSeekBarControllerRate.setEnabled(true);
                             mCircleSeekBarControllerRate.setMaxProgress((int) audioInfo.getDuration());
                             mCircleSeekBarControllerRate.setProgress((int) audioInfo.getPlayProgress());
-                            GlideApp.with(mActivity).load("").placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                            GlideApp.with(mActivity).load(audioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
                             mImageViewControllerStartOrStop.setSelected(true);
-                            mCircleSeekBarControllerRate.setProgress(20);
+                            mCircleSeekBarControllerRate.setProgress((int) audioInfo.getPlayProgress());
                         }
 
                         break;
                     //播放中
                     case AudioBroadcastReceiver.ACTION_CODE_PLAYING:
-
                         Bundle playingBundle = intent.getBundleExtra(AudioBroadcastReceiver.ACTION_BUNDLEKEY);
                         AudioInfo playingAudioInfo = playingBundle.getParcelable(AudioBroadcastReceiver.ACTION_DATA_KEY);
                         if (playingAudioInfo != null) {
@@ -324,7 +322,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                     //停止播放歌曲
                     case AudioBroadcastReceiver.ACTION_CODE_STOP:
 //                        //暂停完成
-                        mImageViewControllerStartOrStop.setSelected(true);
+                        mImageViewControllerStartOrStop.setSelected(false);
 
                         break;
                     //seekto歌曲
@@ -483,7 +481,11 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
             mImageViewControllerStartOrStop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    if (mImageViewControllerStartOrStop.isSelected()){
+                        AudioPlayerManager.getInstance(mActivity).pause();
+                    }else {
+                        AudioPlayerManager.getInstance(mActivity).play((int) mCircleSeekBarControllerRate.getVelocity());
+                    }
                 }
             });
         }

@@ -27,8 +27,9 @@ public class AudioInfoTransitionUtil {
         audioInfo.setFileExt(songInfo.getEncodeType());//设置歌曲格式
         audioInfo.setFileSize(songInfo.getSize());
         audioInfo.setFileSizeText(songInfo.getSize() + "");
-        audioInfo.setSingerName(TextUtils.isEmpty(songEntity.getName()) ? "" : songEntity.getName());
-        audioInfo.setSongName(TextUtils.isEmpty(songEntity.getAr().get(0).getName()) ? "" : songEntity.getAr().get(0).getName());
+        audioInfo.setSongName(TextUtils.isEmpty(songEntity.getName()) ? "" : songEntity.getName());
+        audioInfo.setSingerName(TextUtils.isEmpty(songEntity.getAr().get(0).getName()) ? "" : songEntity.getAr().get(0).getName());
+        audioInfo.setImageUrl(songEntity.getAl().getPicUrl());
         return audioInfo;
     }
 }

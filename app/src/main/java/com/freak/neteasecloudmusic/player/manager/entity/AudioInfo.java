@@ -390,4 +390,32 @@ public class AudioInfo implements Parcelable {
         dest.writeString(downloadUrl);
         dest.writeInt(playProgress);
     }
+
+    @Override
+    public String toString() {
+        return "AudioInfo{" +
+                "status=" + status +
+                ", type=" + type +
+                ", keyword='" + keyword + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", specialId='" + specialId + '\'' +
+                ", singerId='" + singerId + '\'' +
+                ", albumId='" + albumId + '\'' +
+                ", songName='" + songName + '\'' +
+                ", singerName='" + singerName + '\'' +
+                ", hash='" + hash + '\'' +
+                ", mvHash='" + mvHash + '\'' +
+                ", fileExt='" + fileExt + '\'' +
+                ", fileSize=" + fileSize +
+                ", fileSizeText='" + fileSizeText + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", duration=" + duration +
+                ", durationText='" + durationText + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", category='" + category + '\'' +
+                ", childCategory='" + childCategory + '\'' +
+                ", downloadUrl='" + downloadUrl + '\'' +
+                ", playProgress=" + playProgress +
+                '}';
+    }
 }

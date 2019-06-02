@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -185,7 +186,6 @@ public class AudioPlayerService extends Service {
                         mUIHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                LogUtil.e("播放中");
                                 doNotification(null, code, false);
                             }
                         });
@@ -214,6 +214,7 @@ public class AudioPlayerService extends Service {
                             @Override
                             public void run() {
                                 LogUtil.e("播放初始化");
+                                doNotification(initAudioInfo, code, false);
                             }
                         });
                         break;
@@ -349,8 +350,6 @@ public class AudioPlayerService extends Service {
         PendingIntent pendDesLrcUnlockIntent = PendingIntent.getBroadcast(
                 AudioPlayerService.this, AudioBroadcastReceiver.ACTION_CODE_NOTIFY_UNLOCK, buttonDesLrcUnlockIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.deslrcUnlock,
-                pendDesLrcUnlockIntent);
 
         Intent buttonDesLrcHideIntent = AudioBroadcastReceiver.getNotifiyIntent(AudioBroadcastReceiver.ACTION_CODE_NOTIFY_DESLRC_HIDE_ACTION);
         PendingIntent pendDesLrcHideIntent = PendingIntent.getBroadcast(
@@ -379,11 +378,7 @@ public class AudioPlayerService extends Service {
                         View.VISIBLE);
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.hidedeslrc,
                         View.INVISIBLE);
-                mNotifyPlayBarRemoteViews.setViewVisibility(
-                        R.id.deslrcUnlock, View.INVISIBLE);
             } else {
-                mNotifyPlayBarRemoteViews.setViewVisibility(
-                        R.id.deslrcUnlock, View.VISIBLE);
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.hidedeslrc,
                         View.INVISIBLE);
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.showdeslrc,
@@ -394,19 +389,19 @@ public class AudioPlayerService extends Service {
                     View.VISIBLE);
             mNotifyPlayBarRemoteViews.setViewVisibility(R.id.showdeslrc,
                     View.INVISIBLE);
-            mNotifyPlayBarRemoteViews.setViewVisibility(R.id.deslrcUnlock,
-                    View.INVISIBLE);
         }
         switch (code) {
             case AudioBroadcastReceiver.ACTION_CODE_NULL:
-                LogUtil.e("无歌曲");
+                LogUtil.e("通知栏无歌曲");
                 //无歌曲
 
                 mNotifyPlayBarRemoteViews.setImageViewResource(R.id.singPic,
                         R.mipmap.bpz);// 显示专辑封面图片
 
                 mNotifyPlayBarRemoteViews.setTextViewText(R.id.titleName,
-                        getString(R.string.def_text));
+                        getString(R.string.def_artist));
+                mNotifyPlayBarRemoteViews.setTextViewText(R.id.songName,
+                        getString(R.string.def_songName));
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.VISIBLE);
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.pause,
@@ -415,11 +410,13 @@ public class AudioPlayerService extends Service {
                 break;
 
             case AudioBroadcastReceiver.ACTION_CODE_INIT:
-                LogUtil.e("初始化");
+                LogUtil.e("通知栏初始化");
                 //初始化
                 String titleName = audioInfo.getTitle();
-                mNotifyPlayBarRemoteViews.setTextViewText(R.id.titleName,
+                mNotifyPlayBarRemoteViews.setTextViewText(R.id.songName,
                         titleName);
+                mNotifyPlayBarRemoteViews.setTextViewText(R.id.titleName,
+                        audioInfo.getSingerName());
 
                 //刚启动通知栏需要加载歌手图标
                 if (isFristToLoadIcon) {
@@ -430,8 +427,9 @@ public class AudioPlayerService extends Service {
                                 R.id.singPic, curbm);// 显示专辑封面图片
                     }
                 } else {
-                    mNotifyPlayBarRemoteViews.setImageViewResource(R.id.singPic,
-                            R.mipmap.bpz);// 显示专辑封面图片
+//                    mNotifyPlayBarRemoteViews.setImageViewResource(R.id.singPic,
+//                            R.mipmap.bpz);// 显示专辑封面图片
+                    mNotifyPlayBarRemoteViews.setImageViewUri(R.id.singPic, Uri.parse(audioInfo.getImageUrl()));
                 }
 
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
@@ -442,7 +440,6 @@ public class AudioPlayerService extends Service {
 
                 break;
             case AudioBroadcastReceiver.ACTION_CODE_PLAY:
-                LogUtil.e("播放");
                 //播放
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.INVISIBLE);
@@ -452,7 +449,7 @@ public class AudioPlayerService extends Service {
                 break;
 
             case AudioBroadcastReceiver.ACTION_CODE_STOP:
-                LogUtil.e("暂停");
+                LogUtil.e("通知栏暂停");
                 //暂停
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.VISIBLE);
@@ -509,7 +506,7 @@ public class AudioPlayerService extends Service {
             mPlayBarNotification = new Notification.Builder(getApplicationContext())
                     .setContentTitle(tickerText)
                     .setContentText(getString(R.string.def_songName))
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.logo)
                     .setChannelId(CHANNEL_ID)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .build();

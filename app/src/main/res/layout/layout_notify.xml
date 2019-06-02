@@ -8,15 +8,16 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="vertical">
+        android:layout_height="100dp"
+        >
 
         <ImageView
             android:id="@+id/singPic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp" />
+            android:background="@mipmap/logo"
+          />
 
         <TextView
             android:id="@+id/titleName"
@@ -31,76 +32,89 @@
             android:singleLine="true"
             android:text="freak"
             android:textSize="15dp" />
-
-        <ImageButton
-            android:id="@+id/showdeslrc"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_below="@+id/titleName"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
+        <TextView
+            android:id="@+id/songName"
+            style="@style/NotificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
             android:layout_toRightOf="@+id/singPic"
-            android:background="@drawable/nofify_showdeslrc" />
-
-        <ImageButton
-            android:id="@+id/hidedeslrc"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
             android:layout_below="@+id/titleName"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/singPic"
-            android:background="@drawable/nofify_hidedeslrc" />
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="freak"
+            android:textSize="15dp" />
 
-        <ImageButton
-            android:id="@+id/deslrcUnlock"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_below="@+id/titleName"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
+        <ImageView
+            android:id="@+id/collect"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/singPic"
-            android:background="@drawable/nofify_deslrcunlock" />
+            android:layout_alignTop="@+id/hidedeslrc"
+            android:background="@drawable/svg_notification_collect" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/prew"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="2dp"
-            android:background="@mipmap/statusbar_btn_prev" />
+            android:layout_toRightOf="@+id/collect"
+            android:layout_alignTop="@+id/hidedeslrc"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/svg_notification_pre" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/play"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignTop="@+id/prew"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_toRightOf="@+id/prew"
-            android:background="@mipmap/statusbar_btn_play" />
+            android:background="@drawable/svg_notification_start" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/pause"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignTop="@+id/prew"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_toRightOf="@+id/prew"
-            android:background="@mipmap/statusbar_btn_pause" />
+            android:background="@drawable/svg_notification_stop" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/next"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignTop="@+id/prew"
-            android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/play"
-            android:background="@mipmap/statusbar_btn_next" />
+            android:background="@drawable/svg_notification_nextw" />
+
+        <ImageView
+            android:id="@+id/showdeslrc"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/songName"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/next"
+            android:background="@drawable/nofify_showdeslrc" />
+
+        <ImageView
+            android:id="@+id/hidedeslrc"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/songName"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/next"
+            android:background="@drawable/nofify_hidedeslrc" />
     </RelativeLayout>
 
 </LinearLayout>
