@@ -3,7 +3,7 @@ package com.freak.neteasecloudmusic.net.status;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.RequiresPermission;
+import androidx.annotation.RequiresPermission;
 import android.telephony.TelephonyManager;
 
 

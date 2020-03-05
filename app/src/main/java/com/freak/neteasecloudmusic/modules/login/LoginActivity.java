@@ -2,13 +2,14 @@ package com.freak.neteasecloudmusic.modules.login;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
@@ -60,6 +61,21 @@ public class LoginActivity extends BaseAbstractMvpActivity<LoginPresenter> imple
 
     @Override
     protected void initEventAndData() {
+
+    }
+
+    @Override
+    protected void onCreateLoadData() {
+
+    }
+
+    @Override
+    protected void onDestroyRelease() {
+
+    }
+
+    @Override
+    protected void onResumeLoadData() {
 
     }
 
@@ -123,6 +139,11 @@ public class LoginActivity extends BaseAbstractMvpActivity<LoginPresenter> imple
 
     @Override
     public int getStatusBarColor() {
+        return 0;
+    }
+
+    @Override
+    public int getDrawableStatusBar() {
         return 0;
     }
 }

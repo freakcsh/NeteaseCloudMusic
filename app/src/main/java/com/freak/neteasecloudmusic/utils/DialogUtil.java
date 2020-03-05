@@ -2,13 +2,13 @@ package com.freak.neteasecloudmusic.utils;
 
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.freak.neteasecloudmusic.dialog.CommonDialogFragment;
 import com.freak.neteasecloudmusic.dialog.FiltrateDialogFragment;
 import com.freak.neteasecloudmusic.dialog.PasswordDialogFragment;
 import com.freak.neteasecloudmusic.dialog.ToastDialogFragment;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.HotSongListCategoryEntity;
 
 
 /**

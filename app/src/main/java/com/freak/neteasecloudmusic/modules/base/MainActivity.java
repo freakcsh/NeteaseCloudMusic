@@ -2,32 +2,35 @@ package com.freak.neteasecloudmusic.modules.base;
 
 import android.Manifest;
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.flyco.tablayout.SlidingTabLayout;
 import com.freak.httphelper.ApiCallback;
 import com.freak.httphelper.SubscriberCallBack;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractMvpActivity;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
-import com.freak.neteasecloudmusic.glide.GlideApp;
+import com.freak.neteasecloudmusic.modules.base.adapter.MainTabAdapter;
 import com.freak.neteasecloudmusic.modules.base.adapter.MenuItemAdapter;
 import com.freak.neteasecloudmusic.modules.base.entity.LoginStatusEntity;
-import com.freak.neteasecloudmusic.modules.disco.base.DiscoFragment;
+import com.freak.neteasecloudmusic.modules.find.recommend.base.RecommendFragment;
 import com.freak.neteasecloudmusic.modules.homepage.base.entity.MenuEntity;
 import com.freak.neteasecloudmusic.modules.login.LoginActivity;
+import com.freak.neteasecloudmusic.modules.mine.MineFragment;
 import com.freak.neteasecloudmusic.modules.music.MusicFragment;
 import com.freak.neteasecloudmusic.modules.video.base.VideoFragment;
 import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
@@ -45,6 +48,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 
 /**
  * @author freak
@@ -52,21 +58,39 @@ import java.util.List;
  */
 @SuppressWarnings("ALL")
 public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> implements MainContract.View, View.OnClickListener {
-    private ImageView mImgDisco, mImgMusic, mImgVideo, mImgSearch;
-    private List<ImageView> tabs;
-    private DrawerLayout drawerLayout;
-    private RecyclerView mRecycleViewMenu;
+    @BindView(R.id.img_menu)
+    ImageView imgMenu;
+    @BindView(R.id.img_search)
+    ImageView imgSearch;
+    @BindView(R.id.toolbar)
+    ConstraintLayout toolbar;
+    @BindView(R.id.main_viewpager)
+    CustomViewPager mainViewpager;
+    @BindView(R.id.bottom_container)
+    FrameLayout bottomContainer;
+    @BindView(R.id.recycle_view_menu)
+    RecyclerView recycleViewMenu;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.slidingTabLayoutMain)
+    SlidingTabLayout slidingTabLayoutMain;
+    private List<String> titleList;
     private long time = 0;
     private List<MenuEntity> mMenuEntityList;
     private MenuItemAdapter mMenuItemAdapter;
-    private ImageView mImgMenu;
     private View mHeadVew;
-    private TextView text_view_menu_login;
-    private ImageView img_bg_login;
-    private TextView text_view_username;
+    private TextView textViewMenuLogin;
+    private ImageView imgBgLogin;
+    private TextView textViewUsername;
     private String mBackgroundUrl;
-    private ImageView img_bg;
+    private ImageView imgBg;
     private ConfigInfo mConfigInfo;
+    private MainTabAdapter mainTabAdapter;
+    private List<Fragment> fragmentList;
+    private MineFragment mineFragment;
+    private MusicFragment musicFragment;
+    private RecommendFragment recommendFragment;
+    private VideoFragment videoFragment;
 
     @Override
     protected int getLayout() {
@@ -80,27 +104,26 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onCreateLoadData() {
+
+    }
+
+    @Override
+    protected void onDestroyRelease() {
         releaseData();
         destroyService();
         destroyReceiver();
-        super.onDestroy();
     }
 
+    @Override
+    protected void onResumeLoadData() {
+
+    }
 
 
     @Override
     protected void initView() {
-        mImgDisco = (ImageView) findViewById(R.id.img_disco);
-        mImgMusic = (ImageView) findViewById(R.id.img_music);
-        mImgVideo = (ImageView) findViewById(R.id.img_video);
-        mImgSearch = (ImageView) findViewById(R.id.img_search);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mRecycleViewMenu = (RecyclerView) findViewById(R.id.recycle_view_menu);
-        mImgMenu = (ImageView) findViewById(R.id.img_menu);
-        mImgMenu.setOnClickListener(this);
-        mImgSearch.setOnClickListener(this);
         mBackgroundUrl = (String) SPUtils.get(this, Constants.LOGIN_URL, "");
         setViewPager();
         setUpDrawer();
@@ -136,65 +159,37 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
     }
 
     private void setViewPager() {
-        tabs = new ArrayList<>();
-        mMenuEntityList = new ArrayList<>();
-        tabs.add(mImgMusic);
-        tabs.add(mImgDisco);
-        tabs.add(mImgVideo);
-        mMenuEntityList = getItemList(this);
-        final CustomViewPager customViewPager = (CustomViewPager) findViewById(R.id.main_viewpager);
-        final MusicFragment musicFragment = new MusicFragment();
-        final DiscoFragment discoFragment = new DiscoFragment();
-        final VideoFragment videoFragment = new VideoFragment();
-        CustomViewPagerAdapter customViewPagerAdapter = new CustomViewPagerAdapter(getSupportFragmentManager());
-        customViewPagerAdapter.addFragment(discoFragment);
-        customViewPagerAdapter.addFragment(musicFragment);
-        customViewPagerAdapter.addFragment(videoFragment);
-        customViewPager.setAdapter(customViewPagerAdapter);
-        customViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        titleList = new ArrayList<>();
+        fragmentList = new ArrayList<>();
+        titleList.add("我的");
+        titleList.add("发现");
+        titleList.add("云村");
+        titleList.add("视频");
+        mineFragment = new MineFragment();
+        recommendFragment = new RecommendFragment();
+        musicFragment = new MusicFragment();
+        videoFragment = new VideoFragment();
 
-            }
+        fragmentList.add(mineFragment);
+        fragmentList.add(recommendFragment);
+        fragmentList.add(musicFragment);
+        fragmentList.add(videoFragment);
+        mainTabAdapter = new MainTabAdapter(getSupportFragmentManager(), fragmentList, titleList);
+        mainViewpager.setAdapter(mainTabAdapter);
+        mainViewpager.setScanScroll(true);
+        slidingTabLayoutMain.setViewPager(mainViewpager, titleList.toArray(new String[0]), mActivity, (ArrayList<Fragment>) fragmentList);
+        mainViewpager.setCurrentItem(0);
 
-            @Override
-            public void onPageSelected(int position) {
-                switchTabs(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        customViewPager.setCurrentItem(1);
-        switchTabs(1);
-        mImgMusic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customViewPager.setCurrentItem(0);
-            }
-        });
-        mImgDisco.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customViewPager.setCurrentItem(1);
-            }
-        });
-        mImgVideo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customViewPager.setCurrentItem(2);
-            }
-        });
     }
 
     private void setUpDrawer() {
-        mRecycleViewMenu.setLayoutManager(new LinearLayoutManager(this));
+        mMenuEntityList = new ArrayList<>();
+        mMenuEntityList = getItemList(this);
+        recycleViewMenu.setLayoutManager(new LinearLayoutManager(this));
         mMenuItemAdapter = new MenuItemAdapter(R.layout.item_menu, mMenuEntityList);
         mPresenter.loadLoginStatusEntity();
-        mMenuItemAdapter.bindToRecyclerView(mRecycleViewMenu);
-        mRecycleViewMenu.setAdapter(mMenuItemAdapter);
+        mMenuItemAdapter.bindToRecyclerView(recycleViewMenu);
+        recycleViewMenu.setAdapter(mMenuItemAdapter);
         mMenuItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -207,18 +202,18 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         switch (type) {
             case 1:
                 mHeadVew = LayoutInflater.from(this).inflate(R.layout.view_menu_view_head_login, null);
-                img_bg_login = mHeadVew.findViewById(R.id.img_bg_login);
-                img_bg = mHeadVew.findViewById(R.id.img_bg);
-                text_view_username = mHeadVew.findViewById(R.id.text_view_username);
-                GlideApp.with(this).load(mBackgroundUrl).thumbnail(0.1f).into(img_bg_login);
-                GlideApp.with(this).load(loginStatusEntity.getProfile().getAvatarUrl()).thumbnail(0.1f).into(img_bg);
-                text_view_username.setText(loginStatusEntity.getProfile().getNickname());
+                imgBgLogin = mHeadVew.findViewById(R.id.img_bg_login);
+                imgBg = mHeadVew.findViewById(R.id.img_bg);
+                textViewUsername = mHeadVew.findViewById(R.id.text_view_username);
+                Glide.with(this).load(mBackgroundUrl).thumbnail(0.1f).into(imgBgLogin);
+                Glide.with(this).load(loginStatusEntity.getProfile().getAvatarUrl()).thumbnail(0.1f).into(imgBg);
+                textViewUsername.setText(loginStatusEntity.getProfile().getNickname());
                 mMenuItemAdapter.addHeaderView(mHeadVew);
                 break;
             case 2:
                 mHeadVew = LayoutInflater.from(this).inflate(R.layout.item_menu_head, null);
-                text_view_menu_login = mHeadVew.findViewById(R.id.text_view_menu_login);
-                text_view_menu_login.setOnClickListener(this);
+                textViewMenuLogin = mHeadVew.findViewById(R.id.text_view_menu_login);
+                textViewMenuLogin.setOnClickListener(this);
                 mMenuItemAdapter.addHeaderView(mHeadVew);
                 break;
             default:
@@ -295,30 +290,12 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         }
     }
 
-    private void switchTabs(int position) {
-        for (int i = 0; i < tabs.size(); i++) {
-            if (position == i) {
-                tabs.get(i).setSelected(true);
-            } else {
-                tabs.get(i).setSelected(false);
-            }
-        }
-    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            //侧滑菜单
-            case R.id.img_menu:
-                drawerLayout.openDrawer(Gravity.LEFT);
-                break;
-            //搜索
-            case R.id.img_search:
-                break;
             //登陆
             case R.id.text_view_menu_login:
-                LoginActivity.startAction(this);
-                finish();
+                gotoActivity(LoginActivity.class, true);
                 break;
             default:
                 break;
@@ -327,7 +304,7 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
 
     @Override
     public void showToast(String toast) {
-
+        ToastUtil.shortShow(toast);
     }
 
     @Override
@@ -344,26 +321,16 @@ public class MainActivity extends BaseAbstractMvpActivity<MainPresenter> impleme
         initHeadView(2, null);
     }
 
-    static class CustomViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-
-        public CustomViewPagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
+    @OnClick({R.id.img_menu, R.id.img_search})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.img_menu:
+                drawerLayout.openDrawer(Gravity.LEFT);
+                break;
+            case R.id.img_search:
+                break;
         }
-
-        public void addFragment(Fragment fragment) {
-            mFragments.add(fragment);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
     }
+
+
 }

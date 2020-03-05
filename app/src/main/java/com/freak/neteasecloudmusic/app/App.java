@@ -1,7 +1,9 @@
 package com.freak.neteasecloudmusic.app;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
@@ -9,33 +11,41 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.multidex.MultiDexApplication;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.ColorUtils;
+import androidx.multidex.MultiDexApplication;
+
 import com.freak.httphelper.HttpMethods;
 import com.freak.httphelper.log.LogLevel;
+import com.freak.httphelper.log.LogUtil;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 import com.freak.neteasecloudmusic.net.cookie.CookieJarImpl;
+import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
 import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
+import com.freak.neteasecloudmusic.receiver.HeadsetReceiver;
 import com.freak.neteasecloudmusic.receiver.NetworkConnectChangedReceiver;
 import com.freak.neteasecloudmusic.service.AudioPlayerService;
-import com.freak.neteasecloudmusic.utils.imagepick.loader.ImagePickerGlideLoader;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.view.CropImageView;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -47,22 +57,18 @@ import java.util.Set;
  */
 
 public class App extends MultiDexApplication {
-    private static final int DESIGN_WIDTH = 375;
+    public static final int DESIGN_WIDTH = 375;
     private static App instance;
-    private Set<Activity> allActivities;
-//    public static BaseAbstractMvpActivity baseActivity;
+    /**
+     * 存放activity的列表
+     */
+    public HashMap<Class<?>, Activity> allActivities;
 
 
-    public Set<Activity> getAllActivities() {
-        return allActivities;
-    }
 
     private NetworkConnectChangedReceiver mNetworkConnectChangedReceiver;
     private static AudioBroadcastReceiver mAudioBroadcastReceiver;
 
-    public void setAllActivities(Set<Activity> allActivities) {
-        this.allActivities = allActivities;
-    }
 
     public static App getInstance() {
         return instance;
@@ -83,6 +89,7 @@ public class App extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        LogUtil.init("NeteaseCloudMusic",true);
         HttpMethods
                 .getInstanceBuilder()
                 .setBaseUrl(Constants.BASE_URL)//设置域名
@@ -99,7 +106,6 @@ public class App extends MultiDexApplication {
 //                .setNetworkInterceptor(new CommonParametersInterceptor())//设置拦截器
 //                .setFactory(CustomConverterFactory.create())//设置自定义解析器
 //                .setInterceptors(new CommonParametersInterceptor(), new CommonParametersInterceptorHead());//设置多个拦截器
-        initImagePicker();
         initReceiver();
         initService();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -163,10 +169,16 @@ public class App extends MultiDexApplication {
         filter.addAction("android.net.ic_network_off.WIFI_STATE_CHANGED");
         filter.addAction("android.net.ic_network_off.STATE_CHANGE");
         filter.setPriority(1000);
-        if (mNetworkConnectChangedReceiver == null) {
-            mNetworkConnectChangedReceiver = new NetworkConnectChangedReceiver();
-        }
-        registerReceiver(mNetworkConnectChangedReceiver, filter);
+        //耳机拔插广播
+        HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+        IntentFilter headsetFilter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(headsetReceiver, headsetFilter);
+        //网络变化广播
+        NetStateChangeReceiver.registerReceiver(instance);
+//        if (mNetworkConnectChangedReceiver == null) {
+//            mNetworkConnectChangedReceiver = new NetworkConnectChangedReceiver();
+//        }
+//        registerReceiver(mNetworkConnectChangedReceiver, filter);
 
         getAudioBroadcastReceiverInstance().registerReceiver(this);
     }
@@ -195,29 +207,6 @@ public class App extends MultiDexApplication {
         AudioPlayerService.stopService(this);
     }
 
-    private void initImagePicker() {
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        //设置图片加载器
-        imagePicker.setImageLoader(new ImagePickerGlideLoader());
-        //显示拍照按钮
-        imagePicker.setShowCamera(true);
-        //允许裁剪（单选才有效）
-        imagePicker.setCrop(true);
-        //是否按矩形区域保存
-        imagePicker.setSaveRectangle(true);
-        //选中数量限制
-        imagePicker.setSelectLimit(9);
-        //裁剪框的形状
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);
-        //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusWidth(800);
-        //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusHeight(800);
-        //保存文件的宽度。单位像素
-        imagePicker.setOutPutX(1000);
-        //保存文件的高度。单位像素
-        imagePicker.setOutPutY(1000);
-    }
 
     /**
      * 设置ToolBar
@@ -236,7 +225,7 @@ public class App extends MultiDexApplication {
             if (((IActivityStatusBar) activity).getStatusBarColor() != 0) {
                 toolbar.setBackgroundColor(((IActivityStatusBar) activity).getStatusBarColor());
             } else {
-                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.color_white));
             }
 
             ((AppCompatActivity) activity).setSupportActionBar(toolbar);
@@ -254,6 +243,17 @@ public class App extends MultiDexApplication {
         }
     }
 
+
+    /**
+     * 判断是否是亮色
+     *
+     * @param color
+     * @return
+     */
+    private boolean isLightColor(@ColorInt int color) {
+        return ColorUtils.calculateLuminance(color) >= 0.5;
+    }
+
     /**
      * 设置状态栏
      *
@@ -264,6 +264,11 @@ public class App extends MultiDexApplication {
             if (((IActivityStatusBar) activity).getStatusBarColor() != 0) {
                 setTranslucentStatus(activity);
                 addImmersiveStatusBar(activity, ((IActivityStatusBar) activity).getStatusBarColor());
+            } else {
+                if (((IActivityStatusBar) activity).getDrawableStatusBar() != 0) {
+                    setTranslucentStatus(activity);
+                    addImmersiveShadeStatusBar(activity, ((IActivityStatusBar) activity).getDrawableStatusBar());
+                }
             }
         }
     }
@@ -276,20 +281,60 @@ public class App extends MultiDexApplication {
     private void addImmersiveStatusBar(Activity activity, int color) {
         ViewGroup contentFrameLayout = activity.findViewById(android.R.id.content);
         View contentView = contentFrameLayout.getChildAt(0);
+        if (contentView != null) {
+            contentView.setFitsSystemWindows(true);
+        }
+
+        View statusBar = new View(activity);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (hasNotchInScreen(activity)) {
+            params.height = getNotchSize(activity)[1];
+        } else {
+            params.height = getStatusBarHeight();
+        }
+        params.height = getStatusBarHeight();
+        statusBar.setLayoutParams(params);
+        statusBar.setBackgroundColor(color);
+        if (isLightColor(color)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                statusBar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                statusBar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+            }
+        } else {
+            statusBar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
+        contentFrameLayout.addView(statusBar);
+    }
+
+    /**
+     * 设置状态栏渐变色
+     *
+     * @param activity activity
+     * @param drawable drawable资源文件
+     */
+    private void addImmersiveShadeStatusBar(Activity activity, @DrawableRes int drawable) {
+        ViewGroup contentFrameLayout = activity.findViewById(android.R.id.content);
+        View contentView = contentFrameLayout.getChildAt(0);
         if (contentView != null && Build.VERSION.SDK_INT >= 14) {
             contentView.setFitsSystemWindows(true);
         }
 
         View statusBar = new View(activity);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        if (hasNotchInScreen(activity)){
-//            params.height = getNotchSize(activity)[1];
-//        }else {
-//            params.height = getStatusBarHeight();
-//        }
-        params.height = getStatusBarHeight();
+        if (hasNotchInScreen(activity)) {
+            params.height = getNotchSize(activity)[1];
+        } else {
+            params.height = getStatusBarHeight();
+        }
+//        params.height = getStatusBarHeight();
         statusBar.setLayoutParams(params);
-        statusBar.setBackgroundColor(color);
+        statusBar.setBackgroundResource(drawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            statusBar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        } else {
+            statusBar.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+        }
         contentFrameLayout.addView(statusBar);
     }
 
@@ -363,16 +408,178 @@ public class App extends MultiDexApplication {
         return null;
     }
 
-    public void addActivity(Activity act) {
+    /**
+     * 添加activity
+     *
+     * @param activity
+     * @param tClass
+     */
+    public void addActivity(AppCompatActivity activity, Class<?> tClass) {
         if (allActivities == null) {
-            allActivities = new HashSet<>();
+            allActivities = new LinkedHashMap<>();
         }
-        allActivities.add(act);
+
+//        LogUtil.e("activity堆栈 addActivity " + activity.getClass().getSimpleName());
+        allActivities.put(tClass, activity);
+//        LogUtil.d("activity堆栈 addActivity  " + allActivities);
     }
 
-    public void removeActivity(Activity act) {
+    /**
+     * 移除activity,代替finish
+     *
+     * @param activity
+     */
+    public void removeActivity(AppCompatActivity activity) {
         if (allActivities != null) {
-            allActivities.remove(act);
+//            LogUtil.d("activity堆栈 removeActivity  " + allActivities);
+//            LogUtil.d("activity堆栈 removeActivity  " + activity.getClass().getSimpleName());
+            if (allActivities.containsValue(activity)) {
+                allActivities.remove(activity.getClass());
+//                LogUtil.e("activity堆栈 removeActivity " + activity.getClass().getSimpleName());
+            }
         }
     }
+
+    /**
+     * 移除所有activity并结束程序
+     */
+    public void finishActivity() {
+        if (allActivities != null && allActivities.size() > 0) {
+            Set<Map.Entry<Class<?>, Activity>> sets = allActivities.entrySet();
+            for (Map.Entry<Class<?>, Activity> s : sets) {
+                if (!s.getValue().isFinishing()) {
+                    s.getValue().finish();
+                }
+            }
+            allActivities.clear();
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+
+
+    /**
+     * 移除所有的Activity
+     */
+    public void removeAllActivity() {
+        if (allActivities != null && allActivities.size() > 0) {
+            Set<Map.Entry<Class<?>, Activity>> sets = allActivities.entrySet();
+            LogUtil.d("activity堆栈  removeAllActivity  " + allActivities);
+            for (Map.Entry<Class<?>, Activity> s : sets) {
+                if (!s.getValue().isFinishing()) {
+                    s.getValue().finish();
+                }
+            }
+            allActivities.clear();
+        }
+    }
+
+    /**
+     * 判断一个Activity 是否存在
+     *
+     * @param clz
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public <T extends AppCompatActivity> boolean isActivityExist(Class<T> clz) {
+        boolean res;
+        AppCompatActivity activity = getActivity(clz);
+        if (activity == null) {
+            res = false;
+        } else {
+            if (activity.isFinishing() || activity.isDestroyed()) {
+                res = false;
+            } else {
+                res = true;
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * 获得指定activity实例
+     *
+     * @param clazz Activity 的类对象
+     * @return
+     */
+    public <T extends AppCompatActivity> T getActivity(Class<T> clazz) {
+        return (T) allActivities.get(clazz);
+    }
+
+    /**
+     * 判断是否是刘海屏  华为手机
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasNotchInScreen(Context context) {
+
+        boolean ret = false;
+
+        try {
+
+            ClassLoader cl = context.getClassLoader();
+
+            Class hwNotchSizeUtil = cl.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+
+            Method get = hwNotchSizeUtil.getMethod("hasNotchInScreen");
+
+            ret = (boolean) get.invoke(hwNotchSizeUtil);
+
+        } catch (ClassNotFoundException e) {
+
+            Log.e("test", "hasNotchInScreen ClassNotFoundException");
+
+        } catch (NoSuchMethodException e) {
+
+            Log.e("test", "hasNotchInScreen NoSuchMethodException");
+
+        } catch (Exception e) {
+
+            Log.e("test", "hasNotchInScreen Exception");
+
+        }
+        LogUtil.e("是否刘海屏-->" + ret);
+        return ret;
+
+    }
+
+    /**
+     * 获取刘海屏尺寸 华为手机
+     *
+     * @param context
+     * @return
+     */
+    public static int[] getNotchSize(Context context) {
+
+        int[] ret = new int[]{0, 0};
+
+        try {
+
+            ClassLoader cl = context.getClassLoader();
+
+            Class hwNotchSizeUtil = cl.loadClass("com.huawei.android.util.HwNotchSizeUtil");
+
+            Method get = hwNotchSizeUtil.getMethod("getNotchSize");
+
+            ret = (int[]) get.invoke(hwNotchSizeUtil);
+
+        } catch (ClassNotFoundException e) {
+
+            LogUtil.e("getNotchSize ClassNotFoundException");
+
+        } catch (NoSuchMethodException e) {
+
+            LogUtil.e("getNotchSize NoSuchMethodException");
+
+        } catch (Exception e) {
+
+            LogUtil.e("getNotchSize Exception");
+
+        }
+        LogUtil.e("刘海屏尺寸-->" + ret.toString());
+        return ret;
+
+    }
+
 }

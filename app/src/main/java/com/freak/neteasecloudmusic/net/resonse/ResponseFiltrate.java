@@ -1,6 +1,6 @@
 package com.freak.neteasecloudmusic.net.resonse;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.freak.neteasecloudmusic.commom.constants.Constants;
 

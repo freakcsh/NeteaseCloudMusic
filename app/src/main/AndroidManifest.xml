@@ -5,7 +5,8 @@
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.DEVICE_POWER" />
+    <uses-permission android:name="android.permission.DEVICE_POWER"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -16,7 +17,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许程序录制音频 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
 
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -24,10 +26,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.hardware.usb.accessory" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -54,7 +58,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".splash.SplashActivity">
+        <activity android:name=".splash.SplashActivity"
+            android:theme="@style/Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -63,7 +68,7 @@
         </activity>
         <!-- 非常重要，缺少这个在7.0以上手机是不能打开手机的拍照的 -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -75,10 +80,10 @@
         <activity android:name="com.freak.neteasecloudmusic.webview.WebViewActivity" />
         <activity android:name="com.freak.neteasecloudmusic.scan.ScanActivity" />
         <activity android:name=".modules.login.LoginActivity" />
-        <activity android:name=".modules.disco.recommend.songlist.SongListActivity" />
-        <activity android:name=".modules.disco.recommend.songlist.all.AllSongListActivity" />
-        <activity android:name=".modules.disco.recommend.songlist.hot.HotSongListActivity" />
-        <activity android:name=".modules.disco.recommend.songlist.detail.DetailActivity" />
+        <activity android:name=".modules.find.recommend.songlist.SongListActivity" />
+        <activity android:name=".modules.find.recommend.songlist.all.AllSongListActivity" />
+        <activity android:name=".modules.find.recommend.songlist.hot.HotSongListActivity" />
+        <activity android:name=".modules.find.recommend.songlist.detail.DetailActivity" />
         <service android:name=".service.AudioPlayerService"/>
     </application>
 

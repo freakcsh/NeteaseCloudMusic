@@ -10,13 +10,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.base.BaseAbstractSimpleActivity;
@@ -93,6 +94,11 @@ public class ScanActivity extends BaseAbstractSimpleActivity implements IActivit
         return ContextCompat.getColor(this, R.color.colorPrimary);
     }
 
+    @Override
+    public int getDrawableStatusBar() {
+        return 0;
+    }
+
 
     @Override
     protected int getLayout() {
@@ -114,6 +120,11 @@ public class ScanActivity extends BaseAbstractSimpleActivity implements IActivit
         mTvFlash.setTextColor(Color.WHITE);
         mTvFlash.setCompoundDrawablesWithIntrinsicBounds(null, TintUtils.tintDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_flash),
                 ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))), null, null);
+    }
+
+    @Override
+    protected void onDestroyRelease() {
+
     }
 
     @Override
@@ -145,6 +156,11 @@ public class ScanActivity extends BaseAbstractSimpleActivity implements IActivit
 //            }
 //        }
         finish();
+    }
+
+    @Override
+    public void onCameraAmbientBrightnessChanged(boolean isDark) {
+
     }
 
     @Override

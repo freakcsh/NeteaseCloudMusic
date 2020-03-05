@@ -2,8 +2,8 @@ package com.freak.neteasecloudmusic.player.manager.util;
 
 import android.text.TextUtils;
 
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListDetailEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongListDetailEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 
 /**

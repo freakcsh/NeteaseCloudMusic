@@ -2,8 +2,8 @@ package com.freak.neteasecloudmusic.view.toolbar.util;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 /**
  * Created by Administrator on 2019/3/14.

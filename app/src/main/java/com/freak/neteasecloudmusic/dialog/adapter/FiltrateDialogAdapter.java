@@ -1,12 +1,12 @@
 package com.freak.neteasecloudmusic.dialog.adapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.dialog.FiltrateDialogFragment;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.HotSongListCategoryEntity;
 
 import java.util.List;
 

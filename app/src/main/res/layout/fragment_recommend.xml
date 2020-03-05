@@ -1,48 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.jude.rollviewpager.RollPagerView
-        android:id="@+id/roll_pagerView"
+    <com.freak.guidepage.GuideBanner
+        android:id="@+id/guideBannerFind"
         android:layout_width="match_parent"
-        android:layout_height="150pt"
-        android:layout_margin="10pt" />
+        android:layout_height="140pt"
+        android:layout_marginLeft="12pt"
+        android:layout_marginTop="12pt"
+        android:layout_marginRight="12pt"
+        android:layout_marginBottom="18pt"
+        app:banner_indicatorGravity="center_horizontal"
+        app:banner_isNeedShowIndicatorOnOnlyOnePage="true"
+        app:banner_pageChangeDuration="1000"
+        app:banner_pointAutoPlayAble="true"
+        app:banner_pointAutoPlayInterval="4000"
+        app:banner_pointContainerBackground="@android:color/transparent"
+        app:banner_pointDrawable="@drawable/selector_homepage_banner_unequal"
+        app:banner_transitionEffect="depth"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/linearLayoutFind"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12pt"
+        app:layout_constraintTop_toBottomOf="@+id/guideBannerFind">
+
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="30pt"
-                android:layout_height="30pt"
-                android:background="@drawable/shape_bg_circle_red"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="15pt"
-                    android:layout_height="15pt"
-                    android:background="@drawable/svg_icon_recommend_fm" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="5pt"
-                android:text="私人FM"
-                android:textColor="@color/color_404040"
-                android:textSize="10pt" />
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/linearLayoutFindEveryDayRecommend"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -71,7 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_layout_recommend_song_list"
+            android:id="@+id/linearLayoutFindSongList"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -100,6 +91,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayoutFindRand"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -126,10 +118,73 @@
                 android:textColor="@color/color_404040"
                 android:textSize="10pt" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFindRadioStation"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:src="@drawable/svg_icon_recommend_fm" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="电台"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutFindLive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="30pt"
+                android:layout_height="30pt"
+                android:background="@drawable/shape_bg_circle_red"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="15pt"
+                    android:layout_height="15pt"
+                    android:src="@drawable/svg_icon_recommend_fm" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5pt"
+                android:text="直播"
+                android:textColor="@color/color_404040"
+                android:textSize="10pt" />
+        </LinearLayout>
+
+
     </LinearLayout>
-    <View
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewFind"
         android:layout_width="match_parent"
-        android:layout_height="1pt"
-        android:layout_marginTop="10pt"
-        android:background="@color/color_e5e5e5e"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:paddingLeft="12pt"
+        android:paddingRight="12pt"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutFind" />
+</androidx.constraintlayout.widget.ConstraintLayout>

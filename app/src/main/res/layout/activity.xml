@@ -1,83 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<android.support.v7.widget.Toolbar-->
-    <!--android:id="@+id/toolbar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:background="@color/colorPrimary"-->
-    <!--android:fitsSystemWindows="true"-->
-    <!--app:contentInsetStart="0.0dp"-->
-    <!--app:layout_scrollFlags="enterAlways|scroll">-->
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="44pt"
         android:background="@color/colorPrimary"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/img_menu"
-            android:layout_width="25pt"
-            android:layout_height="30pt"
-            android:layout_marginLeft="15pt"
-            android:background="@drawable/svg_icon_menu"
-            android:clickable="true" />
-
-        <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:paddingLeft="15pt"
+            android:paddingRight="15pt"
+            android:src="@drawable/svg_icon_menu"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
-
-            <ImageView
-                android:id="@+id/img_music"
-                android:layout_width="25pt"
-                android:layout_height="25pt"
-
-                android:background="@drawable/selector_actionbar_music" />
-
-            <ImageView
-                android:id="@+id/img_disco"
-                android:layout_width="25pt"
-                android:layout_height="25pt"
-                android:layout_marginLeft="20pt"
-                android:layout_marginRight="20pt"
-                android:background="@drawable/selector_actionbar_disco" />
-
-            <ImageView
-                android:id="@+id/img_video"
-                android:layout_width="25pt"
-                android:layout_height="25pt"
-                android:background="@drawable/selector_actionbar_video" />
-        </LinearLayout>
-
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/slidingTabLayoutMain"
+            android:layout_width="0dp"
+            android:layout_marginLeft="15pt"
+            android:layout_marginRight="15pt"
+            android:backgroundTint="@color/colorPrimary"
+            app:layout_constraintRight_toLeftOf="@+id/img_search"
+            app:layout_constraintLeft_toRightOf="@+id/img_menu"
+            android:layout_height="match_parent"
+            android:background="@color/color_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tl_indicator_color="@color/vm_transparent"
+            app:tl_indicator_width_equal_title="true"
+            app:tl_tab_space_equal="true"
+            app:tl_textSelectColor="@color/color_white"
+            app:tl_textUnselectColor="@color/color_white_70"
+            app:tl_textsize="18pt"
+            app:tl_textBold="BOTH"/>
 
         <ImageView
             android:id="@+id/img_search"
-            android:layout_width="20pt"
-            android:layout_height="20pt"
-            android:layout_marginLeft="10pt"
-            android:layout_marginRight="15pt"
-            android:background="@drawable/svg_icon_search" />
-    </LinearLayout>
-    <!--</android.support.v7.widget.Toolbar>-->
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15pt"
+            android:paddingRight="15pt"
+            android:src="@drawable/svg_icon_search"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.freak.neteasecloudmusic.view.custom.viewpager.CustomViewPager
         android:id="@+id/main_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar" />
+        android:layout_height="0dp"
+        android:layout_below="@+id/toolbar"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_container"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <FrameLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="50pt"
+        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:layout_alignParentBottom="true" />
-</RelativeLayout>
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

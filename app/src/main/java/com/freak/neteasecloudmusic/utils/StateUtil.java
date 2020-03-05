@@ -7,7 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 import android.view.inputmethod.InputMethodManager;
 
 import com.freak.neteasecloudmusic.app.App;

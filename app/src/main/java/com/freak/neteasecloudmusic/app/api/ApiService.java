@@ -1,13 +1,13 @@
 package com.freak.neteasecloudmusic.app.api;
 
 import com.freak.neteasecloudmusic.modules.base.entity.LoginStatusEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.BannerEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListCategoryEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListDetailEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongListEntity;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.SongUrlEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.BannerEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.HotSongListEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.HotSongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongListDetailEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongListEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.SongUrlEntity;
 import com.freak.neteasecloudmusic.modules.login.entty.LoginEntity;
 
 import io.reactivex.Observable;

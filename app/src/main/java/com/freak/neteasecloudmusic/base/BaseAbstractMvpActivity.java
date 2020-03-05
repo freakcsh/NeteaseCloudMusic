@@ -1,7 +1,6 @@
 package com.freak.neteasecloudmusic.base;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -11,8 +10,6 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,27 +19,27 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.freak.httphelper.BasePresenter;
 import com.freak.httphelper.RxBaseView;
-import com.freak.httphelper.RxBus;
 import com.freak.httphelper.log.LogUtil;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.app.App;
-import com.freak.neteasecloudmusic.commom.constants.Constants;
-import com.freak.neteasecloudmusic.event.UserEvent;
-import com.freak.neteasecloudmusic.glide.GlideApp;
 import com.freak.neteasecloudmusic.handler.WeakRefHandler;
 import com.freak.neteasecloudmusic.modules.controls.QuickControlsFragment;
-import com.freak.neteasecloudmusic.net.status.NetStateChangeObserver;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
-import com.freak.neteasecloudmusic.net.status.NetworkType;
 import com.freak.neteasecloudmusic.player.manager.AudioPlayerManager;
 import com.freak.neteasecloudmusic.player.manager.entity.AudioInfo;
 import com.freak.neteasecloudmusic.receiver.AudioBroadcastReceiver;
 import com.freak.neteasecloudmusic.service.AudioPlayerService;
-import com.freak.neteasecloudmusic.utils.SharedPreferencesUtils;
-import com.freak.neteasecloudmusic.utils.ToastUtil;
 import com.freak.neteasecloudmusic.view.seekbar.CircleSeekBar;
+
+import butterknife.ButterKnife;
+
+import static com.freak.neteasecloudmusic.app.App.DESIGN_WIDTH;
 
 
 /**
@@ -51,15 +48,12 @@ import com.freak.neteasecloudmusic.view.seekbar.CircleSeekBar;
  * MVP activity基类
  */
 
-@SuppressWarnings("ALL")
-public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends AppCompatActivity implements RxBaseView, NetStateChangeObserver {
+public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends BaseActivity implements RxBaseView {
     protected T mPresenter;
-    protected Activity mActivity;
-    private View netErrorView;
+    protected AppCompatActivity mActivity;
     private QuickControlsFragment mFragment;
     private View mFloatView;
     private FrameLayout mContentContainer;
-    private static AppCompatActivity sAppCompatActivity;
     /**
      * 音频广播
      */
@@ -109,8 +103,26 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
 
     /**
      * 初始化事件和数据
+     * 网络请求不要放在此方法中，因为断网重连时不会调用此方法，只会调用onCreateLoadData和onResumeLoadData
      */
     protected abstract void initEventAndData();
+
+    /**
+     * 在onCreate方法中加载数据
+     * 不需要刷新数据则请求数据在此方法中调用
+     */
+    protected abstract void onCreateLoadData();
+
+    /**
+     * 资源释放
+     */
+    protected abstract void onDestroyRelease();
+
+    /**
+     * 在onResume中加载数据
+     * 需要返回刷新数据则选择放在这个方法中加载，否则在onCreateLoadData中加载数据
+     */
+    protected abstract void onResumeLoadData();
 
     /**
      * 控件初始化
@@ -124,9 +136,6 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
      */
     protected abstract T createPresenter();
 
-    public static AppCompatActivity getBaseActivity() {
-        return sAppCompatActivity;
-    }
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -134,21 +143,30 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         /**
          * 创建presenter对象
          */
-        mPresenter = createPresenter();
+        if (mPresenter == null) {
+            mPresenter = createPresenter();
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //设置状态栏颜色
+//            getWindow().setStatusBarColor(0xff24cf5f);
+        }
+        App.resetDensity(this, DESIGN_WIDTH);
         setContentView(getLayout());
         super.onCreate(savedInstanceState);
+        //绑定初始化ButterKnife
+        ButterKnife.bind(this);
         mActivity = this;
-        sAppCompatActivity = this;
-        //活动控制器
-        App.getInstance().addActivity(this);
         if (mPresenter != null) {
             mPresenter.attachView(this);
         }
         initView();
         initEventAndData();
+        onCreateLoadData();
+
+
         //展示底部播放fragment
         initHandle();
         showQuickFragment();
@@ -239,7 +257,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                         mCircleSeekBarControllerRate.setEnabled(false);
                         mCircleSeekBarControllerRate.setMaxProgress(0);
                         mCircleSeekBarControllerRate.setProgress(0);
-                        GlideApp.with(mActivity).load("").error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                        Glide.with(mActivity).load("").error(R.drawable.svg_icon_rt).thumbnail(0.1f);
 //                        //重置额外歌词状态
 //                        mConfigInfo.setExtraLrcStatus(ConfigInfo.EXTRALRCSTATUS_NOSHOWEXTRALRC);
 //
@@ -259,7 +277,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                             mCircleSeekBarControllerRate.setEnabled(true);
                             mCircleSeekBarControllerRate.setMaxProgress((int) initAudioInfo.getDuration());
                             mCircleSeekBarControllerRate.setProgress((int) initAudioInfo.getPlayProgress());
-                            GlideApp.with(mActivity).load(initAudioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                            Glide.with(mActivity).load(initAudioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
 
                             //加载歌手头像
 //                            ImageUtil.loadSingerImage(mContext, mArtistImageView, initAudioInfo.getSingerName(), mConfigInfo.isWifi(), 400, 400, new AsyncHandlerTask(mUIHandler, mWorkerHandler), new ImageUtil.ImageLoadCallBack() {
@@ -304,7 +322,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
                             mCircleSeekBarControllerRate.setEnabled(true);
                             mCircleSeekBarControllerRate.setMaxProgress((int) audioInfo.getDuration());
                             mCircleSeekBarControllerRate.setProgress((int) audioInfo.getPlayProgress());
-                            GlideApp.with(mActivity).load(audioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
+                            Glide.with(mActivity).load(audioInfo.getImageUrl()).placeholder(R.drawable.svg_icon_rt).error(R.drawable.svg_icon_rt).thumbnail(0.1f);
                             mImageViewControllerStartOrStop.setSelected(true);
                             mCircleSeekBarControllerRate.setProgress((int) audioInfo.getPlayProgress());
                         }
@@ -501,7 +519,7 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         if (mPresenter != null) {
             mPresenter.detachView();
         }
-        App.getInstance().removeActivity(this);
+        onDestroyRelease();
         if (needRegisterNetworkChangeObserver()) {
             NetStateChangeReceiver.unregisterObserver(this);
         }
@@ -513,49 +531,18 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         if (needRegisterNetworkChangeObserver()) {
             NetStateChangeReceiver.registerObserver(this);
         }
+        onResumeLoadData();
     }
 
-    /**
-     * 是否需要注册网络变化的Observer,如果不需要监听网络变化,则返回false;否则返回true
-     */
-    protected boolean needRegisterNetworkChangeObserver() {
-        return true;
-    }
 
     /**
-     * 网络断开时执行的操作
+     * 网络重连重新加载
      */
     @Override
-    public void onNetDisconnected() {
-        showDisConnectedView();
-    }
-
-    /**
-     * 网络重连时执行的操作
-     *
-     * @param networkType
-     */
-    @Override
-    public void onNetConnected(NetworkType networkType) {
-        ToastUtil.showLong(mActivity, "当前连接的是" + networkType.toString() + "网络");
-        hideDisConnectedView();
-    }
-
-    /**
-     * 显示无网络状态
-     */
-    public void showDisConnectedView() {
-        ToastUtil.shortShow("网络连接错误，请检测您的网络设置");
-//        netErrorView = findViewById(R.id.rl_net_error);
-//        netErrorView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 隐藏无网络状态
-     */
-    public void hideDisConnectedView() {
-//        netErrorView = findViewById(R.id.rl_net_error);
-//        netErrorView.setVisibility(View.GONE);
+    protected void onNetConnectedReLoad() {
+        super.onNetConnectedReLoad();
+        onCreateLoadData();
+        onResumeLoadData();
     }
 
 
@@ -565,7 +552,16 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
      * @param className
      */
     public void gotoActivity(Class<?> className) {
-        gotoActivity(className, false, null);
+        gotoActivity(className, false);
+    }
+
+    /**
+     * 打开一个Activity  关闭当前activity
+     *
+     * @param className
+     */
+    public void gotoActivityWithFinish(Class<?> className) {
+        gotoActivity(className, true);
     }
 
     /**
@@ -594,6 +590,21 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         if (isCloseCurrentActivity) {
             finish();
         }
+    }
+
+    /**
+     * 打开一个带结果返回的activity，并传递数据
+     *
+     * @param className   className
+     * @param bundle      bundle数据
+     * @param requestCode 请求码
+     */
+    public void gotoActivityWithResult(Class<?> className, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(this, className);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -631,16 +642,4 @@ public abstract class BaseAbstractMvpActivity<T extends BasePresenter> extends A
         }
     }
 
-    /**
-     * 未登录状态提示
-     *
-     * @param text 未登陆提示语
-     */
-    public void toastShow(String text) {
-        if (text.equals(Constants.UO_LOGIN)) {
-            SharedPreferencesUtils.put(getApplicationContext(), Constants.ACCESS_TOKEN, false);
-            RxBus.getDefault().post(new UserEvent(1, Constants.RENOVATE));
-        }
-        ToastUtil.shortShow(text);
-    }
 }

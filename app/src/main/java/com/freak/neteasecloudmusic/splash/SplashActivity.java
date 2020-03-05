@@ -1,17 +1,15 @@
 package com.freak.neteasecloudmusic.splash;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.freak.neteasecloudmusic.R;
+import com.freak.neteasecloudmusic.base.BaseAbstractSimpleActivity;
 import com.freak.neteasecloudmusic.base.IActivityStatusBar;
 import com.freak.neteasecloudmusic.modules.base.MainActivity;
 
@@ -22,18 +20,32 @@ import java.lang.ref.WeakReference;
  *
  * @author Administrator
  */
-public class SplashActivity extends AppCompatActivity implements IActivityStatusBar ,View.OnClickListener{
+public class SplashActivity extends BaseAbstractSimpleActivity implements IActivityStatusBar ,View.OnClickListener{
     private TextView text_view_time;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_splash);
-        super.onCreate(savedInstanceState);
-//        new InnerThread(this).start();
+    protected int getLayout() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    protected void initEventAndData() {
+
+    }
+
+    @Override
+    protected void onDestroyRelease() {
+
+    }
+
+    @Override
+    protected void initView() {
         text_view_time = findViewById(R.id.text_view_time);
         text_view_time.setOnClickListener(this);
         timer.start();
     }
-    CountDownTimer timer = new CountDownTimer(8000, 100) {
+
+    CountDownTimer timer = new CountDownTimer(3000, 100) {
         @SuppressLint("SetTextI18n")
         @Override
         public void onTick(long sin) {
@@ -42,7 +54,7 @@ public class SplashActivity extends AppCompatActivity implements IActivityStatus
 
         @Override
         public void onFinish() {
-            startLogin();
+            startMain();
         }
     };
     @Override
@@ -50,7 +62,7 @@ public class SplashActivity extends AppCompatActivity implements IActivityStatus
         switch (v.getId()) {
             case R.id.text_view_time:
                 timer.cancel();
-                startLogin();
+                startMain();
                 break;
             default:
                 break;
@@ -59,6 +71,11 @@ public class SplashActivity extends AppCompatActivity implements IActivityStatus
 
     @Override
     public int getStatusBarColor() {
+        return 0;
+    }
+
+    @Override
+    public int getDrawableStatusBar() {
         return 0;
     }
 
@@ -90,9 +107,8 @@ public class SplashActivity extends AppCompatActivity implements IActivityStatus
         Looper.loop();
     }
 
-    public void startLogin() {
-        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        finish();
+    public void startMain() {
+        gotoActivity(MainActivity.class,true);
     }
 
     private static class InnerHandler extends Handler {
@@ -107,7 +123,7 @@ public class SplashActivity extends AppCompatActivity implements IActivityStatus
         public void handleMessage(Message msg) {
             SplashActivity activity = mReference.get();
             if (activity != null) {
-                activity.startLogin();
+                activity.startMain();
             }
         }
     }

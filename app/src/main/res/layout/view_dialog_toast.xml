@@ -11,6 +11,6 @@
     android:paddingEnd="15pt"
     android:paddingStart="15pt"
     android:paddingTop="8pt"
-    android:textColor="@color/colorPrimary"
+    android:textColor="@color/color_white"
     android:textSize="14pt"
     tools:text="当前已是最新版本"/>

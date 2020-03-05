@@ -1,35 +1,32 @@
 package com.freak.neteasecloudmusic.base;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.app.App;
-import com.freak.neteasecloudmusic.commom.constants.Constants;
-import com.freak.neteasecloudmusic.event.UserEvent;
-import com.freak.neteasecloudmusic.net.status.NetStateChangeObserver;
-import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
-import com.freak.neteasecloudmusic.net.status.NetworkType;
-import com.freak.neteasecloudmusic.utils.SharedPreferencesUtils;
-import com.freak.neteasecloudmusic.utils.ToastUtil;
-import com.freak.httphelper.RxBus;
+
+import butterknife.ButterKnife;
+
+import static com.freak.neteasecloudmusic.app.App.DESIGN_WIDTH;
+
 
 /**
- * @author freak
- * @date 2019/2/19
  * 无MVP的activity基类
+ *
+ * @author freak
+ * @date 2019/9/11.
  */
 
-public abstract class BaseAbstractSimpleActivity extends AppCompatActivity implements NetStateChangeObserver {
+public abstract class BaseAbstractSimpleActivity extends BaseActivity {
 
-    protected Activity mContext;
-    private View netErrorView;
+    protected AppCompatActivity mActivity;
 
     /**
      * 绑定布局
@@ -44,6 +41,11 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
     protected abstract void initEventAndData();
 
     /**
+     * 资源释放
+     */
+    protected abstract void onDestroyRelease();
+
+    /**
      * 控件初始化
      */
     protected abstract void initView();
@@ -53,10 +55,12 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
+        App.resetDensity(this, DESIGN_WIDTH);
         setContentView(getLayout());
         super.onCreate(savedInstanceState);
-        mContext = this;
-        App.getInstance().addActivity(this);
+        //绑定初始化ButterKnife
+        ButterKnife.bind(this);
+        mActivity = this;
         initView();
         initEventAndData();
     }
@@ -64,63 +68,14 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
     @Override
     protected void onResume() {
         super.onResume();
-        if (needRegisterNetworkChangeObserver()) {
-            NetStateChangeReceiver.registerObserver(this);
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        App.getInstance().removeActivity(this);
-        if (needRegisterNetworkChangeObserver()) {
-            NetStateChangeReceiver.unregisterObserver(this);
-        }
-
+        onDestroyRelease();
     }
 
-    /**
-     * 是否需要注册网络变化的Observer,如果不需要监听网络变化,则返回false;否则返回true
-     */
-    protected boolean needRegisterNetworkChangeObserver() {
-        return true;
-    }
-
-    /**
-     * 网络断开时执行的操作
-     */
-    @Override
-    public void onNetDisconnected() {
-        showDisConnectedView();
-    }
-
-    /**
-     * 网络重连时执行的操作
-     *
-     * @param networkType
-     */
-    @Override
-    public void onNetConnected(NetworkType networkType) {
-        ToastUtil.showLong(mContext, "当前连接的是" + networkType.toString() + "网络");
-        hideDisConnectedView();
-    }
-
-    /**
-     * 显示无网络状态
-     */
-    public void showDisConnectedView() {
-        ToastUtil.shortShow("网络连接错误，请检测您的网络设置");
-//        netErrorView = findViewById(R.id.rl_net_error);
-//        netErrorView.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 隐藏无网络状态
-     */
-    public void hideDisConnectedView() {
-//        netErrorView = findViewById(R.id.rl_net_error);
-//        netErrorView.setVisibility(View.GONE);
-    }
 
     /**
      * 打开一个Activity 默认 不关闭当前activity
@@ -128,9 +83,17 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
      * @param className
      */
     public void gotoActivity(Class<?> className) {
-        gotoActivity(className, false, null);
+        gotoActivity(className, false);
     }
 
+    /**
+     * 打开一个Activity  关闭当前activity
+     *
+     * @param className
+     */
+    public void gotoActivityWithFinish(Class<?> className) {
+        gotoActivity(className, true);
+    }
     /**
      * 打开一个Activity，并控制是否finish
      *
@@ -158,7 +121,20 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
             finish();
         }
     }
-
+    /**
+     * 打开一个带结果返回的activity，并传递数据
+     *
+     * @param className              className
+     * @param bundle                 bundle数据
+     * @param requestCode            请求码
+     */
+    public void gotoActivityWithResult(Class<?> className, Bundle bundle, int requestCode) {
+        Intent intent = new Intent(this, className);
+        if (bundle != null) {
+            intent.putExtras(bundle);
+        }
+        startActivityForResult(intent, requestCode);
+    }
     /**
      * 自定义返回监听
      */
@@ -195,16 +171,4 @@ public abstract class BaseAbstractSimpleActivity extends AppCompatActivity imple
         }
     }
 
-    /**
-     * 未登录状态提示
-     *
-     * @param text 未登陆提示语
-     */
-    public void toastShow(String text) {
-        if (text.equals(Constants.UO_LOGIN)) {
-            SharedPreferencesUtils.put(getApplicationContext(), Constants.ACCESS_TOKEN, false);
-            RxBus.getDefault().post(new UserEvent(1, Constants.RENOVATE));
-        }
-        ToastUtil.shortShow(text);
-    }
 }

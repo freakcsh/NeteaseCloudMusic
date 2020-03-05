@@ -30,6 +30,7 @@ public class QuickControlsFragment extends BaseAbstractMvpFragment<QuickControls
 
     @Override
     protected void initView(View view) {
+
     }
 
     @Override

@@ -2,9 +2,9 @@ package com.freak.neteasecloudmusic.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.dialog.adapter.FiltrateDialogAdapter;
-import com.freak.neteasecloudmusic.modules.disco.recommend.entity.HotSongListCategoryEntity;
+import com.freak.neteasecloudmusic.modules.find.recommend.entity.HotSongListCategoryEntity;
 import com.freak.neteasecloudmusic.net.log.LogUtil;
 
 import java.util.ArrayList;

@@ -1,11 +1,12 @@
 package com.freak.neteasecloudmusic.modules.music;
 
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.freak.neteasecloudmusic.R;
@@ -15,6 +16,8 @@ import com.freak.neteasecloudmusic.modules.music.adapter.MusicAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+
 
 /**
  * @author freak
@@ -22,7 +25,8 @@ import java.util.List;
  */
 
 public class MusicFragment extends BaseAbstractMvpFragment<MusicPresenter> implements MusicContract.View, View.OnClickListener {
-    private RecyclerView recycle_view_music;
+    @BindView(R.id.recycle_view_music)
+    RecyclerView recycleViewMusic;
     private MusicAdapter mMusicAdapter;
     private List<MultiItemEntity> mMultiItemEntityList;
     private LinearLayout linear_layout_local_music, linear_layout_recent_play, linear_layout_download_manager, linear_layout_broadcasting_station, linear_layout_collect;
@@ -51,11 +55,10 @@ public class MusicFragment extends BaseAbstractMvpFragment<MusicPresenter> imple
     @Override
     protected void initView(View view) {
         mMultiItemEntityList = new ArrayList<>();
-        recycle_view_music = view.findViewById(R.id.recycle_view_music);
-        recycle_view_music.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recycleViewMusic.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMusicAdapter = new MusicAdapter(mMultiItemEntityList);
         initHeaderView();
-        recycle_view_music.setAdapter(mMusicAdapter);
+        recycleViewMusic.setAdapter(mMusicAdapter);
     }
 
     private void initHeaderView() {

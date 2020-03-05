@@ -1,33 +1,40 @@
 package com.freak.neteasecloudmusic.base;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.freak.httphelper.BasePresenter;
+import com.freak.neteasecloudmusic.R;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeObserver;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
 import com.freak.neteasecloudmusic.net.status.NetworkType;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
-import com.freak.httphelper.BasePresenter;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 /**
  * MVP模式的Base Dialog fragment
  *
- * @author quchao
- * @date 2017/11/28
+ * @author freak
+ * @date 2019/9/11.
  */
 
-public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> extends DialogFragment implements BaseView ,NetStateChangeObserver {
+public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> extends DialogFragment implements BaseView , NetStateChangeObserver {
 
-
+    private Unbinder unbinder;
     @Override
     public void show(FragmentManager manager, String tag) {
         try {
@@ -46,7 +53,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
 
     protected T mPresenter;
     protected View mView;
-    protected Activity mActivity;
+    protected AppCompatActivity mActivity;
     protected Context mContext;
     private RelativeLayout netErrorView;
     protected View loadingView;
@@ -66,19 +73,25 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
 
     @Override
     public void onAttach(Context context) {
-        mActivity = (Activity) context;
+        mActivity = (AppCompatActivity) context;
         mContext = context;
         super.onAttach(context);
     }
 
+    @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(getLayoutId(), null);
+        setStyle(R.style.dialog,0);
+        final Window window = getDialog().getWindow();
+        assert window != null;
+        mView = inflater.inflate(getLayoutId(), ((ViewGroup) window.findViewById(android.R.id.content)),false);
         if (needRegisterNetworkChangeObserver()){
             //此处可加入网络连接错误的布局绑定
 //            netErrorView = mView.findViewById(R.id.rl_net_error);
         }
+        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
+        unbinder = ButterKnife.bind(this, mView);
         return mView;
     }
 
@@ -143,6 +156,7 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
         if (needRegisterNetworkChangeObserver()) {
             NetStateChangeReceiver.unregisterObserver(this);
         }
+        unbinder.unbind();
     }
 
     /**
@@ -193,5 +207,4 @@ public abstract class BaseAbstractMvpDialogFragment<T extends BasePresenter> ext
             mPresenter.detachView();
         }
     }
-
 }

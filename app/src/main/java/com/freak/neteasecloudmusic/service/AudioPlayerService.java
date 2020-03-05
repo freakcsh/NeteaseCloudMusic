@@ -267,7 +267,7 @@ public class AudioPlayerService extends Service {
         //初始化通知栏
         initNotificationView();
         bindNotificationEvent();
-        loadNotificationData();
+//        loadNotificationData();
     }
 
     /**
@@ -769,7 +769,12 @@ public class AudioPlayerService extends Service {
      */
     public static void startService(Context context) {
         Intent intent = new Intent(context, AudioPlayerService.class);
-        context.startService(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+
     }
 
     /**

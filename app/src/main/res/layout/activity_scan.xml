@@ -27,7 +27,6 @@
         app:qrcv_borderSize="0.5dp"
         app:qrcv_borderColor="@android:color/white"
         app:qrcv_animTime="1400"
-        app:qrcv_isCenterVertical="false"
         app:qrcv_toolbarHeight="56dp"
         app:qrcv_isBarcode="false"
         app:qrcv_qrCodeTipText="将二维码/条码放入框内，即可自动扫描"

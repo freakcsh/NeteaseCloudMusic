@@ -3,29 +3,29 @@ package com.freak.neteasecloudmusic.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.freak.neteasecloudmusic.commom.constants.Constants;
-import com.freak.neteasecloudmusic.event.UserEvent;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.freak.neteasecloudmusic.app.App;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeObserver;
 import com.freak.neteasecloudmusic.net.status.NetStateChangeReceiver;
 import com.freak.neteasecloudmusic.net.status.NetworkType;
-import com.freak.neteasecloudmusic.utils.SharedPreferencesUtils;
 import com.freak.neteasecloudmusic.utils.ToastUtil;
-import com.freak.httphelper.RxBus;
 
-import me.yokeyword.fragmentation.SupportFragment;
+import static com.freak.neteasecloudmusic.app.App.DESIGN_WIDTH;
+
 
 /**
- * @author Administrator
- * @date 2019/2/19
  * 无MVP的Fragment基类
+ * @author Administrator
+ * @date 2019/9/11.
  */
 
-public abstract class BaseSimpleFragment extends SupportFragment implements NetStateChangeObserver {
+public abstract class BaseSimpleFragment extends Fragment implements NetStateChangeObserver {
 
     protected View mView;
     protected Activity mActivity;
@@ -48,6 +48,7 @@ public abstract class BaseSimpleFragment extends SupportFragment implements NetS
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        App.resetDensity(mActivity, DESIGN_WIDTH);
         mView = inflater.inflate(getLayoutId(), container, false);
 
         return mView;
@@ -58,13 +59,10 @@ public abstract class BaseSimpleFragment extends SupportFragment implements NetS
         super.onViewCreated(view, savedInstanceState);
 
         initEventAndData(view);
-    }
-
-    @Override
-    public void onLazyInitView(@Nullable Bundle savedInstanceState) {
-        super.onLazyInitView(savedInstanceState);
         initLazyData();
     }
+
+
 
     @Override
     public void onDestroyView() {
@@ -131,19 +129,4 @@ public abstract class BaseSimpleFragment extends SupportFragment implements NetS
 //        netErrorView = mView.findViewById(R.id.rl_net_error);
 //        netErrorView.setVisibility(View.GONE);
     }
-
-    /**
-     * 用户未登陆提示
-     *
-     * @param text
-     */
-    public void toastShow(String text) {
-        if (text.equals(Constants.UO_LOGIN)) {
-            SharedPreferencesUtils.put(mContext, Constants.ACCESS_TOKEN, false);
-            RxBus.getDefault().post(new UserEvent(1, Constants.RENOVATE));
-        }
-        ToastUtil.shortShow(text);
-    }
-
-
 }

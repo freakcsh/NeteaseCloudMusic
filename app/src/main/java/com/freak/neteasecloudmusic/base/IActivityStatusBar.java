@@ -14,4 +14,10 @@ public interface IActivityStatusBar {
      */
     int getStatusBarColor();
 
+    /**
+     * 渐变状态栏
+     * @return
+     */
+    int getDrawableStatusBar();
+
 }
